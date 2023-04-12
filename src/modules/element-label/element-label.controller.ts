@@ -20,6 +20,7 @@ export class ElementLabelController {
   async createLabel(
     @Body() body: CreateElementDto,
   ): Promise<ElementLabelEntity> {
+    // In some complex cases, move the logic to the service layer
     const elementLabel = this.elementLabelRepository.create(body);
     return this.elementLabelRepository.save(elementLabel);
   }
