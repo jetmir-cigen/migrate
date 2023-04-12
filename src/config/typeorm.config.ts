@@ -14,7 +14,8 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     type: 'mysql',
     autoLoadEntities: true,
     ssl: configService.get('DB_SSL'),
-    // synchronize: true,
+    // Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
+    synchronize: false,
     host: configService.get('DB_HOST'),
     port: configService.get('DB_PORT'),
     username: configService.get('DB_USER'),
