@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { DepartmentService } from './department.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('department')
 export class DepartmentController {
@@ -21,6 +23,7 @@ export class DepartmentController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   findAll() {
     return this.departmentService.findAll();
   }

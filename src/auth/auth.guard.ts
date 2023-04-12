@@ -1,25 +1,18 @@
+import * as crypto from 'crypto';
+import * as jwt from 'jsonwebtoken';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { HttpService } from '@nestjs/axios';
 import { map } from 'rxjs/operators';
-import * as jwt from 'jsonwebtoken';
 import { lastValueFrom } from 'rxjs';
-import * as pemJwk from 'pem-jwk';
-import { createPublicKey } from 'crypto';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(
-    private readonly reflector: Reflector,
-    private readonly httpService: HttpService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
     const token = req.headers.authorization?.split(' ')[1];
     const publicKeyUrl = 'https://auth-dev.skytechcontrol.io/pubkey';
-
-    console.log({ token });
 
     try {
       const publicKey = await lastValueFrom(
@@ -27,19 +20,17 @@ export class AuthGuard implements CanActivate {
           .get(publicKeyUrl)
           .pipe(map((response) => response.data)),
       );
+      const keyStr = `-----BEGIN PUBLIC KEY-----\n${publicKey}\n-----END PUBLIC KEY-----`;
 
-      console.log({ publicKey });
-
-      const decodedToken = jwt.verify(token, publicKey, {
-        algorithms: ['RS256'],
+      const testPub = crypto.createPublicKey({
+        key: keyStr,
+        format: 'pem',
       });
 
-      console.log({ decodedToken });
+      jwt.verify(token, testPub);
 
       return true;
     } catch (err) {
-      console.log({ err });
-
       return false;
     }
   }
