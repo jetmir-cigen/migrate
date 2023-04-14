@@ -34,7 +34,6 @@
     "cookie-parser": "1.4.6",
     "jsonwebtoken": "9.0.0",
     "mysql2": "3.2.0",
-    "pem-jwk": "^2.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "typeorm": "0.3.14"
