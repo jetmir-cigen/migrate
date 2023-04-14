@@ -23,7 +23,7 @@ const guards: Record<
 };
 
 export function UserRoleGuard(guardsIds: Array<keyof typeof guards>) {
-  class UserTypeGuardClass implements CanActivate {
+  class UserRoleGuardClass implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
       const request: Request = context.switchToHttp().getRequest();
       const { user } = request;
@@ -48,5 +48,5 @@ export function UserRoleGuard(guardsIds: Array<keyof typeof guards>) {
     }
   }
 
-  return mixin(UserTypeGuardClass);
+  return mixin(UserRoleGuardClass);
 }
