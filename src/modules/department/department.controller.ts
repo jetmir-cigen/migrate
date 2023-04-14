@@ -1,8 +1,10 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { DepartmentService } from './department.service';
+
 import { AuthGuard } from '@/modules/auth/auth.guard';
-import { AuthUser } from '../auth/auth-user.decorator';
-import { UserRoleGuard } from '../user/user-role.guard';
+import { AuthUser } from '@/modules/auth/auth-user.decorator';
+import { UserRoleGuard } from '@/modules/user/user-role.guard';
+
+import { DepartmentService } from './department.service';
 
 @Controller('departments')
 export class DepartmentController {
