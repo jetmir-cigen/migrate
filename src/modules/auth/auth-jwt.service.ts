@@ -9,7 +9,6 @@ import { generatePublicKey } from './utils';
 export class AuthJwtService {
   protected readonly logger = new Logger(AuthJwtService.name);
 
-  protected readonly JWT_SECRET: string;
   protected PUBLIC_KEY: string;
   protected hasFailed = false;
 
