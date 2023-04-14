@@ -27,8 +27,7 @@ export class AuthJwtService {
     try {
       // check if public key is set
       if (!this.PUBLIC_KEY) {
-        const { data } = await this.getPublicKey();
-        this.PUBLIC_KEY = data;
+        await this.updatePublicKey();
       }
       // verify and get the payload
       const payload = this.verifyJwt(token);
