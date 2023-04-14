@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AuthJwtService } from './auth-jwt.service';
-import { ConfigModule } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [ConfigModule],
+  imports: [HttpModule],
   providers: [AuthJwtService],
   exports: [AuthJwtService],
 })

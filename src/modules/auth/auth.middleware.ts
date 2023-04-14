@@ -12,7 +12,7 @@ export class AuthMiddleware implements NestMiddleware {
     private readonly authJwtService: AuthJwtService,
   ) {}
 
-  use(request: Request, _: Response, next: NextFunction) {
+  async use(request: Request, _: Response, next: NextFunction) {
     const AUTH_TOKEN_COOKIE = this.configService.get('AUTH_TOKEN_COOKIE');
     let authToken = jwtFromBearer(request.headers.authorization);
 
@@ -31,7 +31,9 @@ export class AuthMiddleware implements NestMiddleware {
     if (typeof authToken === 'string') {
       const jwtExpiresAt = this.authJwtService.getJwtExpiration(authToken);
       // const isExpired = this.authJwt.isJwtTokenExpired(authToken);
-      const payload = this.authJwtService.verifyJwt(authToken);
+      const payload = await this.authJwtService.verifyJwtWithAttempts(
+        authToken,
+      );
 
       // Set 'request.user' data only if token
       if (jwtExpiresAt instanceof Date && payload !== null) {
