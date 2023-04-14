@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import * as jsonwebtoken from 'jsonwebtoken';
 
-import { formatPublicKey } from './utils';
+import { generatePublicKey } from './utils';
 
 export abstract class Jwt<PayloadType extends object> {
   protected abstract readonly JWT_SECRET: string;
@@ -12,7 +12,7 @@ export abstract class Jwt<PayloadType extends object> {
     try {
       const payload = jsonwebtoken.verify(
         token,
-        formatPublicKey(this.JWT_SECRET),
+        generatePublicKey(this.JWT_SECRET),
         {
           ignoreExpiration: false,
           algorithms: ['RS256'],

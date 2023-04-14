@@ -1,3 +1,5 @@
+import * as crypto from 'crypto';
+
 /**
  * Extract JWT token from 'Authorization' header.
  */
@@ -14,7 +16,10 @@ export function jwtFromBearer(authHeader: string | undefined): string | null {
 /**
  * Format public key(string) to be used in JWT.
  */
-export function formatPublicKey(pubKeyStr: string): string {
+export function generatePublicKey(pubKeyStr: string): crypto.KeyObject {
   const publickKey = `-----BEGIN PUBLIC KEY-----\n${pubKeyStr}\n-----END PUBLIC KEY-----`;
-  return publickKey;
+  return crypto.createPublicKey({
+    key: publickKey,
+    format: 'pem',
+  });
 }
