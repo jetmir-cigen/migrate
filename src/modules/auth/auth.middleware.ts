@@ -2,14 +2,14 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { ConfigService } from '@nestjs/config';
 
-import { AuthJwt } from './auth.jwt';
+import { AuthJwtService } from './auth-jwt.service';
 import { jwtFromBearer } from './utils';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   constructor(
     private readonly configService: ConfigService,
-    private readonly authJwt: AuthJwt,
+    private readonly authJwtService: AuthJwtService,
   ) {}
 
   use(request: Request, _: Response, next: NextFunction) {
@@ -29,9 +29,9 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     if (typeof authToken === 'string') {
-      const jwtExpiresAt = this.authJwt.getJwtExpiration(authToken);
+      const jwtExpiresAt = this.authJwtService.getJwtExpiration(authToken);
       // const isExpired = this.authJwt.isJwtTokenExpired(authToken);
-      const payload = this.authJwt.verifyJwt(authToken);
+      const payload = this.authJwtService.verifyJwt(authToken);
 
       // Set 'request.user' data only if token
       if (jwtExpiresAt instanceof Date && payload !== null) {

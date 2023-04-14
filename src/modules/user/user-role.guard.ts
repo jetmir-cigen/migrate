@@ -7,10 +7,6 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-interface IGetUserAuthInfoRequest extends Request {
-  user: Express.User;
-}
-
 const guards: Record<
   'ADMIN_USER' | 'MANAGER_USER' | 'REGULAR_USER',
   (user: Express.User) => boolean
@@ -26,12 +22,10 @@ const guards: Record<
   },
 };
 
-export function UserTypeGuard(guardsIds: Array<keyof typeof guards>) {
+export function UserRoleGuard(guardsIds: Array<keyof typeof guards>) {
   class UserTypeGuardClass implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
-      const request: IGetUserAuthInfoRequest = context
-        .switchToHttp()
-        .getRequest();
+      const request: Request = context.switchToHttp().getRequest();
       const { user } = request;
 
       if (!user) {
