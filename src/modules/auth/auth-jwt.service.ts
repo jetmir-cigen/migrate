@@ -10,7 +10,7 @@ export class AuthJwtService {
   protected readonly logger = new Logger(AuthJwtService.name);
 
   protected PUBLIC_KEY: string;
-  protected hasFailed = false;
+  protected hasPublicKeyFailed = false;
 
   constructor(private readonly httpService: HttpService) {}
 
@@ -34,11 +34,12 @@ export class AuthJwtService {
 
       // since the auth server can be restarted and the public key will be changed
       // we need to update the public key and try to verify the token again
-      if (!payload && this.hasFailed) {
-        this.hasFailed = false;
-
+      if (!payload && this.hasPublicKeyFailed) {
         // Update the public key
         await this.updatePublicKey();
+
+        // Reset the flag
+        this.hasPublicKeyFailed = false;
 
         // Try to verify the token again
         return this.verifyJwt(token);
@@ -67,10 +68,10 @@ export class AuthJwtService {
       }
 
       return payload as Express.User;
-    } catch (e) {
+    } catch (error: any) {
       // If the error is related to the public key
-      if (e && e.code.includes('ERR_OSSL')) {
-        this.hasFailed = true;
+      if (error.code && error.code.includes('ERR_OSSL')) {
+        this.hasPublicKeyFailed = true;
       }
     }
 
