@@ -20,7 +20,7 @@ export class PaginationQueryDto {
       records is returned.',
     type: 'integer',
     required: false,
-    example: 30,
+    example: 20,
   })
   @IsInt()
   @IsOptional()
