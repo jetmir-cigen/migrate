@@ -5,7 +5,7 @@ import { AuthUser } from '@/modules/auth/auth-user.decorator';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 
 import { DepartmentService } from './department.service';
-import { Department } from './entities/department.entity';
+import { DepartmentEntity } from './entities/department.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Not, Repository } from 'typeorm';
 
@@ -13,8 +13,8 @@ import { IsNull, Not, Repository } from 'typeorm';
 export class DepartmentController {
   constructor(
     private readonly departmentService: DepartmentService,
-    @InjectRepository(Department)
-    private readonly departmentRepository: Repository<Department>,
+    @InjectRepository(DepartmentEntity)
+    private readonly departmentRepository: Repository<DepartmentEntity>,
   ) {}
 
   @Get('test')

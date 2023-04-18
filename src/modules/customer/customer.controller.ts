@@ -11,16 +11,16 @@ import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Customer } from './entities/customer.entity';
+import { CustomerEntity } from './entities/customer.entity';
 import { Repository } from 'typeorm';
 
-@Controller('customer')
+@Controller('customers')
 export class CustomerController {
   constructor(
     private readonly customerService: CustomerService,
 
-    @InjectRepository(Customer)
-    private readonly customerRepository: Repository<Customer>,
+    @InjectRepository(CustomerEntity)
+    private readonly customerRepository: Repository<CustomerEntity>,
   ) {}
 
   @Post()
