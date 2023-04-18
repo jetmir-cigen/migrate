@@ -11,7 +11,7 @@ import {
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 
-@Entity()
+@Entity({ schema: 'control', name: 'department' })
 @Unique(['customer', 'code'])
 export class DepartmentEntity {
   @PrimaryGeneratedColumn()
@@ -21,6 +21,9 @@ export class DepartmentEntity {
   @JoinColumn({ name: 'customer_id' })
   @Index(['customer'])
   customer: CustomerEntity;
+
+  @Column({ name: 'customer_id' })
+  customerId: number;
 
   @Column()
   code: string;
@@ -41,6 +44,9 @@ export class DepartmentEntity {
   @Index(['user'])
   user: UserEntity;
 
+  @Column({ name: 'user_id' })
+  userId: number;
+
   @ManyToOne(() => UserEntity, {
     nullable: true,
     onDelete: 'SET NULL',
@@ -49,6 +55,9 @@ export class DepartmentEntity {
   @JoinColumn({ name: 'deputy_user_id' })
   @Index(['deputyUser'])
   deputyUser: UserEntity;
+
+  @Column({ name: 'deputy_user_id' })
+  deputyUserId: number;
 
   @Column({ default: false })
   inactive: boolean;
