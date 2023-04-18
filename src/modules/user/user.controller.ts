@@ -5,11 +5,22 @@ import { FindUsersByFilterQuery } from './queries/find-users.query';
 import { UserResponseDto } from './dto/user-response.dto';
 import { AuthGuard } from '@/modules/auth/auth.guard';
 import { UserRoleGuard } from './user-role.guard';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly queryBus: QueryBus) {}
 
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiOkResponse({
+    description: 'List of all .users',
+    type: UserResponseDto,
+  })
+  @ApiUnauthorizedResponse()
   @Get('/')
   @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
   async getAll(@Query() query: UserQueryDto): Promise<UserResponseDto> {
