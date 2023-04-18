@@ -15,6 +15,7 @@ import { ElementLabelModule } from './modules/element-label/element-label.module
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthMiddleware } from './modules/auth/auth.middleware';
 import { UserModule } from './modules/user/user.module';
+import { CustomerModule } from './modules/customer/customer.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UserModule } from './modules/user/user.module';
     ElementLabelModule,
     AuthModule,
     UserModule,
+    CustomerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

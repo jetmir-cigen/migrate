@@ -5,10 +5,17 @@ import { AuthUser } from '@/modules/auth/auth-user.decorator';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 
 import { DepartmentService } from './department.service';
+import { Department } from './entities/department.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 
 @Controller('departments')
 export class DepartmentController {
-  constructor(private readonly departmentService: DepartmentService) {}
+  constructor(
+    private readonly departmentService: DepartmentService,
+    @InjectRepository(Department)
+    private readonly departmentRepository: Repository<Department>,
+  ) {}
 
   @Get('test')
   @UseGuards(AuthGuard)
@@ -22,5 +29,10 @@ export class DepartmentController {
     @AuthUser() user: Express.User,
   ): Promise<Express.User> {
     return user;
+  }
+
+  @Get('/')
+  async getDepartments() {
+    return this.departmentRepository.createQueryBuilder('department').getMany();
   }
 }
