@@ -9,20 +9,16 @@ import {
 } from 'typeorm';
 
 @Entity()
-@Unique(['org_no'])
-@Unique(['customer_no'])
-@Index(['whitelabelId'])
-@Index(['customer_head_id'])
-@Index(['countryId'])
-@Index(['devicePolicyVendorId'])
-export class Customer {
+export class CustomerEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'char', length: 40, nullable: false })
+  @Unique(['customer_no'])
   customer_no: string;
 
   @Column({ type: 'char', length: 20, nullable: false })
+  @Unique(['org_no'])
   org_no: string;
 
   @Column({ type: 'char', length: 20, nullable: true })
@@ -79,6 +75,7 @@ export class Customer {
   mail_color_scheme: string;
 
   @Column({ type: 'int', nullable: true })
+  @Index(['customer_head_id'])
   customer_head_id: number;
 
   @Column({ type: 'boolean', default: false })
@@ -130,12 +127,14 @@ export class Customer {
   init_barpu: number;
 
   @Column({ name: 'country_id', type: 'int', default: 47 })
+  @Index(['countryId'])
   countryId: number;
 
   @Column({ name: 'locale', type: 'varchar', length: 2, nullable: true })
   locale?: string;
 
   @Column({ name: 'whitelabel_id', type: 'int', default: 1 })
+  @Index(['whitelabelId'])
   whitelabelId: number;
 
   @Column({
@@ -205,6 +204,7 @@ export class Customer {
   billingCycleMonths: number;
 
   @Column({ name: 'device_policy_vendor_id', type: 'int', default: 1 })
+  @Index(['devicePolicyVendorId'])
   devicePolicyVendorId: number;
 
   @Column({ name: 'number_of_employees', type: 'int', nullable: true })

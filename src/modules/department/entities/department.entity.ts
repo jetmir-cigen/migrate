@@ -8,47 +8,47 @@ import {
   Index,
 } from 'typeorm';
 
-import { Customer } from '@/modules/customer/entities/customer.entity';
-import { User } from '@/modules/user/entities/user.entity';
+import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { UserEntity } from '@/modules/user/entities/user.entity';
 
 @Entity()
 @Unique(['customer', 'code'])
-@Index(['customer'])
-@Index(['name'])
-@Index(['user'])
-@Index(['deputyUser'])
-export class Department {
+export class DepartmentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Customer, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @ManyToOne(() => CustomerEntity, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'customer_id' })
-  customer: Customer;
+  @Index(['customer'])
+  customer: CustomerEntity;
 
   @Column()
   code: string;
 
   @Column()
+  @Index(['name'])
   name: string;
 
   @Column({ nullable: true })
   project: string;
 
-  @ManyToOne(() => User, {
+  @ManyToOne(() => UserEntity, {
     nullable: true,
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  @Index(['user'])
+  user: UserEntity;
 
-  @ManyToOne(() => User, {
+  @ManyToOne(() => UserEntity, {
     nullable: true,
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'deputy_user_id' })
-  deputyUser: User;
+  @Index(['deputyUser'])
+  deputyUser: UserEntity;
 
   @Column({ default: false })
   inactive: boolean;

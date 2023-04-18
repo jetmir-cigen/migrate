@@ -8,13 +8,11 @@ import {
   Index,
 } from 'typeorm';
 // import { Usergroup } from './usergroup.entity';
-import { Customer } from '@/modules/customer/entities/customer.entity';
+import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 // import { InvoiceAccount } from './invoice-account.entity';
 
 @Entity()
-@Unique(['username'])
-@Index(['phoneNumber'])
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -28,11 +26,12 @@ export class User {
   @Column({ nullable: true, name: 'customer_id' })
   customerId: number;
 
-  @ManyToOne(() => Customer)
+  @ManyToOne(() => CustomerEntity)
   @JoinColumn({ name: 'customer_id' })
-  customer: Customer;
+  customer: CustomerEntity;
 
   @Column()
+  @Unique(['username'])
   username: string;
 
   @Column()
@@ -48,6 +47,7 @@ export class User {
   email: string;
 
   @Column({ nullable: true, name: 'phone_number' })
+  @Index(['phoneNumber'])
   phoneNumber: string;
 
   @Column({ nullable: true, name: 'reset_token' })
