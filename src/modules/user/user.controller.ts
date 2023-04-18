@@ -1,17 +1,15 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common';
 import { UserQueryDto } from './dto/user-query.dto';
-import { UserEntity } from './entities/user.entity';
-import { UserService } from './user.service';
+import { QueryBus } from '@nestjs/cqrs';
+import { FindUsersByFilterQuery } from './queries/find-users.query';
+import { UserResponseDto } from './dto/user-response.dto';
 
 @Controller('users')
 export class UserController {
-  constructor(
-    @Inject(UserService)
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly queryBus: QueryBus) {}
 
   @Get()
-  async getAll(@Query() query: UserQueryDto): Promise<UserEntity[]> {
+  async getAll(@Query() query: UserQueryDto): Promise<UserResponseDto> {
     const {
       filterByUsername,
       filterByEmail,
@@ -21,15 +19,20 @@ export class UserController {
       items = 20,
     } = query;
 
-    return this.userService.getAll(
-      {
-        username: filterByUsername,
-        email: filterByEmail,
-        name: filterByName,
-        seller: filterBySeller,
-        type: filterByType,
-      },
-      items,
+    // In case of complex queries or complex business logic, it is better to use service
+    const [users, total] = await this.queryBus.execute(
+      new FindUsersByFilterQuery(
+        {
+          username: filterByUsername,
+          email: filterByEmail,
+          name: filterByName,
+          seller: filterBySeller,
+          type: filterByType,
+        },
+        { items },
+      ),
     );
+
+    return new UserResponseDto({ total, users });
   }
 }

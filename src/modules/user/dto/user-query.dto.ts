@@ -2,7 +2,6 @@ import {
   IsBoolean,
   IsEmail,
   IsInt,
-  IsNumber,
   IsOptional,
   IsString,
   MinLength,
@@ -75,6 +74,7 @@ export class UserQueryDto {
   })
   @IsOptional()
   @IsBoolean()
+  @Type(() => Boolean)
   filterBySeller?: boolean;
 
   @ApiProperty({
