@@ -10,8 +10,9 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { PaginationQueryDto } from '@/common/dto/pagination-query.dto';
 
-export class UserQueryDto {
+export class UserQueryDto extends PaginationQueryDto {
   @ApiProperty({
     description:
       'Phrase to filter users by username. If not \
@@ -76,19 +77,4 @@ export class UserQueryDto {
   @IsBoolean()
   @Type(() => Boolean)
   filterBySeller?: boolean;
-
-  @ApiProperty({
-    description:
-      'Specify how many items should be returned. If not set, some subset of \
-      records is returned.',
-    type: 'integer',
-    required: false,
-    example: 20,
-  })
-  @IsOptional()
-  @Type(() => Number)
-  @Min(1)
-  @Max(100)
-  @IsInt()
-  items?: number;
 }

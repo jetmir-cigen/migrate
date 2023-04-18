@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { UserQueryDto } from './dto/user-query.dto';
 import { QueryBus } from '@nestjs/cqrs';
 import { FindUsersByFilterQuery } from './queries/find-users.query';
