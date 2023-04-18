@@ -17,7 +17,7 @@ export class UserController {
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiOkResponse({
-    description: 'List of all .users',
+    description: 'List of all users',
     type: UserResponseDto,
   })
   @ApiUnauthorizedResponse()
