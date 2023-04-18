@@ -11,7 +11,7 @@ import {
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 // import { InvoiceAccount } from './invoice-account.entity';
 
-@Entity()
+@Entity('user')
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,9 +22,6 @@ export class UserEntity {
   // @ManyToOne(() => Usergroup)
   // @JoinColumn({ name: 'usergroup_id' })
   // usergroup: Usergroup;
-
-  @Column({ nullable: true, name: 'customer_id' })
-  customerId: number;
 
   @ManyToOne(() => CustomerEntity)
   @JoinColumn({ name: 'customer_id' })
