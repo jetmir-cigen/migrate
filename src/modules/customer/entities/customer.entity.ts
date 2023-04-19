@@ -8,7 +8,7 @@ import {
   Index,
 } from 'typeorm';
 
-@Entity()
+@Entity('customer')
 export class CustomerEntity {
   @PrimaryGeneratedColumn()
   id: number;
