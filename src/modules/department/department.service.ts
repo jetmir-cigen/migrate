@@ -12,7 +12,21 @@ export class DepartmentService {
     private readonly departmentRepository: Repository<DepartmentEntity>,
   ) {}
 
-  create(createDepartmentDto: CreateDepartmentDto) {
+  async create(createDepartmentDto: CreateDepartmentDto, customerId: number) {
+    try {
+      const department = await this.departmentRepository.save({
+        ...createDepartmentDto,
+        customerId,
+      });
+
+      console.log({ department });
+
+      return department;
+    } catch (err) {
+      console.log({ err });
+      throw err;
+    }
+
     return 'This action adds a new test';
   }
 
