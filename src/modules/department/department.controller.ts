@@ -86,24 +86,39 @@ export class DepartmentController {
   })
   @Get('/:id')
   async findOne(@Param('id') id: number, @AuthUser() user: Express.User) {
-    try {
-      const department = await this.departmentService.findOne(id, user.uid);
-      return department;
-    } catch (err) {
-      if (err instanceof EntityNotFoundError) {
-        throw new NotFoundException(`Department with ID ${id} not found`);
-      }
-      throw err;
-    }
+    return this.departmentService.findOne(id, user.uid);
   }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: number,
-  //   @Body() updateDepartmentDto: UpdateDepartmentDto,
-  // ) {
-  //   return this.departmentService.update(id, updateDepartmentDto);
-  // }
+  @ApiOperation({
+    summary: 'Update a department by ID',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'Department ID',
+    example: 328,
+  })
+  @ApiBody({
+    type: UpdateDepartmentDto,
+    description: 'Data for updating a department',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The updated department',
+    type: DepartmentDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Department with ID not found',
+  })
+  @Patch(':id')
+  update(
+    @Param('id') id: number,
+    @Body() updateDepartmentDto: UpdateDepartmentDto,
+    @AuthUser() user: Express.User,
+  ) {
+    return this.departmentService.update(id, updateDepartmentDto, user.uid);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {

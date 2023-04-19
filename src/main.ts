@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { TransformInterceptor } from './transform.interceptor';
+import { useContainer } from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,6 +23,9 @@ async function bootstrap() {
     origin: ['http://localhost:3000'],
     allowedHeaders: ['authorization', 'cookie', 'cookies', 'content-type'],
   });
+
+  //For custom validations
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   const config = new DocumentBuilder()
     .setTitle('Manager API')
