@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { AppModule } from './app.module';
 import { TransformInterceptor } from './transform.interceptor';
 
 async function bootstrap() {
@@ -16,6 +17,15 @@ async function bootstrap() {
     origin: ['http://localhost:3000'],
     allowedHeaders: ['authorization', 'cookie', 'cookies', 'content-type'],
   });
+
+  const config = new DocumentBuilder()
+    .setTitle('Manager API')
+    .setDescription('The manager API description')
+    .setVersion('1.0')
+    .addTag('manager')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(3000);
 }

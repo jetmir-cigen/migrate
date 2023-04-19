@@ -11,7 +11,7 @@ import {
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 
-@Entity()
+@Entity('department')
 @Unique(['customer', 'code'])
 export class DepartmentEntity {
   @PrimaryGeneratedColumn()
