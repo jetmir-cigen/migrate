@@ -26,8 +26,6 @@ export class DepartmentService {
       console.log({ err });
       throw err;
     }
-
-    return 'This action adds a new test';
   }
 
   findAll(userId: number) {
@@ -61,7 +59,7 @@ export class DepartmentService {
       .andWhere('department.id = :id', { id })
       .andWhere('department.id = access.department_id')
       .andWhere('access.user_id = :userId', { userId })
-      .getOne();
+      .getOneOrFail();
   }
 
   update(id: number, updateDepartmentDto: UpdateDepartmentDto) {
