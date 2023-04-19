@@ -49,7 +49,7 @@ export class DepartmentService {
       .getManyAndCount();
   }
 
-  async findOne(id: number, userId: number) {
+  async findOne(id: number, userId: number): Promise<DepartmentEntity> {
     try {
       const department = await this.departmentRepository
         .createQueryBuilder('department')
@@ -60,7 +60,7 @@ export class DepartmentService {
         .andWhere('access.user_id = :userId', { userId })
         .getOneOrFail();
 
-      return department;
+      return department as DepartmentEntity;
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
         throw new NotFoundException(`Department with ID ${id} not found`);
@@ -89,8 +89,18 @@ export class DepartmentService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} test`;
+  async remove(id: number, userId: number) {
+    const department = await this.findOne(id, userId);
+
+    console.log({ department });
+
+    try {
+      await this.departmentRepository.remove(department);
+      return true;
+    } catch (err) {
+      console.log({ err });
+      return false;
+    }
   }
 
   async codeExists(code: string, departmentId?: number) {

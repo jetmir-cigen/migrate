@@ -1,8 +1,8 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
-  NotFoundException,
   Param,
   Patch,
   Post,
@@ -27,7 +27,6 @@ import {
   DepartmentDto,
   DepartmentResponseDto,
 } from './dto/department-response.dto';
-import { EntityNotFoundError } from 'typeorm';
 
 @ApiTags('Departments')
 @ApiBearerAuth()
@@ -120,8 +119,19 @@ export class DepartmentController {
     return this.departmentService.update(id, updateDepartmentDto, user.uid);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.testService.remove(+id);
-  // }
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Remove a department by ID',
+    description:
+      'Removes the department with the specified ID from the database',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'integer',
+    description: 'The ID of the department to remove',
+    example: 1,
+  })
+  remove(@Param('id') id: number, @AuthUser() user: Express.User) {
+    return this.departmentService.remove(id, user.uid);
+  }
 }

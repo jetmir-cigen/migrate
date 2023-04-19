@@ -32,6 +32,7 @@ async function bootstrap() {
     .setDescription('The manager API description')
     .setVersion('1.0')
     .addTag('manager')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
