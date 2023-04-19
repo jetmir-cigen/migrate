@@ -1,6 +1,7 @@
 import { SuccessResponseDto } from '@/common/dto/status-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from '../entities/user.entity';
+import { UserGroupEntity } from '../entities/user-group.entity';
 
 export class UserResponseDto extends SuccessResponseDto {
   constructor(init: Pick<UserResponseDto, 'total' | 'users'>) {
@@ -51,4 +52,11 @@ export class UserDto {
     example: 'Doe',
   })
   lastName: string;
+
+  @ApiProperty({
+    description: 'Type of the user',
+    type: 'string',
+    example: 'Doe',
+  })
+  type: string;
 }

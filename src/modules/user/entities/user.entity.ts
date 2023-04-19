@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 // import { Usergroup } from './usergroup.entity';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { UserGroupEntity } from './user-group.entity';
 // import { InvoiceAccount } from './invoice-account.entity';
 
 @Entity('user')
@@ -16,12 +17,14 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'usergroup_id' })
-  usergroupId: number;
+  // @Column({ name: 'usergroup_id' })
+  // usergroupId: number;
 
-  // @ManyToOne(() => Usergroup)
-  // @JoinColumn({ name: 'usergroup_id' })
-  // usergroup: Usergroup;
+  @ManyToOne(() => UserGroupEntity, (usergroup) => usergroup.users, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'usergroup_id' })
+  usergroup: UserGroupEntity;
 
   @ManyToOne(() => CustomerEntity)
   @JoinColumn({ name: 'customer_id' })

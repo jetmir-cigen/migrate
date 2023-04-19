@@ -29,23 +29,33 @@ export class FindUsersByFilterQueryHandler
   ) {}
 
   async execute({ filters, pagination }: FindUsersByFilterQuery) {
-    const where = [];
+    const whereFilters = [];
     const { username, name, seller } = filters;
     const { items = 20 } = pagination || {};
     if (username) {
-      where.push({ username });
+      whereFilters.push({ username });
     }
     if (name) {
-      where.push({ firstName: name }, { lastName: name });
+      whereFilters.push({ firstName: name }, { lastName: name });
     }
     if (seller) {
-      where.push({ seller });
+      whereFilters.push({ seller });
     }
-    const [users, total] = await this.userRepository.findAndCount({
-      where: where.length ? where : undefined,
-      take: items,
-      select: ['username', 'email', 'seller', 'firstName', 'lastName'],
-    });
+    const [users, total] = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.usergroup', 'usergroup')
+      .where(whereFilters)
+      .take(items)
+      .select([
+        'user.id',
+        'user.username',
+        'user.seller',
+        'user.firstName',
+        'user.lastName',
+        'user.email',
+        'usergroup.name',
+      ])
+      .getManyAndCount();
 
     return [users, total] as [UserEntity[], number];
   }
