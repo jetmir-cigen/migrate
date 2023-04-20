@@ -4,6 +4,7 @@ import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DepartmentEntity } from './entities/department.entity';
 import { EntityNotFoundError, Repository } from 'typeorm';
+import { DepartmentListResponseDto } from './dto/department-response.dto';
 
 @Injectable()
 export class DepartmentService {
@@ -12,7 +13,10 @@ export class DepartmentService {
     private readonly departmentRepository: Repository<DepartmentEntity>,
   ) {}
 
-  async create(createDepartmentDto: CreateDepartmentDto, customerId: number) {
+  async create(
+    createDepartmentDto: CreateDepartmentDto,
+    customerId: number,
+  ): Promise<DepartmentEntity> {
     try {
       const department = await this.departmentRepository.save({
         ...createDepartmentDto,
@@ -21,12 +25,11 @@ export class DepartmentService {
 
       return department;
     } catch (err) {
-      console.log({ err });
       throw err;
     }
   }
 
-  findAll(userId: number) {
+  async findAll(userId: number): Promise<[DepartmentEntity[], number]> {
     // return this.departmentRepository
     //   .createQueryBuilder('department')
     //   .where((qb) => {
@@ -40,13 +43,15 @@ export class DepartmentService {
     //   })
     //   .getManyAndCount();
 
-    return this.departmentRepository
+    const [departments, total] = await this.departmentRepository
       .createQueryBuilder('department')
       .select()
       .addFrom('view.manager_access_department', 'access')
       .andWhere('department.id = access.department_id')
       .andWhere('access.user_id = :userId', { userId })
       .getManyAndCount();
+
+    return [departments, total] as [DepartmentEntity[], number];
   }
 
   async findOne(id: number, userId: number): Promise<DepartmentEntity> {
@@ -73,7 +78,7 @@ export class DepartmentService {
     id: number,
     updateDepartmentDto: UpdateDepartmentDto,
     userId: number,
-  ) {
+  ): Promise<DepartmentEntity> {
     const department = await this.findOne(id, userId);
 
     const updatedDepartment = {
@@ -89,27 +94,22 @@ export class DepartmentService {
     }
   }
 
-  async remove(id: number, userId: number) {
+  async remove(id: number, userId: number): Promise<boolean> {
     const department = await this.findOne(id, userId);
-
-    console.log({ department });
 
     try {
       await this.departmentRepository.remove(department);
       return true;
     } catch (err) {
-      console.log({ err });
       return false;
     }
   }
 
-  async codeExists(code: string, departmentId?: number) {
+  async codeExists(code: string, departmentId?: number): Promise<boolean> {
     const res = await this.departmentRepository.findOneOrFail({
       where: { code },
       select: { code: true, id: true },
     });
-
-    console.log({ res });
 
     if (res.id !== departmentId) {
       throw Error('Exists');

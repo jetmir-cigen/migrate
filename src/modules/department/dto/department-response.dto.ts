@@ -95,8 +95,8 @@ export class DepartmentDto {
   departmentBillingRef: string;
 }
 
-export class DepartmentResponseDto extends SuccessResponseDto {
-  constructor(init: Pick<DepartmentResponseDto, 'total' | 'departments'>) {
+export class DepartmentListResponseDto extends SuccessResponseDto {
+  constructor(init: Pick<DepartmentListResponseDto, 'total' | 'departments'>) {
     super();
     this.total = init.total;
     this.departments = init.departments;
@@ -114,4 +114,17 @@ export class DepartmentResponseDto extends SuccessResponseDto {
     isArray: true,
   })
   departments: DepartmentDto[];
+}
+
+export class DepartmentResponseDto extends SuccessResponseDto {
+  constructor(init: Pick<DepartmentResponseDto, 'department'>) {
+    super();
+    this.department = init.department;
+  }
+
+  @ApiProperty({
+    description: 'Department ',
+    type: DepartmentDto,
+  })
+  department: DepartmentDto;
 }

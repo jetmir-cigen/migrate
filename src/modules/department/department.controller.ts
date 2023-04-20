@@ -25,6 +25,7 @@ import {
 } from '@nestjs/swagger';
 import {
   DepartmentDto,
+  DepartmentListResponseDto,
   DepartmentResponseDto,
 } from './dto/department-response.dto';
 
@@ -48,21 +49,28 @@ export class DepartmentController {
     type: DepartmentDto,
   })
   @Post('/')
-  create(
+  async create(
     @Body() createDepartmentDto: CreateDepartmentDto,
     @AuthUser() user: any,
-  ) {
-    return this.departmentService.create(createDepartmentDto, user.cid);
+  ): Promise<DepartmentResponseDto> {
+    const department = await this.departmentService.create(
+      createDepartmentDto,
+      user.cid,
+    );
+    return new DepartmentResponseDto({ department });
   }
 
   @ApiOperation({ summary: 'Get all departments' })
   @ApiOkResponse({
     description: 'List of all departments',
-    type: DepartmentResponseDto,
+    type: DepartmentListResponseDto,
   })
   @Get('/')
-  async findAll(@AuthUser() user: Express.User) {
-    return this.departmentService.findAll(user.uid);
+  async findAll(
+    @AuthUser() user: Express.User,
+  ): Promise<DepartmentListResponseDto> {
+    const [departments, total] = await this.departmentService.findAll(user.uid);
+    return new DepartmentListResponseDto({ total, departments });
   }
 
   @ApiOperation({
@@ -84,8 +92,12 @@ export class DepartmentController {
     description: `Department with ID not found`,
   })
   @Get('/:id')
-  async findOne(@Param('id') id: number, @AuthUser() user: Express.User) {
-    return this.departmentService.findOne(id, user.uid);
+  async findOne(
+    @Param('id') id: number,
+    @AuthUser() user: Express.User,
+  ): Promise<DepartmentResponseDto> {
+    const department = await this.departmentService.findOne(id, user.uid);
+    return new DepartmentResponseDto({ department });
   }
 
   @ApiOperation({
@@ -111,12 +123,17 @@ export class DepartmentController {
     description: 'Department with ID not found',
   })
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
     @AuthUser() user: Express.User,
-  ) {
-    return this.departmentService.update(id, updateDepartmentDto, user.uid);
+  ): Promise<DepartmentResponseDto> {
+    const department = await this.departmentService.update(
+      id,
+      updateDepartmentDto,
+      user.uid,
+    );
+    return new DepartmentResponseDto({ department });
   }
 
   @Delete(':id')
@@ -131,7 +148,10 @@ export class DepartmentController {
     description: 'The ID of the department to remove',
     example: 1,
   })
-  remove(@Param('id') id: number, @AuthUser() user: Express.User) {
+  remove(
+    @Param('id') id: number,
+    @AuthUser() user: Express.User,
+  ): Promise<boolean> {
     return this.departmentService.remove(id, user.uid);
   }
 }
