@@ -8,9 +8,16 @@ import { UserEntity } from './entities/user.entity';
 import { FindUsersByFilterQueryHandler } from './queries/find-users.query';
 import { UserGroupEntity } from './entities/user-group.entity';
 import { HttpModule } from '@nestjs/axios';
-import { CreateUserCommandHandler } from '@/modules/user/commands/user-create.command';
-import { UserCreatedEventHandler } from '@/modules/user/events/user-created.event';
-import { DeleteUserCommandHandler } from '@/modules/user/commands/user-delete.command';
+import {
+  CreateUserCommandHandler,
+  DeleteUserCommandHandler,
+  UpdateUserCommandHandler,
+} from '@/modules/user/commands';
+import {
+  UserCreatedEventHandler,
+  UserUpdatedEventHandler,
+  UserDeletedEventHandler,
+} from '@/modules/user/events';
 
 @Module({
   imports: [
@@ -25,6 +32,9 @@ import { DeleteUserCommandHandler } from '@/modules/user/commands/user-delete.co
     CreateUserCommandHandler,
     DeleteUserCommandHandler,
     UserCreatedEventHandler,
+    UserUpdatedEventHandler,
+    UserDeletedEventHandler,
+    UpdateUserCommandHandler,
   ],
 })
 export class UserModule {}

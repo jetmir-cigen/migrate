@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -26,13 +27,16 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserCreateDto } from '@/modules/user/dto/user-create.dto';
-import { CreateUserCommand } from '@/modules/user/commands/user-create.command';
+import {
+  CreateUserCommand,
+  DeleteUserCommand,
+  UpdateUserCommand,
+} from '@/modules/user/commands';
 import { UserService } from '@/modules/user/user.service';
 import {
   StatusResponseDTO,
   SuccessResponseDto,
 } from '@/common/dto/status-response.dto';
-import { DeleteUserCommand } from '@/modules/user/commands/user-delete.command';
 
 @Controller('users')
 export class UserController {
@@ -94,6 +98,29 @@ export class UserController {
     return new UserCreateResponseDto({
       user: await this.commandBus.execute(new CreateUserCommand(userCreateDto)),
     });
+  }
+
+  @ApiOperation({
+    summary: 'Current user delete all of his data',
+  })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'updated successfully.',
+    type: StatusResponseDTO,
+  })
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse({
+    description: 'Allowed for all users except for admin and active users',
+  })
+  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+  @Patch(':id')
+  async updateUser(
+    @Param('id') id: number,
+    @Body() userCreateDto: Partial<UserCreateDto>,
+  ): Promise<SuccessResponseDto> {
+    await this.commandBus.execute(new UpdateUserCommand(id, userCreateDto));
+
+    return new SuccessResponseDto();
   }
 
   @ApiOperation({
