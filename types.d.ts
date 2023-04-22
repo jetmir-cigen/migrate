@@ -1,15 +1,15 @@
 declare global {
   namespace Express {
     interface RegularUser {
-      uid: number;
+      id: number;
       role: 'user';
     }
     interface ManagerUser {
-      uid: number;
+      id: number;
       role: 'manager';
     }
     interface AdminUser {
-      uid: number;
+      id: number;
       role: 'admin';
     }
 

@@ -60,3 +60,15 @@ export class UserDto {
   })
   type: string;
 }
+
+export class UserCreateResponseDto extends SuccessResponseDto {
+  constructor(init: Pick<UserCreateResponseDto, 'user'>) {
+    super();
+    this.user = init.user;
+  }
+  @ApiProperty({
+    description: 'User created',
+    type: UserEntity,
+  })
+  user: UserDto;
+}
