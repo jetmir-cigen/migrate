@@ -5,13 +5,13 @@ import { MailerService as NestJsMailerService } from '@nestjs-modules/mailer';
 export class MailerService {
   constructor(private readonly mailerService: NestJsMailerService) {}
 
-  async sendTestEmail(email: string, verificationCode: number) {
+  async sendTestEmail(email: string) {
     await this.mailerService.sendMail({
       to: email,
       subject: 'some subject',
       template: 'test',
       context: {
-        verificationCode,
+        someVar: 'someVar',
       },
     });
   }
