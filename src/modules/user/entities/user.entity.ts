@@ -17,8 +17,8 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @Column({ name: 'usergroup_id' })
-  // usergroupId: number;
+  @Column({ name: 'usergroup_id' })
+  userGroupId: number;
 
   @ManyToOne(() => UserGroupEntity, (usergroup) => usergroup.users, {
     nullable: true,

@@ -1,5 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+export abstract class StatusResponseDTO<Bool extends boolean = boolean> {
+  protected constructor(init: { $success: Bool }) {
+    this.$success = init.$success;
+  }
+
+  @ApiProperty({
+    description:
+      'Indicates result of the request: `true` - success, `false` - failure.',
+    example: true,
+  })
+  $success: Bool;
+}
+
 export class SuccessResponseDto {
   @ApiProperty({
     description: 'Indicates that request was successful.',

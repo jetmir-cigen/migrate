@@ -6,16 +6,22 @@ import {
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { MailerModule as NestJsMailerModule } from '@nestjs-modules/mailer';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DepartmentModule } from './modules/department/department.module';
-import { configValidationSchema, typeOrmAsyncConfig } from './config';
+import {
+  configValidationSchema,
+  typeOrmAsyncConfig,
+  mailerAsyncConfig,
+} from './config';
 import { ElementLabelModule } from './modules/element-label/element-label.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthMiddleware } from './modules/auth/auth.middleware';
 import { UserModule } from './modules/user/user.module';
 import { CustomerModule } from './modules/customer/customer.module';
+import { MailerModule } from './modules/mailer/mailer.module';
 
 @Module({
   imports: [
@@ -24,11 +30,13 @@ import { CustomerModule } from './modules/customer/customer.module';
       validationSchema: configValidationSchema,
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+    NestJsMailerModule.forRootAsync(mailerAsyncConfig),
     DepartmentModule,
     ElementLabelModule,
     AuthModule,
     UserModule,
     CustomerModule,
+    MailerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

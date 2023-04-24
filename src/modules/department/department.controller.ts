@@ -69,7 +69,7 @@ export class DepartmentController {
   async findAll(
     @AuthUser() user: Express.User,
   ): Promise<DepartmentListResponseDto> {
-    const [departments, total] = await this.departmentService.findAll(user.uid);
+    const [departments, total] = await this.departmentService.findAll(user.id);
     return new DepartmentListResponseDto({ total, departments });
   }
 
@@ -96,7 +96,7 @@ export class DepartmentController {
     @Param('id') id: number,
     @AuthUser() user: Express.User,
   ): Promise<DepartmentResponseDto> {
-    const department = await this.departmentService.findOne(id, user.uid);
+    const department = await this.departmentService.findOne(id, user.id);
     return new DepartmentResponseDto({ department });
   }
 
@@ -131,7 +131,7 @@ export class DepartmentController {
     const department = await this.departmentService.update(
       id,
       updateDepartmentDto,
-      user.uid,
+      user.id,
     );
     return new DepartmentResponseDto({ department });
   }
@@ -152,6 +152,6 @@ export class DepartmentController {
     @Param('id') id: number,
     @AuthUser() user: Express.User,
   ): Promise<boolean> {
-    return this.departmentService.remove(id, user.uid);
+    return this.departmentService.remove(id, user.id);
   }
 }
