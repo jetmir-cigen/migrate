@@ -1,9 +1,18 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { QueryBus } from '@nestjs/cqrs';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiInternalServerErrorResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   TextTemplateDto,
   TextTemplateResponseDto,
+  CreateTextTemplateDto,
 } from '@/modules/text-template/dto';
 import {
   GetDistinctTextTemplateCodesQuery,
@@ -12,12 +21,16 @@ import {
 import { AuthGuard } from '@/modules/auth/auth.guard';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { SuccessResponseDto } from '@/common/dto/status-response.dto';
+import { CreateTextTemplateCommand } from '@/modules/text-template/commands/create-text-template.command';
 
 @ApiTags('text-templates')
 @Controller('text-templates')
 @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
 export class TextTemplateController {
-  constructor(private readonly queryBus: QueryBus) {}
+  constructor(
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Get all text templates' })
@@ -45,5 +58,23 @@ export class TextTemplateController {
       $success: true,
       codes,
     };
+  }
+
+  @Post()
+  @ApiBody({ type: CreateTextTemplateDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Creates a new text template',
+    type: TextTemplateDto,
+  })
+  @ApiBadRequestResponse({ description: 'Invalid input data' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  async createTextTemplate(
+    @Body() createTextTemplateDto: CreateTextTemplateDto,
+  ): Promise<TextTemplateDto> {
+    const createdTextTemplate = await this.commandBus.execute(
+      new CreateTextTemplateCommand(createTextTemplateDto),
+    );
+    return new TextTemplateDto(createdTextTemplate);
   }
 }
