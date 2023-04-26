@@ -14,7 +14,7 @@ export class GetDistinctTextTemplateCodesQueryHandler
     private readonly textTemplateRepository: Repository<TextTemplateEntity>,
   ) {}
 
-  async execute(query: GetDistinctTextTemplateCodesQuery): Promise<string[]> {
+  async execute(): Promise<string[]> {
     const codes = await this.textTemplateRepository
       .createQueryBuilder('text_template')
       .select('DISTINCT text_template.code', 'code')
