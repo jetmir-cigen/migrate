@@ -22,6 +22,7 @@ import { AuthMiddleware } from './modules/auth/auth.middleware';
 import { UserModule } from './modules/user/user.module';
 import { CustomerModule } from './modules/customer/customer.module';
 import { MailerModule } from './modules/mailer/mailer.module';
+import { TextTemplateModule } from './modules/text-template/text-template.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { MailerModule } from './modules/mailer/mailer.module';
     UserModule,
     CustomerModule,
     MailerModule,
+    TextTemplateModule,
   ],
   controllers: [AppController],
   providers: [AppService],
