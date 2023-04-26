@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ApiBadRequestResponse,
@@ -6,6 +14,7 @@ import {
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -21,7 +30,10 @@ import {
 import { AuthGuard } from '@/modules/auth/auth.guard';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { SuccessResponseDto } from '@/common/dto/status-response.dto';
-import { CreateTextTemplateCommand } from '@/modules/text-template/commands/create-text-template.command';
+import {
+  CreateTextTemplateCommand,
+  DeleteTextTemplateCommand,
+} from '@/modules/text-template/commands';
 
 @ApiTags('text-templates')
 @Controller('text-templates')
@@ -76,5 +88,22 @@ export class TextTemplateController {
       new CreateTextTemplateCommand(createTextTemplateDto),
     );
     return new TextTemplateDto(createdTextTemplate);
+  }
+
+  @Delete(':id')
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the text template to delete',
+  })
+  @ApiResponse({
+    status: 204,
+    description: 'Text template deleted successfully',
+  })
+  @ApiBadRequestResponse({ description: 'Invalid input data' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  async deleteTextTemplate(@Param('id') id: number): Promise<void> {
+    const command = new DeleteTextTemplateCommand(id);
+    await this.commandBus.execute(command);
   }
 }
