@@ -51,7 +51,7 @@ export class DepartmentController {
   @Post('/')
   async create(
     @Body() createDepartmentDto: CreateDepartmentDto,
-    @AuthUser() user: any,
+    @AuthUser() user: Express.AuthUser,
   ): Promise<DepartmentResponseDto> {
     const department = await this.departmentService.create(
       createDepartmentDto,
@@ -67,9 +67,9 @@ export class DepartmentController {
   })
   @Get('/')
   async findAll(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: Express.AuthUser,
   ): Promise<DepartmentListResponseDto> {
-    const [departments, total] = await this.departmentService.findAll(user.id);
+    const [departments, total] = await this.departmentService.findAll(user.uid);
     return new DepartmentListResponseDto({ total, departments });
   }
 
@@ -94,9 +94,9 @@ export class DepartmentController {
   @Get('/:id')
   async findOne(
     @Param('id') id: number,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: Express.AuthUser,
   ): Promise<DepartmentResponseDto> {
-    const department = await this.departmentService.findOne(id, user.id);
+    const department = await this.departmentService.findOne(id, user.uid);
     return new DepartmentResponseDto({ department });
   }
 
@@ -126,12 +126,12 @@ export class DepartmentController {
   async update(
     @Param('id') id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: Express.AuthUser,
   ): Promise<DepartmentResponseDto> {
     const department = await this.departmentService.update(
       id,
       updateDepartmentDto,
-      user.id,
+      user.uid,
     );
     return new DepartmentResponseDto({ department });
   }
@@ -150,8 +150,8 @@ export class DepartmentController {
   })
   remove(
     @Param('id') id: number,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: Express.AuthUser,
   ): Promise<boolean> {
-    return this.departmentService.remove(id, user.id);
+    return this.departmentService.remove(id, user.uid);
   }
 }

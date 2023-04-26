@@ -22,5 +22,6 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     password: configService.get('DB_PASS'),
     database: configService.get('DB_NAME'),
     // migrations: [path.join(__dirname, '../database/migrations/*{.ts,.js}')],
+    logging: true,
   }),
 };
