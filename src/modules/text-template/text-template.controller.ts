@@ -4,7 +4,9 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
+  UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -26,6 +28,7 @@ import {
 import {
   GetDistinctTextTemplateCodesQuery,
   GetTextTemplatesQuery,
+  GetTextTemplateByIdQuery,
 } from '@/modules/text-template/queries';
 import { AuthGuard } from '@/modules/auth/auth.guard';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
@@ -33,7 +36,10 @@ import { SuccessResponseDto } from '@/common/dto/status-response.dto';
 import {
   CreateTextTemplateCommand,
   DeleteTextTemplateCommand,
+  UpdateTextTemplateCommand,
 } from '@/modules/text-template/commands';
+import { UpdateTextTemplateDto } from '@/modules/text-template/dto/update-text-template.dto';
+import { TextTemplateEntity } from '@/modules/text-template/entities';
 
 @ApiTags('text-templates')
 @Controller('text-templates')
@@ -91,6 +97,36 @@ export class TextTemplateController {
       $success: true,
       textTemplate: new TextTemplateDto(createdTextTemplate),
     };
+  }
+
+  @ApiOperation({ summary: 'Update a text template record by ID' })
+  @ApiParam({
+    name: 'id',
+    description: 'The ID of the text template to update',
+    type: 'number',
+  })
+  @ApiBody({ type: UpdateTextTemplateDto })
+  @Patch(':id')
+  async updateTextTemplate(
+    @Param('id') id: number,
+    @Body() updateTextTemplateDto: UpdateTextTemplateDto,
+  ): Promise<SuccessResponseDto> {
+    const foundTextTemplate = await this.queryBus.execute(
+      new GetTextTemplateByIdQuery(id),
+    );
+
+    if (!foundTextTemplate) {
+      throw new UnprocessableEntityException('Text template not found');
+    }
+
+    await this.commandBus.execute(
+      new UpdateTextTemplateCommand({
+        id,
+        updateTextTemplateData: updateTextTemplateDto,
+      }),
+    );
+
+    return new SuccessResponseDto();
   }
 
   @Delete(':id')

@@ -6,7 +6,7 @@ import { TextTemplateEntity } from '../entities';
 export class GetDistinctTextTemplateCodesQuery {}
 
 @QueryHandler(GetDistinctTextTemplateCodesQuery)
-export class GetDistinctTextTemplateCodesHandler
+export class GetDistinctTextTemplateCodesQueryHandler
   implements IQueryHandler<GetDistinctTextTemplateCodesQuery>
 {
   constructor(

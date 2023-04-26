@@ -6,7 +6,7 @@ import { TextTemplateEntity } from '@/modules/text-template/entities';
 export class GetTextTemplatesQuery {}
 
 @QueryHandler(GetTextTemplatesQuery)
-export class GetTextTemplatesHandler
+export class GetTextTemplatesQueryHandler
   implements IQueryHandler<GetTextTemplatesQuery>
 {
   constructor(

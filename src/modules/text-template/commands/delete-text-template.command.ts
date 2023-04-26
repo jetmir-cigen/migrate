@@ -10,7 +10,7 @@ export class DeleteTextTemplateCommand {
 
 @Injectable()
 @CommandHandler(DeleteTextTemplateCommand)
-export class DeleteTextTemplateHandler
+export class DeleteTextTemplateCommandHandler
   implements ICommandHandler<DeleteTextTemplateCommand>
 {
   constructor(

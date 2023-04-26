@@ -21,7 +21,7 @@ export class CreateTextTemplateCommand {
 }
 
 @CommandHandler(CreateTextTemplateCommand)
-export class CreateTextTemplateHandler
+export class CreateTextTemplateCommandHandler
   implements ICommandHandler<CreateTextTemplateCommand>
 {
   constructor(
