@@ -2,7 +2,6 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TextTemplateEntity } from '@/modules/text-template/entities';
 import { Repository } from 'typeorm';
-import { NotFoundException } from '@nestjs/common';
 
 interface TextTemplateData {
   code?: string | null;

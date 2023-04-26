@@ -24,6 +24,7 @@ import {
   TextTemplateDto,
   TextTemplateResponseDto,
   CreateTextTemplateDto,
+  UpdateTextTemplateDto,
 } from '@/modules/text-template/dto';
 import {
   GetDistinctTextTemplateCodesQuery,
@@ -38,8 +39,6 @@ import {
   DeleteTextTemplateCommand,
   UpdateTextTemplateCommand,
 } from '@/modules/text-template/commands';
-import { UpdateTextTemplateDto } from '@/modules/text-template/dto/update-text-template.dto';
-import { TextTemplateEntity } from '@/modules/text-template/entities';
 
 @ApiTags('text-templates')
 @Controller('text-templates')
