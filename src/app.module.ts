@@ -43,6 +43,7 @@ import { WhitelabelModule } from './modules/whitelabel/whitelabel.module';
     InvoiceModule,
     TextTemplateModule,
     WhitelabelModule,
+    InvoiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
