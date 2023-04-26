@@ -72,7 +72,7 @@ export class TextTemplateController {
     };
   }
 
-  @Post()
+  @Post('/')
   @ApiBody({ type: CreateTextTemplateDto })
   @ApiResponse({
     status: 201,
@@ -83,11 +83,14 @@ export class TextTemplateController {
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   async createTextTemplate(
     @Body() createTextTemplateDto: CreateTextTemplateDto,
-  ): Promise<TextTemplateDto> {
+  ): Promise<SuccessResponseDto & { textTemplate: TextTemplateDto }> {
     const createdTextTemplate = await this.commandBus.execute(
       new CreateTextTemplateCommand(createTextTemplateDto),
     );
-    return new TextTemplateDto(createdTextTemplate);
+    return {
+      $success: true,
+      textTemplate: new TextTemplateDto(createdTextTemplate),
+    };
   }
 
   @Delete(':id')
@@ -102,8 +105,13 @@ export class TextTemplateController {
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  async deleteTextTemplate(@Param('id') id: number): Promise<void> {
+  async deleteTextTemplate(
+    @Param('id') id: number,
+  ): Promise<SuccessResponseDto> {
     const command = new DeleteTextTemplateCommand(id);
     await this.commandBus.execute(command);
+    return {
+      $success: true,
+    };
   }
 }

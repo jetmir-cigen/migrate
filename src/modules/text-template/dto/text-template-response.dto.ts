@@ -4,16 +4,16 @@ import { TextTemplateEntity } from '@/modules/text-template/entities';
 
 export class TextTemplateDto {
   constructor(init: TextTemplateDto) {
-    init.code = this.code;
-    init.locale = this.locale;
-    init.whiteLabelId = this.whiteLabelId;
-    init.customerHeadId = this.customerHeadId;
-    init.customerId = this.customerId;
-    init.sender = this.sender;
-    init.subject = this.subject;
-    init.text = this.text;
-    init.type = this.type;
-    init.description = this.description;
+    this.code = init.code;
+    this.locale = init.locale;
+    this.whiteLabelId = init.whiteLabelId;
+    this.customerHeadId = init.customerHeadId;
+    this.customerId = init.customerId;
+    this.sender = init.sender;
+    this.subject = init.subject;
+    this.text = init.text;
+    this.type = init.type;
+    this.description = init.description;
   }
 
   @ApiProperty({
