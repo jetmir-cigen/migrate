@@ -6,7 +6,6 @@ import {
   IsOptional,
   Length,
 } from 'class-validator';
-import { TextTemplateEntity } from '../entities';
 
 export class CreateTextTemplateDto {
   @ApiProperty({
