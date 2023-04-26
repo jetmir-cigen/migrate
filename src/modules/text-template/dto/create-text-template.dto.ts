@@ -91,19 +91,4 @@ export class CreateTextTemplateDto {
   @IsOptional()
   @IsString()
   description?: string;
-
-  toEntity(): TextTemplateEntity {
-    const textTemplate = new TextTemplateEntity();
-    textTemplate.code = this.code;
-    textTemplate.locale = this.locale;
-    textTemplate.whitelabelId = this.whitelabelId;
-    textTemplate.customerHeadId = this.customerHeadId;
-    textTemplate.customerId = this.customerId;
-    textTemplate.sender = this.sender;
-    textTemplate.subject = this.subject;
-    textTemplate.text = this.text;
-    textTemplate.type = this.type;
-    textTemplate.description = this.description;
-    return textTemplate;
-  }
 }
