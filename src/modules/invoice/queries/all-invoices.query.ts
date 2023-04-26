@@ -21,7 +21,9 @@ export class FindInvoicesByFilterQueryHandler
     private readonly invoiceRepository: Repository<InvoiceEntity>,
   ) {}
 
-  async execute({ filters }: FindInvoicesByFilterQuery) {
+  async execute({
+    filters,
+  }: FindInvoicesByFilterQuery): Promise<InvoiceEntity[]> {
     const { customerId, userId } = filters;
 
     const invoices = await this.invoiceRepository
@@ -35,6 +37,6 @@ export class FindInvoicesByFilterQueryHandler
       .andWhere('vi.vendor_id = :customerId', { customerId })
       .getMany();
 
-    return invoices;
+    return invoices as InvoiceEntity[];
   }
 }

@@ -22,7 +22,7 @@ export class FindInvoiceByFilterQueryHandler
     private readonly invoiceRepository: Repository<InvoiceEntity>,
   ) {}
 
-  async execute({ filters }: FindInvoiceByFilterQuery) {
+  async execute({ filters }: FindInvoiceByFilterQuery): Promise<InvoiceEntity> {
     const { id, userId } = filters;
 
     try {
@@ -37,7 +37,7 @@ export class FindInvoiceByFilterQueryHandler
         .andWhere('invoice.id = vi.id')
         .getOneOrFail();
 
-      return invoice;
+      return invoice as InvoiceEntity;
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
         throw new NotFoundException(`Invoice with ID ${id} not found`);
