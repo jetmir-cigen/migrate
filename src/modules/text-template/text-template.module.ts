@@ -7,10 +7,15 @@ import {
 import { TextTemplateController } from './text-template.controller';
 import { TextTemplateEntity } from './entities/text-template.entity';
 import { CqrsModule } from '@nestjs/cqrs';
+import { CreateTextTemplateHandler } from '@/modules/text-template/commands';
 
 @Module({
   imports: [TypeOrmModule.forFeature([TextTemplateEntity]), CqrsModule],
   controllers: [TextTemplateController],
-  providers: [GetTextTemplatesHandler, GetDistinctTextTemplateCodesHandler],
+  providers: [
+    GetTextTemplatesHandler,
+    GetDistinctTextTemplateCodesHandler,
+    CreateTextTemplateHandler,
+  ],
 })
 export class TextTemplateModule {}
