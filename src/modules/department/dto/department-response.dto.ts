@@ -9,13 +9,6 @@ export class DepartmentDto {
   })
   id: number;
 
-  // @ApiProperty({
-  //   description: 'Id of department',
-  //   type: 'integer',
-  //   example: '1',
-  // })
-  // customer: CustomerEntity;
-
   @ApiProperty({
     description: 'Id of customer',
     type: 'integer',
@@ -45,26 +38,12 @@ export class DepartmentDto {
   })
   project: string;
 
-  // @ApiProperty({
-  //   description: 'Id of department',
-  //   type: 'integer',
-  //   example: '1',
-  // })
-  // user: UserEntity;
-
   @ApiProperty({
     description: 'Id of department head',
     type: 'integer',
     example: '1',
   })
   userId: number;
-
-  // @ApiProperty({
-  //   description: 'Id of department',
-  //   type: 'integer',
-  //   example: '1',
-  // })
-  // deputyUser: UserEntity;
 
   @ApiProperty({
     description: 'Id of deputy',

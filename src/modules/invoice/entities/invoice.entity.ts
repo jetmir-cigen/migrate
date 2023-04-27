@@ -14,10 +14,6 @@ export class InvoiceEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  //   @ManyToOne(() => Vendor)
-  //   @JoinColumn({ name: 'vendor_id' })
-  //   vendor: Vendor;
-
   @Column({ name: 'vendor_id' })
   vendorId: number;
 
@@ -37,10 +33,6 @@ export class InvoiceEntity {
 
   @Column({ type: 'boolean', default: false })
   sent: boolean;
-
-  //   @ManyToOne(() => InvoiceAccount, { nullable: true })
-  //   @JoinColumn({ name: 'invoice_account_id' })
-  //   invoiceAccount: InvoiceAccount;
 
   @Column({ name: 'invoice_account_id' })
   invoiceAccountId: number;
@@ -114,10 +106,6 @@ export class InvoiceEntity {
 
   @Column({ name: 'last_update', type: 'datetime', nullable: true })
   lastUpdate: Date;
-
-  //   @ManyToOne(() => InvoiceClassification, { nullable: false, default: () => 1 })
-  //   @JoinColumn({ name: 'invoice_classification_id' })
-  //   invoiceClassification: InvoiceClassification;
 
   @Column({ name: 'invoice_classification_id' })
   invoiceClassificationId: number;

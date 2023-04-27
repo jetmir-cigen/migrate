@@ -18,7 +18,6 @@ import {
 import { AuthUser } from '../auth/auth-user.decorator';
 import { AuthGuard } from '../auth/auth.guard';
 
-import { InvoiceEntity } from './entities/invoice.entity';
 import {
   InvoiceListResponseDto,
   InvoiceResponseDto,

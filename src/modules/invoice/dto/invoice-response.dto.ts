@@ -138,15 +138,8 @@ export class InvoiceDto {
 export class InvoiceListResponseDto extends SuccessResponseDto {
   constructor(init: Pick<InvoiceListResponseDto, 'invoices'>) {
     super();
-    // this.total = init.total;
     this.invoices = init.invoices;
   }
-  // @ApiProperty({
-  //   description: 'Total count of invoice.',
-  //   type: 'integer',
-  //   example: 162,
-  // })
-  // total: number;
 
   @ApiProperty({
     description: 'List of invoice',
