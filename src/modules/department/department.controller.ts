@@ -91,7 +91,7 @@ export class DepartmentController {
     status: 404,
     description: `Department with ID not found`,
   })
-  @Get('/:id')
+  @Get(':id(\\d+)')
   async findOne(
     @Param('id') id: number,
     @AuthUser() user: Express.AuthUser,
@@ -122,7 +122,7 @@ export class DepartmentController {
     status: 404,
     description: 'Department with ID not found',
   })
-  @Patch(':id')
+  @Patch(':id(\\d+)')
   async update(
     @Param('id') id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
@@ -136,7 +136,7 @@ export class DepartmentController {
     return new DepartmentResponseDto({ department });
   }
 
-  @Delete(':id')
+  @Delete(':id(\\d+)')
   @ApiOperation({
     summary: 'Remove a department by ID',
     description:
