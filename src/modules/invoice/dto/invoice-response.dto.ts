@@ -14,12 +14,6 @@ export class InvoiceDto {
   })
   vendorId: number;
 
-  // @ApiProperty({
-  //   description: 'Customer entity associated with the invoice',
-  //   type: () => CustomerEntity,
-  // })
-  // customer: CustomerEntity;
-
   @ApiProperty({
     description: 'Invoice number',
     example: 'INV-001',
@@ -61,12 +55,6 @@ export class InvoiceDto {
     example: 100.0,
   })
   invoiceControlAmount: number;
-
-  // @ApiProperty({
-  //   description: 'Element label associated with the invoice',
-  //   type: () => ElementLabelEntity,
-  // })
-  // elementLabel: ElementLabelEntity;
 
   @ApiProperty({
     description: 'KID number associated with the invoice',
