@@ -52,7 +52,7 @@ export class DepartmentController {
   @Post('/')
   async create(
     @Body() createDepartmentDto: CreateDepartmentDto,
-    @AuthUser() user: Express.AdminUser,
+    @AuthUser() user: Express.User,
   ) {
     const department = await this.departmentService.create(
       createDepartmentDto,
@@ -67,7 +67,7 @@ export class DepartmentController {
     type: DepartmentListResponseDto,
   })
   @Get('/')
-  async findAll(@AuthUser() user: Express.AdminUser) {
+  async findAll(@AuthUser() user: Express.User) {
     const departments = await this.departmentService.findAll(user.uid);
     return new DepartmentListResponseDto({ departments });
   }
@@ -91,7 +91,7 @@ export class DepartmentController {
     description: `Department with ID not found`,
   })
   @Get(':id(\\d+)')
-  async findOne(@Param('id') id: number, @AuthUser() user: Express.AdminUser) {
+  async findOne(@Param('id') id: number, @AuthUser() user: Express.User) {
     const department = await this.departmentService.findOne(id, user.uid);
     return new DepartmentResponseDto({ department });
   }
@@ -122,7 +122,7 @@ export class DepartmentController {
   async update(
     @Param('id') id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
-    @AuthUser() user: Express.AdminUser,
+    @AuthUser() user: Express.User,
   ) {
     const department = await this.departmentService.update(
       id,
@@ -144,7 +144,7 @@ export class DepartmentController {
     description: 'The ID of the department to remove',
     example: 1,
   })
-  remove(@Param('id') id: number, @AuthUser() user: Express.AdminUser) {
+  remove(@Param('id') id: number, @AuthUser() user: Express.User) {
     return this.departmentService.remove(id, user.uid);
   }
 }
