@@ -1,16 +1,28 @@
 declare global {
+  enum UserRoles {
+    ADMIN = 'admin',
+    MANAGER = 'manager',
+    USER = 'user',
+  }
+
   namespace Express {
-    interface RegularUser {
-      id: number;
-      role: 'user';
+    interface GenericUser {
+      uid: number;
+      cid: number;
+      role: UserRoles;
     }
-    interface ManagerUser {
+
+    interface RegularUser extends GenericUser {
       id: number;
-      role: 'manager';
+      role: UserRoles.USER;
     }
-    interface AdminUser {
+    interface ManagerUser extends GenericUser {
       id: number;
-      role: 'admin';
+      role: UserRoles.MANAGER;
+    }
+    interface AdminUser extends GenericUser {
+      id: number;
+      role: UserRoles.ADMIN;
     }
 
     type User = RegularUser | ManagerUser | AdminUser;

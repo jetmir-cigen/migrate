@@ -28,10 +28,11 @@ import {
   DepartmentListResponseDto,
   DepartmentResponseDto,
 } from './dto/department-response.dto';
+import { UserRoleGuard } from '../user/user-role.guard';
 
 @ApiTags('Departments')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
 @Controller('departments')
 export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}
@@ -51,8 +52,8 @@ export class DepartmentController {
   @Post('/')
   async create(
     @Body() createDepartmentDto: CreateDepartmentDto,
-    @AuthUser() user: any,
-  ): Promise<DepartmentResponseDto> {
+    @AuthUser() user: Express.User,
+  ) {
     const department = await this.departmentService.create(
       createDepartmentDto,
       user.cid,
@@ -66,11 +67,9 @@ export class DepartmentController {
     type: DepartmentListResponseDto,
   })
   @Get('/')
-  async findAll(
-    @AuthUser() user: Express.User,
-  ): Promise<DepartmentListResponseDto> {
-    const [departments, total] = await this.departmentService.findAll(user.id);
-    return new DepartmentListResponseDto({ total, departments });
+  async findAll(@AuthUser() user: Express.User) {
+    const departments = await this.departmentService.findAll(user.uid);
+    return new DepartmentListResponseDto({ departments });
   }
 
   @ApiOperation({
@@ -91,12 +90,9 @@ export class DepartmentController {
     status: 404,
     description: `Department with ID not found`,
   })
-  @Get('/:id')
-  async findOne(
-    @Param('id') id: number,
-    @AuthUser() user: Express.User,
-  ): Promise<DepartmentResponseDto> {
-    const department = await this.departmentService.findOne(id, user.id);
+  @Get(':id(\\d+)')
+  async findOne(@Param('id') id: number, @AuthUser() user: Express.User) {
+    const department = await this.departmentService.findOne(id, user.uid);
     return new DepartmentResponseDto({ department });
   }
 
@@ -122,21 +118,21 @@ export class DepartmentController {
     status: 404,
     description: 'Department with ID not found',
   })
-  @Patch(':id')
+  @Patch(':id(\\d+)')
   async update(
     @Param('id') id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
     @AuthUser() user: Express.User,
-  ): Promise<DepartmentResponseDto> {
+  ) {
     const department = await this.departmentService.update(
       id,
       updateDepartmentDto,
-      user.id,
+      user.uid,
     );
     return new DepartmentResponseDto({ department });
   }
 
-  @Delete(':id')
+  @Delete(':id(\\d+)')
   @ApiOperation({
     summary: 'Remove a department by ID',
     description:
@@ -148,10 +144,7 @@ export class DepartmentController {
     description: 'The ID of the department to remove',
     example: 1,
   })
-  remove(
-    @Param('id') id: number,
-    @AuthUser() user: Express.User,
-  ): Promise<boolean> {
-    return this.departmentService.remove(id, user.id);
+  remove(@Param('id') id: number, @AuthUser() user: Express.User) {
+    return this.departmentService.remove(id, user.uid);
   }
 }
