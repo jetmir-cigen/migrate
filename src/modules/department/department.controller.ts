@@ -28,10 +28,11 @@ import {
   DepartmentListResponseDto,
   DepartmentResponseDto,
 } from './dto/department-response.dto';
+import { UserRoleGuard } from '../user/user-role.guard';
 
 @ApiTags('Departments')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
 @Controller('departments')
 export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}
@@ -51,7 +52,7 @@ export class DepartmentController {
   @Post('/')
   async create(
     @Body() createDepartmentDto: CreateDepartmentDto,
-    @AuthUser() user: Express.AuthUser,
+    @AuthUser() user: Express.AdminUser,
   ) {
     const department = await this.departmentService.create(
       createDepartmentDto,
@@ -66,7 +67,7 @@ export class DepartmentController {
     type: DepartmentListResponseDto,
   })
   @Get('/')
-  async findAll(@AuthUser() user: Express.AuthUser) {
+  async findAll(@AuthUser() user: Express.AdminUser) {
     const departments = await this.departmentService.findAll(user.uid);
     return new DepartmentListResponseDto({ departments });
   }
@@ -90,7 +91,7 @@ export class DepartmentController {
     description: `Department with ID not found`,
   })
   @Get(':id(\\d+)')
-  async findOne(@Param('id') id: number, @AuthUser() user: Express.AuthUser) {
+  async findOne(@Param('id') id: number, @AuthUser() user: Express.AdminUser) {
     const department = await this.departmentService.findOne(id, user.uid);
     return new DepartmentResponseDto({ department });
   }
@@ -121,7 +122,7 @@ export class DepartmentController {
   async update(
     @Param('id') id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
-    @AuthUser() user: Express.AuthUser,
+    @AuthUser() user: Express.AdminUser,
   ) {
     const department = await this.departmentService.update(
       id,
@@ -143,7 +144,7 @@ export class DepartmentController {
     description: 'The ID of the department to remove',
     example: 1,
   })
-  remove(@Param('id') id: number, @AuthUser() user: Express.AuthUser) {
+  remove(@Param('id') id: number, @AuthUser() user: Express.AdminUser) {
     return this.departmentService.remove(id, user.uid);
   }
 }
