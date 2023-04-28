@@ -75,17 +75,10 @@ export class DepartmentDto {
 }
 
 export class DepartmentListResponseDto extends SuccessResponseDto {
-  constructor(init: Pick<DepartmentListResponseDto, 'total' | 'departments'>) {
+  constructor(init: Pick<DepartmentListResponseDto, 'departments'>) {
     super();
-    this.total = init.total;
     this.departments = init.departments;
   }
-  @ApiProperty({
-    description: 'Total count of departments.',
-    type: 'integer',
-    example: 162,
-  })
-  total: number;
 
   @ApiProperty({
     description: 'List of departments',

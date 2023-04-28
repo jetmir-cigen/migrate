@@ -28,13 +28,19 @@ export class FindInvoiceByFilterQueryHandler
     try {
       const invoice = await this.invoiceRepository
         .createQueryBuilder('invoice')
-        .select()
-        .addFrom('view.invoice', 'vi')
-        .addFrom('view.manager_access_customer', 'mac')
-        .andWhere('mac.user_id = :userId', { userId })
-        .andWhere('mac.customer_id = vi.customer_id')
-        .andWhere('invoice.id = :id', { id })
-        .andWhere('invoice.id = vi.id')
+        .andWhere((qb) => {
+          const subQuery = qb
+            .subQuery()
+            .select('vi.id')
+            .from('view.invoice', 'vi')
+            .addFrom('view.manager_access_customer', 'mac')
+            .where('mac.user_id = :userId', { userId })
+            .andWhere('mac.customer_id = vi.customer_id')
+            .andWhere('invoice.id = :id', { id })
+            .andWhere('invoice.id = vi.id')
+            .getQuery();
+          return 'invoice.id IN ' + subQuery;
+        })
         .getOneOrFail();
 
       return invoice as InvoiceEntity;

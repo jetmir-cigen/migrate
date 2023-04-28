@@ -28,30 +28,40 @@ export class DepartmentService {
     }
   }
 
-  async findAll(userId: number): Promise<[DepartmentEntity[], number]> {
-    const [departments, total] = await this.departmentRepository
+  async findAll(userId: number): Promise<DepartmentEntity[]> {
+    const departments = await this.departmentRepository
       .createQueryBuilder('department')
-      .select()
-      .addFrom('view.manager_access_department', 'access')
-      .andWhere('department.id = access.department_id')
-      .andWhere('access.user_id = :userId', { userId })
-      .getManyAndCount();
+      .where((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('department_id')
+          .from('view.manager_access_department', 'access')
+          .where('access.user_id = :userId', { userId })
+          .getQuery();
+        return 'department.id IN ' + subQuery;
+      })
+      .getMany();
 
-    return [departments, total] as [DepartmentEntity[], number];
+    return departments;
   }
 
   async findOne(id: number, userId: number): Promise<DepartmentEntity> {
     try {
       const department = await this.departmentRepository
         .createQueryBuilder('department')
-        .select()
-        .addFrom('view.manager_access_department', 'access')
-        .andWhere('department.id = :id', { id })
-        .andWhere('department.id = access.department_id')
-        .andWhere('access.user_id = :userId', { userId })
+        .where({ id })
+        .where((qb) => {
+          const subQuery = qb
+            .subQuery()
+            .select('department_id')
+            .from('view.manager_access_department', 'access')
+            .where('access.user_id = :userId', { userId })
+            .getQuery();
+          return 'department.id IN ' + subQuery;
+        })
         .getOneOrFail();
 
-      return department as DepartmentEntity;
+      return department;
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
         throw new NotFoundException(`Department with ID ${id} not found`);

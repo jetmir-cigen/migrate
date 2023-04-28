@@ -21,22 +21,26 @@ export class FindInvoicesByFilterQueryHandler
     private readonly invoiceRepository: Repository<InvoiceEntity>,
   ) {}
 
-  async execute({
-    filters,
-  }: FindInvoicesByFilterQuery): Promise<InvoiceEntity[]> {
+  async execute({ filters }: FindInvoicesByFilterQuery) {
     const { customerId, userId } = filters;
 
     const invoices = await this.invoiceRepository
       .createQueryBuilder('invoice')
-      .select()
-      .addFrom('view.invoice', 'vi')
-      .addFrom('view.manager_access_customer', 'mac')
-      .andWhere('mac.user_id = :userId', { userId })
-      .andWhere('mac.customer_id = vi.customer_id')
-      .andWhere('invoice.id = vi.id')
-      .andWhere('vi.vendor_id = :customerId', { customerId })
+      .andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('vi.id')
+          .from('view.invoice', 'vi')
+          .addFrom('view.manager_access_customer', 'mac')
+          .where('mac.user_id = :userId', { userId })
+          .andWhere('mac.customer_id = vi.customer_id')
+          .andWhere('invoice.id = vi.id')
+          .andWhere('vi.vendor_id = :customerId', { customerId })
+          .getQuery();
+        return 'invoice.id IN ' + subQuery;
+      })
       .getMany();
 
-    return invoices as InvoiceEntity[];
+    return invoices;
   }
 }

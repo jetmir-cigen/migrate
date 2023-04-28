@@ -52,7 +52,7 @@ export class DepartmentController {
   async create(
     @Body() createDepartmentDto: CreateDepartmentDto,
     @AuthUser() user: Express.AuthUser,
-  ): Promise<DepartmentResponseDto> {
+  ) {
     const department = await this.departmentService.create(
       createDepartmentDto,
       user.cid,
@@ -66,11 +66,9 @@ export class DepartmentController {
     type: DepartmentListResponseDto,
   })
   @Get('/')
-  async findAll(
-    @AuthUser() user: Express.AuthUser,
-  ): Promise<DepartmentListResponseDto> {
-    const [departments, total] = await this.departmentService.findAll(user.uid);
-    return new DepartmentListResponseDto({ total, departments });
+  async findAll(@AuthUser() user: Express.AuthUser) {
+    const departments = await this.departmentService.findAll(user.uid);
+    return new DepartmentListResponseDto({ departments });
   }
 
   @ApiOperation({
@@ -92,10 +90,7 @@ export class DepartmentController {
     description: `Department with ID not found`,
   })
   @Get(':id(\\d+)')
-  async findOne(
-    @Param('id') id: number,
-    @AuthUser() user: Express.AuthUser,
-  ): Promise<DepartmentResponseDto> {
+  async findOne(@Param('id') id: number, @AuthUser() user: Express.AuthUser) {
     const department = await this.departmentService.findOne(id, user.uid);
     return new DepartmentResponseDto({ department });
   }
@@ -127,7 +122,7 @@ export class DepartmentController {
     @Param('id') id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
     @AuthUser() user: Express.AuthUser,
-  ): Promise<DepartmentResponseDto> {
+  ) {
     const department = await this.departmentService.update(
       id,
       updateDepartmentDto,
@@ -148,10 +143,7 @@ export class DepartmentController {
     description: 'The ID of the department to remove',
     example: 1,
   })
-  remove(
-    @Param('id') id: number,
-    @AuthUser() user: Express.AuthUser,
-  ): Promise<boolean> {
+  remove(@Param('id') id: number, @AuthUser() user: Express.AuthUser) {
     return this.departmentService.remove(id, user.uid);
   }
 }

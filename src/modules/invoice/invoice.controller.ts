@@ -44,9 +44,7 @@ export class InvoiceController {
     status: 401,
     description: 'Unauthorized',
   })
-  async findAll(
-    @AuthUser() user: Express.AuthUser,
-  ): Promise<InvoiceListResponseDto> {
+  async findAll(@AuthUser() user: Express.AuthUser) {
     const invoices = await this.queryBus.execute(
       new FindInvoicesByFilterQuery({
         userId: user.uid,
@@ -72,9 +70,7 @@ export class InvoiceController {
     status: 401,
     description: 'Unauthorized',
   })
-  async findAllVendorInvoices(
-    @AuthUser() user: Express.AuthUser,
-  ): Promise<InvoiceListResponseDto> {
+  async findAllVendorInvoices(@AuthUser() user: Express.AuthUser) {
     const invoices = await this.queryBus.execute(
       new FindVendorInvoicesByFilterQuery({
         userId: user.uid,
@@ -109,10 +105,7 @@ export class InvoiceController {
     status: 404,
     description: 'Invoice not found',
   })
-  async findOne(
-    @Param('id') id: number,
-    @AuthUser() user: Express.AuthUser,
-  ): Promise<InvoiceResponseDto> {
+  async findOne(@Param('id') id: number, @AuthUser() user: Express.AuthUser) {
     const invoice = await this.queryBus.execute(
       new FindInvoiceByFilterQuery({
         userId: user.uid,
