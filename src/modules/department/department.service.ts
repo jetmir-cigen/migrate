@@ -31,6 +31,8 @@ export class DepartmentService {
   async findAll(userId: number): Promise<DepartmentEntity[]> {
     const departments = await this.departmentRepository
       .createQueryBuilder('department')
+      .leftJoinAndSelect('department.user', 'user')
+      .leftJoinAndSelect('department.deputyUser', 'deputyUser')
       .where((qb) => {
         const subQuery = qb
           .subQuery()
@@ -47,10 +49,14 @@ export class DepartmentService {
 
   async findOne(id: number, userId: number): Promise<DepartmentEntity> {
     try {
+      console.log({ id, userId });
+
       const department = await this.departmentRepository
         .createQueryBuilder('department')
+        .leftJoinAndSelect('department.user', 'user')
+        .leftJoinAndSelect('department.deputyUser', 'deputyUser')
         .where({ id })
-        .where((qb) => {
+        .andWhere((qb) => {
           const subQuery = qb
             .subQuery()
             .select('department_id')
@@ -61,6 +67,7 @@ export class DepartmentService {
         })
         .getOneOrFail();
 
+      console.log(department);
       return department;
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
