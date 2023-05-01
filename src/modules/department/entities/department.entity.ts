@@ -59,7 +59,15 @@ export class DepartmentEntity {
   @Column({ name: 'deputy_user_id' })
   deputyUserId: number;
 
-  @Column({ default: false })
+  @Column({
+    type: 'bit',
+    width: 1,
+    default: () => "b'0'",
+    transformer: {
+      from: (value: Buffer) => value[0] === 1,
+      to: (value: boolean) => (value ? Buffer.from([1]) : Buffer.from([0])),
+    },
+  })
   inactive: boolean;
 
   @Column({ default: false, name: 'deputy_mail' })
