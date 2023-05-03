@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsDefined,
   IsString,
@@ -32,7 +33,8 @@ export class CreateTextTemplateDto {
   })
   @IsDefined()
   @IsInt()
-  whitelabelId: number;
+  @Type(() => Number)
+  whitelabel: number;
 
   @ApiProperty({
     description: 'The customer head ID of the text template',
@@ -40,7 +42,8 @@ export class CreateTextTemplateDto {
   })
   @IsOptional()
   @IsInt()
-  customerHeadId?: number;
+  @Type(() => Number)
+  customerHead?: number;
 
   @ApiProperty({
     description: 'The customer ID of the text template',
@@ -48,7 +51,8 @@ export class CreateTextTemplateDto {
   })
   @IsOptional()
   @IsInt()
-  customerId?: number;
+  @Type(() => Number)
+  customer?: number;
 
   @ApiProperty({
     description: 'The sender of the text template',
