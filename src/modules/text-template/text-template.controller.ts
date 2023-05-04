@@ -39,10 +39,11 @@ import {
   DeleteTextTemplateCommand,
   UpdateTextTemplateCommand,
 } from '@/modules/text-template/commands';
+import { TextTemplateEntity } from './entities';
 
 @ApiTags('text-templates')
 @Controller('text-templates')
-@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+// @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
 export class TextTemplateController {
   constructor(
     private readonly queryBus: QueryBus,
@@ -52,29 +53,15 @@ export class TextTemplateController {
   @Get()
   @ApiOperation({ summary: 'Get all text templates' })
   @ApiOkResponse({ type: [TextTemplateDto] })
-  async getTextTemplates(): Promise<TextTemplateResponseDto> {
-    const [textTemplates, total] = await this.queryBus.execute(
-      new GetTextTemplatesQuery(),
-    );
-    return new TextTemplateResponseDto({
-      total,
-      textTemplates,
-    });
+  async getTextTemplates(): Promise<TextTemplateEntity[]> {
+    return this.queryBus.execute(new GetTextTemplatesQuery());
   }
 
   @Get('/codes')
   @ApiOperation({ summary: 'Get all distinct codes' })
   @ApiOkResponse({ type: [String] })
-  async getDistinctTextTemplateCodes(): Promise<
-    SuccessResponseDto & { codes: string[] }
-  > {
-    const codes = await this.queryBus.execute(
-      new GetDistinctTextTemplateCodesQuery(),
-    );
-    return {
-      $success: true,
-      codes,
-    };
+  async getDistinctTextTemplateCodes(): Promise<string[]> {
+    return this.queryBus.execute(new GetDistinctTextTemplateCodesQuery());
   }
 
   @Post('/')

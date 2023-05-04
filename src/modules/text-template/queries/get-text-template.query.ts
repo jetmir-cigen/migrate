@@ -14,20 +14,32 @@ export class GetTextTemplatesQueryHandler
     private readonly textTemplateRepository: Repository<TextTemplateEntity>,
   ) {}
 
-  async execute(): Promise<[TextTemplateEntity[], number]> {
-    const [textTemplates, total] =
-      await this.textTemplateRepository.findAndCount({
-        select: [
-          'code',
-          'locale',
-          'whitelabelId',
-          'customerHeadId',
-          'customerId',
-          'sender',
-          'subject',
-          'text',
-        ],
-      });
-    return [textTemplates, total];
+  async execute() {
+    const textTemplates = await this.textTemplateRepository.find({
+      relations: ['whitelabel', 'customerHead', 'customer'],
+      select: {
+        id: true,
+        code: true,
+        locale: true,
+        type: true,
+        whitelabel: {
+          name: true,
+        },
+        customer: {
+          name: true,
+        },
+        customerHead: {
+          name: true,
+        },
+        subject: true,
+        text: true,
+      },
+    });
+    return textTemplates.map((textTemplate) => ({
+      ...textTemplate,
+      customer: textTemplate.customer?.name || 'N/A',
+      whitelabel: textTemplate.whitelabel?.name,
+      customerHead: textTemplate.customerHead?.name || 'N/A',
+    }));
   }
 }
