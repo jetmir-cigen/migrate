@@ -22,7 +22,10 @@ export class DepartmentService {
         customerId,
       });
 
-      return department;
+      return this.departmentRepository.findOneOrFail({
+        where: { id: department.id },
+        relations: ['user', 'deputyUser'],
+      });
     } catch (err) {
       throw err;
     }
@@ -49,8 +52,6 @@ export class DepartmentService {
 
   async findOne(id: number, userId: number): Promise<DepartmentEntity> {
     try {
-      console.log({ id, userId });
-
       const department = await this.departmentRepository
         .createQueryBuilder('department')
         .leftJoinAndSelect('department.user', 'user')
@@ -67,7 +68,6 @@ export class DepartmentService {
         })
         .getOneOrFail();
 
-      console.log(department);
       return department;
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
@@ -82,16 +82,14 @@ export class DepartmentService {
     updateDepartmentDto: UpdateDepartmentDto,
     userId: number,
   ): Promise<DepartmentEntity> {
-    const department = await this.findOne(id, userId);
-
-    const updatedDepartment = {
-      ...department,
-      ...updateDepartmentDto,
-    };
+    await this.findOne(id, userId);
 
     try {
-      await this.departmentRepository.update(id, updatedDepartment);
-      return updatedDepartment;
+      await this.departmentRepository.update(id, updateDepartmentDto);
+      return this.departmentRepository.findOneOrFail({
+        where: { id },
+        relations: ['user', 'deputyUser'],
+      });
     } catch (err) {
       throw err;
     }
