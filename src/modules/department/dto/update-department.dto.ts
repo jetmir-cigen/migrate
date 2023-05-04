@@ -3,6 +3,7 @@ import {
   IsBoolean,
   IsNotEmpty,
   IsNumber,
+  IsNumberString,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -20,7 +21,7 @@ export class UpdateDepartmentDto {
     example: 123,
     description: 'The code of the department',
   })
-  @IsNumber()
+  @IsNumberString({}, { message: 'Code must be a number' })
   @IsNotEmpty()
   code: string;
 
