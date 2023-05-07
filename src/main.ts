@@ -38,5 +38,11 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   await app.listen(4000);
+  console.log(
+    `Application running at ${(await app.getUrl()).replace(
+      '[::1]',
+      'localhost',
+    )}`,
+  );
 }
 bootstrap();
