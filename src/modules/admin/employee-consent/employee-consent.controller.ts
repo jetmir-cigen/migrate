@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { EmployeeConsentService } from './employee-consent.service';
 import {
   ApiBearerAuth,
@@ -35,13 +35,4 @@ export class EmployeeConsentController {
     });
     return new EmployeeConsentListResponseDto({ employeeConsents });
   }
-
-  // @Post('/')
-  // async createLabel(
-  //   @Body() body: CreateElementDto,
-  // ): Promise<ElementLabelEntity> {
-  //   // In some complex cases, move the logic to the service layer
-  //   const elementLabel = this.elementLabelRepository.create(body);
-  //   return this.elementLabelRepository.save(elementLabel);
-  // }
 }
