@@ -9,13 +9,17 @@ import { EmployeeConsentEntity } from '../../employee-consent/entities/employee-
 
 @Entity('employee-consent-cost-object')
 export class EmployeeConsentCostObjectEntity {
+  // Missing primary key
+  @PrimaryGeneratedColumn()
+  id: string;
+
   @Column({ type: 'datetime', nullable: true })
   datetime: Date;
 
   @OneToOne(() => EmployeeConsentEntity, (consent) => consent.id, {
     nullable: true,
   })
-  @JoinColumn({ name: 'employee_consent' })
+  @JoinColumn({ name: 'employee_consent_id' })
   employeeConsent: EmployeeConsentEntity;
 
   @Column({ name: 'employee_consent_id' })

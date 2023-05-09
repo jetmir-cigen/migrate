@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { EmployeeConsentService } from './employee-consent.service';
 import {
   ApiBearerAuth,
@@ -28,11 +28,10 @@ export class EmployeeConsentController {
   })
   @ApiUnauthorizedResponse()
   @Get('/')
-  async findAll(@AuthUser() { customerId, customerHeadId }) {
-    console.log('find all');
+  async findAll(@AuthUser() user: Express.User) {
     const employeeConsents = await this.employeeConsentService.findAll({
-      customerId,
-      customerHeadId,
+      customerId: user.cid,
+      customerHeadId: 1,
     });
     return new EmployeeConsentListResponseDto({ employeeConsents });
   }

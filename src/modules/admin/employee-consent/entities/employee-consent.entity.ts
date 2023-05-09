@@ -9,8 +9,9 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
+import { EmployeeConsentCostObjectEntity } from '../../employee-consent-cost-object/entities/employee-consent-cost-object.entity';
 
-@Entity('employee-consent')
+@Entity('employee_consent')
 export class EmployeeConsentEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -27,10 +28,8 @@ export class EmployeeConsentEntity {
   text: string;
 
   @OneToOne(() => UserEntity, (user) => user.id, { nullable: true })
-  @JoinColumn({ name: 'createdUserId' })
+  @JoinColumn({ name: 'created_user_id' })
   user: UserEntity;
-
-  @Column({ name: 'created_user_id' })
   createdUserId: number;
 
   @CreateDateColumn({ name: 'createdDate' })
