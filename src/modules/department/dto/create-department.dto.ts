@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsOptional,
   IsBoolean,
+  IsNumberString,
 } from 'class-validator';
 
 export class CreateDepartmentDto {
@@ -20,7 +21,7 @@ export class CreateDepartmentDto {
     example: 123,
     description: 'The code of the department',
   })
-  @IsNumber()
+  @IsNumberString()
   @IsNotEmpty()
   code: string;
 

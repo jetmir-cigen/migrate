@@ -8,9 +8,9 @@ export class CreateTextTemplateCommand {
     public readonly data: {
       code: string;
       locale: string;
-      whitelabelId?: number;
-      customerHeadId?: number;
-      customerId?: number;
+      whitelabel?: number;
+      customerHead?: number;
+      customer?: number;
       sender?: string;
       subject?: string;
       text?: string;
@@ -32,7 +32,18 @@ export class CreateTextTemplateCommandHandler
   async execute({
     data,
   }: CreateTextTemplateCommand): Promise<TextTemplateEntity> {
-    const textTemplate = this.textTemplateRepository.create(data);
+    const textTemplate = this.textTemplateRepository.create({
+      ...data,
+      whitelabel: {
+        id: data.whitelabel,
+      },
+      customerHead: {
+        id: data.customerHead,
+      },
+      customer: {
+        id: data.customer,
+      },
+    });
 
     return this.textTemplateRepository.save(textTemplate);
   }

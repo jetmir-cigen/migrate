@@ -27,6 +27,7 @@ import { TextTemplateModule } from './modules/text-template/text-template.module
 import { EmployeeConsentModule } from './modules/admin/employee-consent/employee-consent.module';
 import { CustomerHeadModule } from './modules/customer-head/customer-head.module';
 import { EmployeeConsentCostObjectModule } from './modules/admin/employee-consent-cost-object/employee-consent-cost-object.module';
+import { WhitelabelModule } from './modules/whitelabel/whitelabel.module';
 
 @Module({
   imports: [
@@ -47,6 +48,8 @@ import { EmployeeConsentCostObjectModule } from './modules/admin/employee-consen
     TextTemplateModule,
     EmployeeConsentModule,
     EmployeeConsentCostObjectModule,
+    WhitelabelModule,
+    InvoiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

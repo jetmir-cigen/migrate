@@ -45,7 +45,6 @@ export class FindUsersByFilterQueryHandler
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.usergroup', 'usergroup')
       .where(whereFilters)
-      .take(items)
       .select([
         'user.id',
         'user.username',
