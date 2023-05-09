@@ -33,7 +33,7 @@ export class EmployeeConsentService {
         'COUNT(DISTINCT employeeConsentCostObjects.cost_object_id)',
         'consentsGiven',
       )
-      .leftJoin('employeeConsent.createdUser', 'user')
+      .leftJoin('employeeConsent.user', 'user')
       .leftJoin(
         'employeeConsent.employeeConsentCostObjects',
         'employeeConsentCostObjects',

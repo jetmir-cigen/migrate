@@ -29,6 +29,7 @@ export class EmployeeConsentController {
   @ApiUnauthorizedResponse()
   @Get('/')
   async findAll(@AuthUser() { customerId, customerHeadId }) {
+    console.log('find all');
     const employeeConsents = await this.employeeConsentService.findAll({
       customerId,
       customerHeadId,
