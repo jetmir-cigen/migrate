@@ -10,9 +10,9 @@ export class EmployeeConsentDto {
 
   @ApiProperty({
     example: true,
-    description: 'Whether the consent is global',
+    description: `Unique identifier of the author's customer head if present`,
   })
-  isGlobal: boolean;
+  customerHeadId: number;
 
   @ApiProperty({
     example: 'I agree to...',
@@ -33,10 +33,16 @@ export class EmployeeConsentDto {
   createdUserId: number;
 
   @ApiProperty({
-    example: 'John Smith',
-    description: 'Name of the user who created the consent',
+    example: 'John',
+    description: 'First name of the user who created the consent',
   })
-  createdUserName: string;
+  createdUserFirstName: string;
+
+  @ApiProperty({
+    example: 'Smith',
+    description: 'Last name of the user who created the consent',
+  })
+  createdUserLastName: string;
 
   @ApiProperty({
     example: 'I agree to...',
