@@ -32,17 +32,13 @@ export class EmployeeConsentService {
     const employeeConsents = await this.employeeConsentRepository
       .createQueryBuilder('employee_consent')
       .select('employee_consent.id', 'id')
-      .addSelect(
-        `IF(employee_consent.customer_head_id IS NULL, 'false', 'true')`,
-        'isGlobal',
-      )
+      .addSelect('employee_consent.customer_head_id', 'customerHeadId')
       .addSelect('employee_consent.text', 'text')
       .addSelect('employee_consent.created_date', 'createdDate')
       .addSelect('user.id', 'createdUserId')
-      .addSelect(
-        "CONCAT(user.first_name, ' ', user.last_name)",
-        'createdUserName',
-      )
+      .addSelect('user.id', 'createdUserId')
+      .addSelect('user.first_name', 'createdUserFirstName')
+      .addSelect('user.last_name', 'createdUserLastName')
       .leftJoin('employee_consent.user', 'user')
       .where(
         'employee_consent.customer_id = :customerId OR employee_consent.customer_head_id = :customerHeadId',
@@ -50,7 +46,7 @@ export class EmployeeConsentService {
       )
       .groupBy('employee_consent.id')
       .orderBy('employee_consent.id', 'DESC')
-      .getMany();
+      .getRawMany<EmployeeConsentDto>();
 
     const consents = employeeConsents.map((consent) => {
       const consentsGiven =
