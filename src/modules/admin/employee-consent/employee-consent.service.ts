@@ -3,13 +3,14 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { EmployeeConsentEntity } from './entities/employee-consent.entity';
 import { Repository } from 'typeorm';
 import { EmployeeConsentDto } from './dto/employee-consent-response.dto';
+import { CreateEmployeeConsentDto } from './dto/create-employee-consent.dto';
 
 @Injectable()
 export class EmployeeConsentService {
   constructor(
     @InjectRepository(EmployeeConsentEntity)
     @InjectDataSource()
-    private readonly employeeConsentRepository: Repository<EmployeeConsentDto>,
+    private readonly employeeConsentRepository: Repository<EmployeeConsentEntity>,
   ) {}
 
   async findAll({
@@ -59,6 +60,22 @@ export class EmployeeConsentService {
       return { ...consent, consentsGiven };
     });
 
-    return consents;
+    return consents as EmployeeConsentDto;
+  }
+
+  async create(
+    createDepartmentDto: CreateEmployeeConsentDto,
+    customerId: number,
+  ): Promise<EmployeeConsentEntity> {
+    try {
+      const department = await this.employeeConsentRepository.save({});
+
+      return this.employeeConsentRepository.findOneOrFail({
+        where: { id: department.id },
+        relations: ['user', 'deputyUser'],
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 }

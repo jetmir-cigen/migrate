@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { EmployeeConsentService } from './employee-consent.service';
 import {
   ApiBearerAuth,
@@ -11,6 +11,8 @@ import { AuthGuard } from '@/modules/auth/auth.guard';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { EmployeeConsentListResponseDto } from './dto/employee-consent-response.dto';
 import { AuthUser } from '@/modules/auth/auth-user.decorator';
+import { EmployeeConsentEntity } from './entities/employee-consent.entity';
+import { CreateEmployeeConsentDto } from './dto/create-employee-consent.dto';
 
 @ApiTags('Employee-consents')
 @ApiBearerAuth()
@@ -34,5 +36,13 @@ export class EmployeeConsentController {
       customerHeadId: 1,
     });
     return new EmployeeConsentListResponseDto({ employeeConsents });
+  }
+  @Post('/')
+  async createLabel(
+    @Body() body: CreateEmployeeConsentDto,
+  ): Promise<EmployeeConsentEntity> {
+    // In some complex cases, move the logic to the service layer
+    const elementLabel = this.employeeConsentService.create(body);
+    return this.employeeConsentService.save(elementLabel);
   }
 }
