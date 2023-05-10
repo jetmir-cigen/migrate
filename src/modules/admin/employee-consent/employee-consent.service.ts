@@ -9,7 +9,7 @@ export class EmployeeConsentService {
   constructor(
     @InjectRepository(EmployeeConsentEntity)
     @InjectDataSource()
-    private readonly employeeConsentRepository: Repository<EmployeeConsentEntity>,
+    private readonly employeeConsentRepository: Repository<EmployeeConsentDto>,
   ) {}
 
   async findAll({
@@ -19,7 +19,10 @@ export class EmployeeConsentService {
     customerId: number;
     customerHeadId: number;
   }): Promise<EmployeeConsentDto[]> {
-    const groupedConsents = await this.employeeConsentRepository.query(
+    const groupedConsents: {
+      employeeConsentId: number;
+      consentsGiven: number;
+    }[] = await this.employeeConsentRepository.query(
       `SELECT employee_consent_id employeeConsentId, COUNT(employee_consent_id) AS consentsGiven
       FROM employee_consent_cost_object GROUP BY employee_consent_id;
       `,
@@ -46,7 +49,7 @@ export class EmployeeConsentService {
       )
       .groupBy('employee_consent.id')
       .orderBy('employee_consent.id', 'DESC')
-      .getRawMany();
+      .getMany();
 
     const consents = employeeConsents.map((consent) => {
       const consentsGiven =

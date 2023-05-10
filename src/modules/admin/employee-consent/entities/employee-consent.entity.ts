@@ -9,7 +9,6 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { EmployeeConsentCostObjectEntity } from '../../employee-consent-cost-object/entities/employee-consent-cost-object.entity';
 
 @Entity('employee_consent')
 export class EmployeeConsentEntity {
