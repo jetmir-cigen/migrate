@@ -39,10 +39,14 @@ export class EmployeeConsentController {
   }
   @Post('/')
   async createLabel(
-    @Body() body: CreateEmployeeConsentDto,
+    @Body() createDepartmentDto: CreateEmployeeConsentDto,
+    @AuthUser() user: Express.User,
   ): Promise<EmployeeConsentEntity> {
-    // In some complex cases, move the logic to the service layer
-    const elementLabel = this.employeeConsentService.create(body);
-    return this.employeeConsentService.save(elementLabel);
+    const employeeConsents = await this.employeeConsentService.create({
+      createDepartmentDto,
+      customerId: user.cid,
+      userId: user.id,
+    });
+    return new EmployeeConsentListResponseDto({ employeeConsents });
   }
 }
