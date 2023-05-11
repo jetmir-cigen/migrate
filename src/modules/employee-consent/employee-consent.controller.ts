@@ -41,7 +41,7 @@ export class EmployeeConsentController {
   }
 
   @ApiOperation({
-    summary: 'Create a new department',
+    summary: 'Create a new employee consent',
   })
   @ApiBody({
     type: CreateEmployeeConsentDto,
