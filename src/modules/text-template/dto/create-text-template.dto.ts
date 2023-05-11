@@ -6,6 +6,8 @@ import {
   IsInt,
   IsOptional,
   Length,
+  isBoolean,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateTextTemplateDto {
@@ -28,13 +30,11 @@ export class CreateTextTemplateDto {
   locale: string;
 
   @ApiProperty({
-    description: 'The whitelabel ID of the text template',
-    example: 1,
+    description: 'The customer head ID of the text template',
+    example: 2,
   })
-  @IsDefined()
-  @IsInt()
-  @Type(() => Number)
-  whitelabel: number;
+  @IsString()
+  isGlobal: string & ('global' | 'local');
 
   @ApiProperty({
     description: 'The customer head ID of the text template',
