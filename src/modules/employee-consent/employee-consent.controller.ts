@@ -57,11 +57,14 @@ export class EmployeeConsentController {
     @Body() createDepartmentDto: CreateEmployeeConsentDto,
     @AuthUser() user: Express.User,
   ): Promise<EmployeeConsentEntity> {
+    console.log({ createDepartmentDto });
     const employeeConsents = await this.employeeConsentService.create({
       createDepartmentDto,
       customerId: user.cid,
       userId: user.id,
+      customerHeadId: user.chid,
     });
+    // @ts-ignore
     return new EmployeeConsentListResponseDto({ employeeConsents });
   }
 }
