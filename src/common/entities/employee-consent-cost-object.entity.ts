@@ -5,7 +5,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { EmployeeConsentEntity } from '../../modules/employee-consent/entities/employee-consent.entity';
+import { EmployeeConsentEntity } from '@/modules/employee-consent/entities/employee-consent.entity';
 
 @Entity('employee-consent-cost-object')
 export class EmployeeConsentCostObjectEntity {
@@ -20,7 +20,7 @@ export class EmployeeConsentCostObjectEntity {
     nullable: true,
   })
   @JoinColumn({ name: 'employee_consent_id' })
-  employeeConsentId: number;
+  employeeConsent: EmployeeConsentEntity;
 
   // missing entity
   @Column({ nullable: true, name: 'cost_object_id' })

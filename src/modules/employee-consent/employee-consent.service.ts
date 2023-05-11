@@ -35,7 +35,6 @@ export class EmployeeConsentService {
       .addSelect('employee_consent.text', 'text')
       .addSelect('employee_consent.created_date', 'createdDate')
       .addSelect('user.id', 'createdUserId')
-      .addSelect('user.id', 'createdUserId')
       .addSelect('user.first_name', 'createdUserFirstName')
       .addSelect('user.last_name', 'createdUserLastName')
       .leftJoin('employee_consent.user', 'user')
