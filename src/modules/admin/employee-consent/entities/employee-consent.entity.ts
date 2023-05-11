@@ -18,7 +18,7 @@ export class EmployeeConsentEntity {
   @OneToOne(() => CustomerHeadEntity, (customerHead) => customerHead.id, {
     nullable: true,
   })
-  customerHeadId: string;
+  customerHeadId: number;
 
   @OneToOne(() => CustomerEntity, (customer) => customer.id, { nullable: true })
   customerId: number;
