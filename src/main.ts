@@ -19,9 +19,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   // Enable cors, so FE can access it.
   app.enableCors({
-    // credentials: true,
-    // origin: ['http://localhost:3000'],
-    // allowedHeaders: ['authorization', 'cookie', 'cookies', 'content-type'],
+    credentials: true,
+    origin: ['http://localhost:3000', /.+vercel\.app/],
+    allowedHeaders: ['authorization', 'cookie', 'cookies', 'content-type'],
   });
 
   //For custom validations
@@ -37,6 +37,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(3001);
+  const PORT = process.env.PORT || 4000;
+
+  await app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 }
 bootstrap();
