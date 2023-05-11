@@ -2,8 +2,10 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { EmployeeConsentService } from './employee-consent.service';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOkResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -37,8 +39,21 @@ export class EmployeeConsentController {
     });
     return new EmployeeConsentListResponseDto({ employeeConsents });
   }
+
+  @ApiOperation({
+    summary: 'Create a new department',
+  })
+  @ApiBody({
+    type: CreateEmployeeConsentDto,
+    description: 'Data for creating a new employee consent',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The created employee consent',
+    type: EmployeeConsentEntity,
+  })
   @Post('/')
-  async createLabel(
+  async create(
     @Body() createDepartmentDto: CreateEmployeeConsentDto,
     @AuthUser() user: Express.User,
   ): Promise<EmployeeConsentEntity> {
