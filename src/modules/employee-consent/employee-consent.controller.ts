@@ -31,7 +31,7 @@ export class EmployeeConsentController {
   async findAll(@AuthUser() user: Express.User) {
     const employeeConsents = await this.employeeConsentService.findAll({
       customerId: user.cid,
-      customerHeadId: 1,
+      customerHeadId: user.chid,
     });
     return new EmployeeConsentListResponseDto({ employeeConsents });
   }
