@@ -41,6 +41,7 @@ import {
   UpdateTextTemplateCommand,
 } from '@/modules/text-template/commands';
 import { TextTemplateEntity } from './entities';
+import { AuthUser } from '../auth/auth-user.decorator';
 
 @ApiTags('text-templates')
 @Controller('text-templates')
@@ -78,9 +79,13 @@ export class TextTemplateController {
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   async createTextTemplate(
     @Body() createTextTemplateDto: CreateTextTemplateDto,
+    @AuthUser() user: Express.User,
   ): Promise<SuccessResponseDto & { textTemplate: TextTemplateDto }> {
     const createdTextTemplate = await this.commandBus.execute(
-      new CreateTextTemplateCommand(createTextTemplateDto),
+      new CreateTextTemplateCommand({
+        ...createTextTemplateDto,
+        authUser: user,
+      }),
     );
     return {
       $success: true,

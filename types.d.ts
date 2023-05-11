@@ -9,6 +9,8 @@ declare global {
     interface GenericUser {
       uid: number;
       cid: number;
+      chid: number;
+      wlid: number;
       role: UserRoles;
     }
 
