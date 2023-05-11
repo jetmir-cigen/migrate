@@ -16,6 +16,8 @@ export class CreateTextTemplateCommand {
       text?: string;
       type: string;
       description?: string;
+      authUser: Express.User;
+      isGlobal: string & ('global' | 'local');
     },
   ) {}
 }
@@ -30,18 +32,18 @@ export class CreateTextTemplateCommandHandler
   ) {}
 
   async execute({
-    data,
+    data: { authUser, isGlobal, ...rest },
   }: CreateTextTemplateCommand): Promise<TextTemplateEntity> {
     const textTemplate = this.textTemplateRepository.create({
-      ...data,
+      ...rest,
       whitelabel: {
-        id: data.whitelabel,
+        id: authUser.wlid,
       },
       customerHead: {
-        id: data.customerHead,
+        id: isGlobal === 'global' ? authUser.chid : null,
       },
       customer: {
-        id: data.customer,
+        id: isGlobal === 'local' ? authUser.cid : null,
       },
     });
 
