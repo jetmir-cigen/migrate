@@ -1,37 +1,41 @@
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
+} from 'typeorm';
 import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  OneToOne,
-  JoinColumn,
-} from 'typeorm';
+import { EmployeeConsentCostObjectEntity } from '@/common/entities/employee-consent-cost-object.entity';
 
-@Entity('employee_consent')
+@Entity({ name: 'employee_consent' })
 export class EmployeeConsentEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn() id: number;
 
-  @OneToOne(() => CustomerHeadEntity, (customerHead) => customerHead.id, {
-    nullable: true,
-  })
+  @ManyToOne(() => CustomerHeadEntity)
   @JoinColumn({ name: 'customer_head_id' })
   customerHead: CustomerHeadEntity;
 
-  @OneToOne(() => CustomerEntity, (customer) => customer.id, { nullable: true })
+  @ManyToOne(() => CustomerEntity)
   @JoinColumn({ name: 'customer_id' })
   customer: CustomerEntity;
 
-  @Column({ type: 'text', nullable: true })
-  text: string;
+  @Column({ type: 'text', name: 'text', charset: 'utf8mb4' }) text: string;
 
-  @OneToOne(() => UserEntity, (user) => user.id, { nullable: true })
+  @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'created_user_id' })
   user: UserEntity;
 
-  @CreateDateColumn({ name: 'createdDate' })
-  createdDate: Date;
+  @Column({ name: 'created_date' }) createdDate: Date;
+
+  @OneToMany(
+    () => EmployeeConsentCostObjectEntity,
+    (ecco) => ecco.employeeConsent,
+  )
+  employeeConsentCostObjects: EmployeeConsentCostObjectEntity[];
 }

@@ -14,21 +14,12 @@ export class EmployeeConsentService {
   ) {}
 
   async findAll({
-    customerId,
-    customerHeadId,
+    customer,
+    customerHead,
   }: {
-    customerId: number;
-    customerHeadId: number;
+    customer: { id: number };
+    customerHead: { id: number };
   }): Promise<EmployeeConsentDto[]> {
-    const groupedConsents: {
-      employeeConsentId: number;
-      consentsGiven: number;
-    }[] = await this.employeeConsentRepository.query(
-      `SELECT employee_consent_id employeeConsentId, COUNT(employee_consent_id) AS consentsGiven
-      FROM employee_consent_cost_object GROUP BY employee_consent_id;
-      `,
-    );
-
     const employeeConsents = await this.employeeConsentRepository
       .createQueryBuilder('employee_consent')
       .select('employee_consent.id', 'id')
@@ -38,24 +29,24 @@ export class EmployeeConsentService {
       .addSelect('user.id', 'createdUserId')
       .addSelect('user.first_name', 'createdUserFirstName')
       .addSelect('user.last_name', 'createdUserLastName')
+      .addSelect(
+        'COUNT(employeeConsentCostObjects.employee_consent_id)',
+        'consentsGiven',
+      )
       .leftJoin('employee_consent.user', 'user')
+      .leftJoin(
+        'employee_consent.employeeConsentCostObjects',
+        'employeeConsentCostObjects',
+      )
       .where(
         'employee_consent.customer_id = :customerId OR employee_consent.customer_head_id = :customerHeadId',
-        { customerId, customerHeadId },
+        { customerId: customer.id, customerHeadId: customerHead.id },
       )
       .groupBy('employee_consent.id')
       .orderBy('employee_consent.id', 'DESC')
-      .getRawMany<EmployeeConsentDto>();
+      .getRawMany();
 
-    const consents = employeeConsents.map((consent) => {
-      const consentsGiven =
-        groupedConsents.find(
-          ({ employeeConsentId }) => employeeConsentId === consent.id,
-        )?.consentsGiven || 0;
-      return { ...consent, consentsGiven };
-    });
-
-    return consents;
+    return employeeConsents;
   }
 
   async create({
