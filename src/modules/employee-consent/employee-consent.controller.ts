@@ -60,9 +60,9 @@ export class EmployeeConsentController {
     console.log({ createDepartmentDto });
     const employeeConsents = await this.employeeConsentService.create({
       createDepartmentDto,
-      customerId: user.cid,
-      userId: user.id,
-      customerHeadId: user.chid,
+      customer: { id: user.cid },
+      customerHead: { id: user.chid },
+      user: { id: user.id },
     });
     // @ts-ignore
     return new EmployeeConsentListResponseDto({ employeeConsents });

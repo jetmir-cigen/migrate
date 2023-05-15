@@ -51,21 +51,21 @@ export class EmployeeConsentService {
 
   async create({
     createDepartmentDto,
-    userId,
-    customerId,
-    customerHeadId,
+    user,
+    customer,
+    customerHead,
   }: {
     createDepartmentDto: CreateEmployeeConsentDto;
-    userId: number;
-    customerId: number;
-    customerHeadId?: number;
+    customer: { id: number };
+    customerHead: { id: number };
+    user: { id: number };
   }): Promise<EmployeeConsentEntity> {
     try {
       const employeeConsent = await this.employeeConsentRepository.save({
         ...createDepartmentDto,
-        createdUserId: userId,
-        customerId,
-        customerHeadId: createDepartmentDto.isGlobal ? customerHeadId : null,
+        createdUserId: user.id,
+        customerId: customer.id,
+        customerHeadId: createDepartmentDto.isGlobal ? customerHead.id : null,
       });
 
       return this.employeeConsentRepository.findOneOrFail({
