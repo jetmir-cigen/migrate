@@ -1,28 +1,19 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 import { EmployeeConsentEntity } from '@/modules/employee-consent/entities/employee-consent.entity';
 
-@Entity('employee-consent-cost-object')
+@Entity({ name: 'employee_consent_cost_object' })
 export class EmployeeConsentCostObjectEntity {
-  // Missing primary key
-  @PrimaryGeneratedColumn()
-  id: string;
-
-  @Column({ type: 'datetime', nullable: true })
-  datetime: Date;
-
-  @OneToOne(() => EmployeeConsentEntity, (consent) => consent.id, {
-    nullable: true,
-  })
+  @ManyToOne(() => EmployeeConsentEntity)
   @JoinColumn({ name: 'employee_consent_id' })
   employeeConsent: EmployeeConsentEntity;
 
-  // missing entity
-  @Column({ nullable: true, name: 'cost_object_id' })
-  costObjectId: number;
+  @PrimaryColumn({ name: 'employee_consent_id' }) employeeConsentId: number;
+  @PrimaryColumn({ name: 'cost_object_id' }) costObjectId: number;
+
+  @Column({
+    type: 'timestamp',
+    name: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  datetime: Date;
 }
