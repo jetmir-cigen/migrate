@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { EmployeeConsentEntity } from './entities/employee-consent.entity';
 import { Repository } from 'typeorm';
-import { EmployeeConsentDto } from './dto/employee-consent-response.dto';
 
 @Injectable()
 export class EmployeeConsentService {
@@ -18,32 +17,26 @@ export class EmployeeConsentService {
   }: {
     customer: { id: number };
     customerHead: { id: number };
-  }): Promise<EmployeeConsentDto[]> {
+  }): Promise<EmployeeConsentEntity[]> {
     const employeeConsents = await this.employeeConsentRepository
-      .createQueryBuilder('employee_consent')
-      .select('employee_consent.id', 'id')
-      .addSelect('employee_consent.customer_head_id', 'customerHeadId')
-      .addSelect('employee_consent.text', 'text')
-      .addSelect('employee_consent.created_date', 'createdDate')
-      .addSelect('user.id', 'createdUserId')
-      .addSelect('user.first_name', 'createdUserFirstName')
-      .addSelect('user.last_name', 'createdUserLastName')
-      .addSelect(
-        'COUNT(employeeConsentCostObjects.employee_consent_id)',
-        'consentsGiven',
-      )
-      .leftJoin('employee_consent.user', 'user')
-      .leftJoin(
-        'employee_consent.employeeConsentCostObjects',
-        'employeeConsentCostObjects',
-      )
+      .createQueryBuilder('e')
+      .leftJoin('e.employeeConsentCostObjects', 'employeeConsentCostObjects')
+      .leftJoin('e.user', 'u')
+      .leftJoin('e.customerHead', 'ch')
+      .leftJoin('e.customer', 'c')
+      .select(['e', 'u.id', 'u.firstName', 'u.lastName', 'ch.id', 'c.id'])
       .where(
-        'employee_consent.customer_id = :customerId OR employee_consent.customer_head_id = :customerHeadId',
-        { customerId: customer.id, customerHeadId: customerHead.id },
+        'e.customer_id = :customer OR e.customer_head_id = :customerHead',
+        { customer: customer.id, customerHead: customerHead.id },
       )
-      .groupBy('employee_consent.id')
-      .orderBy('employee_consent.id', 'DESC')
-      .getRawMany();
+      .loadRelationCountAndMap(
+        'e.employeeConsentCostObjectsCount',
+        'e.employeeConsentCostObjects',
+        'employeeConsentCostObjectsCount',
+      )
+      .groupBy('e.id')
+      .orderBy('e.id', 'DESC')
+      .getMany();
 
     return employeeConsents;
   }
