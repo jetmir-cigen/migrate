@@ -33,7 +33,7 @@ export class EmployeeConsentController {
       customer: { id: user.cid },
       customerHead: { id: user.chid },
     });
-    //@ts-ignore
+
     return new EmployeeConsentListResponseDto({ employeeConsents });
   }
 }

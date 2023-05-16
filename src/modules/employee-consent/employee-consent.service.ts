@@ -30,9 +30,9 @@ export class EmployeeConsentService {
         { customer: customer.id, customerHead: customerHead.id },
       )
       .loadRelationCountAndMap(
-        'e.employeeConsentCostObjectsCount',
+        'e.consentsGiven',
         'e.employeeConsentCostObjects',
-        'employeeConsentCostObjectsCount',
+        'consentsGiven',
       )
       .groupBy('e.id')
       .orderBy('e.id', 'DESC')

@@ -45,7 +45,7 @@ export class EmployeeConsentDto {
     example: 2,
     description: 'Number of given consents',
   })
-  employeeConsentCostObjectsCount: number;
+  consentsGiven: number;
 }
 
 export class EmployeeConsentListResponseDto extends SuccessResponseDto {
