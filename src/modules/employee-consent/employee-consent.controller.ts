@@ -33,7 +33,6 @@ export class EmployeeConsentController {
       customer: { id: user.cid },
       customerHead: { id: user.chid },
     });
-
     return new EmployeeConsentListResponseDto({ employeeConsents });
   }
 }

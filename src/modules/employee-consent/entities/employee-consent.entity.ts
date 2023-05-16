@@ -4,8 +4,6 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  ManyToMany,
-  JoinTable,
   OneToMany,
 } from 'typeorm';
 import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
@@ -38,4 +36,6 @@ export class EmployeeConsentEntity {
     (ecco) => ecco.employeeConsent,
   )
   employeeConsentCostObjects: EmployeeConsentCostObjectEntity[];
+
+  public consentsGiven: number;
 }
