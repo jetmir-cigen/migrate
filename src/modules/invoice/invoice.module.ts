@@ -9,9 +9,13 @@ import {
   FindInvoicesByFilterQueryHandler,
   FindVendorInvoicesByFilterQueryHandler,
 } from './queries';
+import { VendorEntity } from '@/common/entities/vendor.entity';
 
 @Module({
-  imports: [CqrsModule, TypeOrmModule.forFeature([InvoiceEntity])],
+  imports: [
+    CqrsModule,
+    TypeOrmModule.forFeature([InvoiceEntity, VendorEntity]),
+  ],
   controllers: [InvoiceController],
   providers: [
     InvoiceService,

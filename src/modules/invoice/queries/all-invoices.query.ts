@@ -35,10 +35,13 @@ export class FindInvoicesByFilterQueryHandler
           .where('mac.user_id = :userId', { userId })
           .andWhere('mac.customer_id = vi.customer_id')
           .andWhere('invoice.id = vi.id')
-          .andWhere('vi.vendor_id = :customerId', { customerId })
+          // .andWhere('vi.vendor_id = :customerId', { customerId })
           .getQuery();
         return 'invoice.id IN ' + subQuery;
       })
+      .leftJoinAndSelect('invoice.vendor', 'vendor')
+      .leftJoinAndSelect('invoice.customer', 'customer')
+      .leftJoinAndSelect('invoice.elementLabel', 'elementLabel')
       .getMany();
 
     return invoices;

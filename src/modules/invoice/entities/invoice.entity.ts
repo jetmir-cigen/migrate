@@ -1,15 +1,19 @@
+import { VendorEntity } from '@/common/entities/vendor.entity';
+import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { ElementLabelEntity } from '@/modules/element-label/element-label.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  Index,
-  JoinColumn,
   ManyToOne,
+  JoinColumn,
+  Index,
 } from 'typeorm';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
-import { ElementLabelEntity } from '@/modules/element-label/element-label.entity';
 
 @Entity({ name: 'invoice', schema: 'control' })
+@Index('uk_invoices_vendor_id_invoice_no', ['vendorId', 'invoiceNo'], {
+  unique: true,
+})
 export class InvoiceEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -17,12 +21,18 @@ export class InvoiceEntity {
   @Column({ name: 'vendor_id' })
   vendorId: number;
 
+  @ManyToOne(() => VendorEntity)
+  @JoinColumn({ name: 'vendor_id' })
+  vendor: VendorEntity;
+
+  @Column({ name: 'customer_id' })
+  customerId: number;
+
   @ManyToOne(() => CustomerEntity)
   @JoinColumn({ name: 'customer_id' })
   customer: CustomerEntity;
 
   @Column({ name: 'invoice_no', length: 25 })
-  @Index('uk_invoices_vendor_id_invoice_no', { unique: true })
   invoiceNo: string;
 
   @Column({ type: 'date' })
@@ -34,8 +44,8 @@ export class InvoiceEntity {
   @Column({ type: 'boolean', default: false })
   sent: boolean;
 
-  @Column({ name: 'invoice_account_id' })
-  invoiceAccountId: number;
+  @Column({ name: 'invoice_account_id', nullable: true })
+  invoiceAccountId: number | null;
 
   @Column({
     name: 'invoice_amount',
@@ -55,12 +65,15 @@ export class InvoiceEntity {
   })
   invoiceControlAmount: number;
 
-  @ManyToOne(() => ElementLabelEntity, { nullable: false })
+  @Column({ name: 'element_label_id', default: 1 })
+  elementLabelId: number;
+
+  @ManyToOne(() => ElementLabelEntity)
   @JoinColumn({ name: 'element_label_id' })
   elementLabel: ElementLabelEntity;
 
   @Column({ length: 100, nullable: true })
-  kidnumber: string;
+  kidnumber: string | null;
 
   @Column({
     name: 'vendor_net_amount',
@@ -69,7 +82,7 @@ export class InvoiceEntity {
     scale: 2,
     nullable: true,
   })
-  vendorNetAmount: number;
+  vendorNetAmount: number | null;
 
   @Column({
     name: 'vendor_vat_amount',
@@ -78,7 +91,7 @@ export class InvoiceEntity {
     scale: 2,
     nullable: true,
   })
-  vendorVatAmount: number;
+  vendorVatAmount: number | null;
 
   @Column({
     name: 'vendor_gross_amount',
@@ -87,22 +100,22 @@ export class InvoiceEntity {
     scale: 2,
     nullable: true,
   })
-  vendorGrossAmount: number;
+  vendorGrossAmount: number | null;
 
   @Column({ name: 'invoice_file_name', length: 255, nullable: true })
-  invoiceFileName: string;
+  invoiceFileName: string | null;
 
   @Column({ name: 'ehf_status', length: 45, nullable: true })
-  ehfStatus: string;
+  ehfStatus: string | null;
 
   @Column({ name: 'invoice_recipient', length: 255, nullable: true })
-  invoiceRecipient: string;
+  invoiceRecipient: string | null;
 
   @Column({ type: 'datetime', nullable: true })
-  created: Date;
+  created: Date | null;
 
   @Column({ name: 'created_user_id', nullable: true })
-  createdUserId: number;
+  createdUserId: number | null;
 
   @Column({ name: 'last_update', type: 'datetime', nullable: true })
   lastUpdate: Date;
