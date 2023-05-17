@@ -24,6 +24,7 @@ import { CustomerModule } from './modules/customer/customer.module';
 import { MailerModule } from './modules/mailer/mailer.module';
 import { InvoiceModule } from './modules/invoice/invoice.module';
 import { TextTemplateModule } from './modules/text-template/text-template.module';
+import { EmployeeConsentModule } from './modules/employee-consent/employee-consent.module';
 import { WhitelabelModule } from './modules/whitelabel/whitelabel.module';
 
 @Module({
@@ -42,6 +43,7 @@ import { WhitelabelModule } from './modules/whitelabel/whitelabel.module';
     MailerModule,
     InvoiceModule,
     TextTemplateModule,
+    EmployeeConsentModule,
     WhitelabelModule,
     InvoiceModule,
   ],
