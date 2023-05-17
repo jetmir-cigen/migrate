@@ -12,6 +12,6 @@ export class UserGroupEntity {
   @Column()
   description: string;
 
-  @OneToMany(() => UserEntity, (user) => user.usergroup, { nullable: true })
+  @OneToMany(() => UserEntity, (user) => user.userGroup, { nullable: true })
   users: UserEntity[];
 }
