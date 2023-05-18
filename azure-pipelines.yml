@@ -35,7 +35,6 @@ stages:
           inputs:
             containerRegistry: $(DOCKER_REGISTRY_SERVICE_CONNECTION)
             command: 'login'
-        - checkout: self
         - task: AzureCLI@2
           displayName: Docker Build and push
           inputs:
@@ -44,18 +43,18 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               az acr build -t "$(IMAGE_REPOSITORY):$(Build.BuildId)" -r stardustcontainerregistryy --platform linux .
-        - checkout: CD_Template
-        - script: |
-            sudo snap install yq
-            git checkout main
+        # - checkout: CD_Template
+        # - script: |
+        #     sudo snap install yq
+        #     git checkout main
 
-            export FULL_IMAGE="$(IMAGE_REGISTRY)/$(IMAGE_REPOSITORY):$(Build.BuildId)"
+        #     export FULL_IMAGE="$(IMAGE_REGISTRY)/$(IMAGE_REPOSITORY):$(Build.BuildId)"
 
-            yq -i 'select(.kind == "CronJob") |= .spec.jobTemplate.spec.template.spec.containers[0].image = strenv(FULL_IMAGE)' $(FILE)
-            yq -i 'select(.kind == "Deployment") |= .spec.template.spec.containers[0].image = strenv(FULL_IMAGE)' $FILE
+        #     yq -i 'select(.kind == "CronJob") |= .spec.jobTemplate.spec.template.spec.containers[0].image = strenv(FULL_IMAGE)' $(FILE)
+        #     yq -i 'select(.kind == "Deployment") |= .spec.template.spec.containers[0].image = strenv(FULL_IMAGE)' $FILE
 
-            git config --global user.email "devops@cigen.me"
-            git config --global user.name "cd-pipeline.cigen"
-            git add .
-            git commit -m "update manifest for argocd"
-            git push origin HEAD:main --force
+        #     git config --global user.email "devops@cigen.me"
+        #     git config --global user.name "cd-pipeline.cigen"
+        #     git add .
+        #     git commit -m "update manifest for argocd"
+        #     git push origin HEAD:main --force
