@@ -19,11 +19,13 @@ import {
   UserDeletedEventHandler,
 } from '@/modules/user/events';
 import { GetUserByIdQueryHandler } from '@/modules/user/queries/get-user-by-id.query';
+import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { GetCustomerQueryHandler } from '@/modules/user/queries/get-customers.query';
 
 @Module({
   imports: [
     CqrsModule,
-    TypeOrmModule.forFeature([UserEntity, UserGroupEntity]),
+    TypeOrmModule.forFeature([UserEntity, UserGroupEntity, CustomerEntity]),
     HttpModule,
   ],
   controllers: [UserController],
@@ -31,12 +33,13 @@ import { GetUserByIdQueryHandler } from '@/modules/user/queries/get-user-by-id.q
     UserService,
     FindUsersByFilterQueryHandler,
     GetUserByIdQueryHandler,
+    GetCustomerQueryHandler,
     CreateUserCommandHandler,
+    UpdateUserCommandHandler,
     DeleteUserCommandHandler,
     UserCreatedEventHandler,
     UserUpdatedEventHandler,
     UserDeletedEventHandler,
-    UpdateUserCommandHandler,
   ],
 })
 export class UserModule {}

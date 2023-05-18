@@ -40,6 +40,9 @@ import {
 } from '@/common/dto/status-response.dto';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 import { GetUserByIdQuery } from '@/modules/user/queries/get-user-by-id.query';
+import { AuthUser } from '@/modules/auth/auth-user.decorator';
+import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { GetCustomersQuery } from '@/modules/user/queries/get-customers.query';
 
 @Controller('users')
 export class UserController {
@@ -81,6 +84,19 @@ export class UserController {
     return new UserCreateResponseDto({
       user: await this.commandBus.execute(new CreateUserCommand(userCreateDto)),
     });
+  }
+
+  @Get('customers')
+  @ApiResponse({
+    status: 201,
+    description: 'User customers retrieved successfully',
+  })
+  @ApiBadRequestResponse({ description: 'Invalid input data' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  async getCustomersByUser(
+    @AuthUser() user: Express.User,
+  ): Promise<CustomerEntity[]> {
+    return this.queryBus.execute(new GetCustomersQuery(user.chid));
   }
 
   @Get(':id')

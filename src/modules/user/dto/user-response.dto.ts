@@ -32,6 +32,13 @@ export class UserDto {
   username: string;
 
   @ApiProperty({
+    description: 'Phone number of the user',
+    type: 'string',
+    example: '1234567',
+  })
+  phoneNumber: string;
+
+  @ApiProperty({
     description: 'First name of the user',
     type: 'string',
     example: 'John',

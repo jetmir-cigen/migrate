@@ -39,6 +39,7 @@ export class FindUsersByFilterQueryHandler
         'user.firstName',
         'user.lastName',
         'user.email',
+        'user.phoneNumber',
         'userGroup.id',
         'userGroup.description',
       ])
