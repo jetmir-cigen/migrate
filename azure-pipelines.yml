@@ -4,12 +4,20 @@ trigger:
 - dev
 - feature/dockerize
 
+resources:
+  repositories:
+    - repository: CD_Template
+      endpoint: skytechrepos
+      type: git
+      name: 'Project Stardust/CD_Template'
+      ref: refs/heads/main
+
 variables:
   #VM_IMAGE_NAME: 'windows-2019'
   IMAGE_REPOSITORY: managerapi
   DOCKER_FILE_PATH:  '**/Dockerfile'
   DOCKER_REGISTRY_SERVICE_CONNECTION: acr-dev
-  #FILE: development/Processing/admin.yml #this is using placeholder namespace, needs to be changed in the future
+  FILE: development/Api/managerapi.yml 
   #IMAGE_TAG: latest #for now we are using build id, this is for future image tagging
   IMAGE_REGISTRY: stardustcontainerregistryy.azurecr.io
 
@@ -35,4 +43,18 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               az acr build -t "$(IMAGE_REPOSITORY):$(Build.BuildId)" -r stardustcontainerregistryy --platform linux .
+        - checkout: CD_Template
+        - script: |
+            sudo snap install yq
+            git checkout main
 
+            export FULL_IMAGE="$(IMAGE_REGISTRY)/$(IMAGE_REPOSITORY):$(Build.BuildId)"
+
+            yq -i 'select(.kind == "CronJob") |= .spec.jobTemplate.spec.template.spec.containers[0].image = strenv(FULL_IMAGE)' $(FILE)
+            yq -i 'select(.kind == "Deployment") |= .spec.template.spec.containers[0].image = strenv(FULL_IMAGE)' $FILE
+
+            git config --global user.email "devops@cigen.me"
+            git config --global user.name "cd-pipeline.cigen"
+            git add .
+            git commit -m "update manifest for argocd"
+            git push origin HEAD:main --force
