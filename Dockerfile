@@ -36,7 +36,7 @@ COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modul
 
 COPY --chown=node:node . .
 
-COPY --chown=node:node .env .
+#COPY --chown=node:node .env .
 
 
 # Run the build command which creates the production bundle
