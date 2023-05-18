@@ -47,6 +47,8 @@ stages:
               cd "Manager API"
               az acr build -t "$(IMAGE_REPOSITORY):$(Build.BuildId)" -r stardustcontainerregistryy --platform linux .
         - script: |
+            ls
+            cd "Project Stardust/CD_Template"
             cd ../CD_Template
             sudo snap install yq
             git checkout main
