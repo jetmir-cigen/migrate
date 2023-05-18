@@ -32,6 +32,7 @@ stages:
       steps:
         - checkout: self
         - checkout: CD_Template
+          persistCredentials: true
         - task: Docker@2
           displayName: Docker login
           inputs:
