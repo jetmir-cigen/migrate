@@ -48,9 +48,9 @@ stages:
               az acr build -t "$(IMAGE_REPOSITORY):$(Build.BuildId)" -r stardustcontainerregistryy --platform linux .
         - script: |
             ls
-            cd "Project Stardust/CD_Template"
-            cd ../CD_Template
+            cd CD_Template
             sudo snap install yq
+            git pull
             git checkout main
 
             export FULL_IMAGE="$(IMAGE_REGISTRY)/$(IMAGE_REPOSITORY):$(Build.BuildId)"
