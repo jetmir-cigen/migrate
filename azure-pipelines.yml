@@ -50,7 +50,6 @@ stages:
             ls
             cd CD_Template
             sudo snap install yq
-            git pull
             git checkout main
 
             export FULL_IMAGE="$(IMAGE_REGISTRY)/$(IMAGE_REPOSITORY):$(Build.BuildId)"
