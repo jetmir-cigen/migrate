@@ -5,7 +5,6 @@ import { UserEntity } from '@/modules/user/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserCreatedEvent } from '@/modules/user/events/user-created.event';
 import { ConflictException } from '@nestjs/common';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 
 export class CreateUserCommand {
   constructor(
