@@ -35,6 +35,7 @@ stages:
           inputs:
             containerRegistry: $(DOCKER_REGISTRY_SERVICE_CONNECTION)
             command: 'login'
+        - checkout: self
         - task: AzureCLI@2
           displayName: Docker Build and push
           inputs:
