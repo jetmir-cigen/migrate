@@ -1,0 +1,38 @@
+trigger:
+- main
+- staging
+- dev
+- feature/dockerize
+
+variables:
+  #VM_IMAGE_NAME: 'windows-2019'
+  IMAGE_REPOSITORY: managerapi
+  DOCKER_FILE_PATH:  '**/Dockerfile'
+  DOCKER_REGISTRY_SERVICE_CONNECTION: acr-dev
+  #FILE: development/Processing/admin.yml #this is using placeholder namespace, needs to be changed in the future
+  #IMAGE_TAG: latest #for now we are using build id, this is for future image tagging
+  IMAGE_REGISTRY: stardustcontainerregistryy.azurecr.io
+
+stages:
+  - stage: Build
+    displayName: Build and Push Docker Image
+    jobs:
+    - job: Build
+      displayName: Build
+      pool:
+        vmImage: linux
+      steps:
+        - task: Docker@2
+          displayName: Docker login
+          inputs:
+            containerRegistry: $(DOCKER_REGISTRY_SERVICE_CONNECTION)
+            command: 'login'
+        - task: AzureCLI@2
+          displayName: Docker Build and push
+          inputs:
+            azureSubscription: "azure-dev-subscription"
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              az acr build -t "$(IMAGE_REPOSITORY):$(Build.BuildId)" -r stardustcontainerregistryy --platform linux .
+
