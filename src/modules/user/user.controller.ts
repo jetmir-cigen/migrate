@@ -6,10 +6,8 @@ import {
   Param,
   Patch,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
-import { UserQueryDto } from './dto/user-query.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { FindUsersByFilterQuery } from './queries/find-users.query';
 import {
@@ -22,8 +20,11 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
+  ApiResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserCreateDto } from '@/modules/user/dto/user-create.dto';
@@ -37,6 +38,8 @@ import {
   StatusResponseDTO,
   SuccessResponseDto,
 } from '@/common/dto/status-response.dto';
+import { UserEntity } from '@/modules/user/entities/user.entity';
+import { GetUserByIdQuery } from '@/modules/user/queries/get-user-by-id.query';
 
 @Controller('users')
 export class UserController {
@@ -53,32 +56,12 @@ export class UserController {
   })
   @ApiUnauthorizedResponse()
   @Get('/')
-  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
-  async getAll(@Query() query: UserQueryDto): Promise<UserResponseDto> {
-    const {
-      filterByUsername,
-      filterByEmail,
-      filterByName,
-      filterBySeller,
-      filterByType,
-      items = 20,
-    } = query;
-
+  // @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+  async getAll(): Promise<UserResponseDto> {
     // In case of complex queries or complex business logic, it is better to use service
-    const [users, total] = await this.queryBus.execute(
-      new FindUsersByFilterQuery(
-        {
-          username: filterByUsername,
-          email: filterByEmail,
-          name: filterByName,
-          seller: filterBySeller,
-          type: filterByType,
-        },
-        { items },
-      ),
-    );
+    const users = await this.queryBus.execute(new FindUsersByFilterQuery());
 
-    return new UserResponseDto({ total, users });
+    return new UserResponseDto({ users });
   }
 
   @ApiOperation({ summary: 'Create a new user' })
@@ -98,6 +81,22 @@ export class UserController {
     return new UserCreateResponseDto({
       user: await this.commandBus.execute(new CreateUserCommand(userCreateDto)),
     });
+  }
+
+  @Get(':id')
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the user to get',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'User retrieved successfully',
+  })
+  @ApiBadRequestResponse({ description: 'Invalid input data' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  async getTextTemplateById(@Param('id') id: number): Promise<UserEntity> {
+    return this.queryBus.execute(new GetUserByIdQuery(id));
   }
 
   @ApiOperation({

@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { EmployeeConsentService } from './employee-consent.service';
 import {
-  ApiBearerAuth,
+  ApiResponse,
   ApiBody,
+  ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';

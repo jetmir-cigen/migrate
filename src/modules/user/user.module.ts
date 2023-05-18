@@ -18,6 +18,7 @@ import {
   UserUpdatedEventHandler,
   UserDeletedEventHandler,
 } from '@/modules/user/events';
+import { GetUserByIdQueryHandler } from '@/modules/user/queries/get-user-by-id.query';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import {
   providers: [
     UserService,
     FindUsersByFilterQueryHandler,
+    GetUserByIdQueryHandler,
     CreateUserCommandHandler,
     DeleteUserCommandHandler,
     UserCreatedEventHandler,

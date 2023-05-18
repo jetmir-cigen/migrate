@@ -1,4 +1,7 @@
 import { SuccessResponseDto } from '@/common/dto/status-response.dto';
+import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
+import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { UserEntity } from '@/modules/user/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EmployeeConsentDto {
@@ -10,9 +13,15 @@ export class EmployeeConsentDto {
 
   @ApiProperty({
     example: true,
-    description: `Unique identifier of the author's customer head if present`,
+    description: `Author's customer head if present`,
   })
-  customerHeadId: number;
+  customerHead: CustomerHeadEntity;
+
+  @ApiProperty({
+    example: true,
+    description: `Author's customer`,
+  })
+  customer: CustomerEntity;
 
   @ApiProperty({
     example: 'I agree to...',
@@ -28,25 +37,13 @@ export class EmployeeConsentDto {
 
   @ApiProperty({
     example: 2,
-    description: 'Unique identifier of the user who created the consent',
+    description: `Author's user`,
   })
-  createdUserId: number;
+  user: UserEntity;
 
   @ApiProperty({
-    example: 'John',
-    description: 'First name of the user who created the consent',
-  })
-  createdUserFirstName: string;
-
-  @ApiProperty({
-    example: 'Smith',
-    description: 'Last name of the user who created the consent',
-  })
-  createdUserLastName: string;
-
-  @ApiProperty({
-    example: 'I agree to...',
-    description: 'Consent content',
+    example: 2,
+    description: 'Number of given consents',
   })
   consentsGiven: number;
 }

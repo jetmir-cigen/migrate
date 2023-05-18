@@ -5,7 +5,6 @@ import {
   IsNumber,
   IsOptional,
   IsBoolean,
-  IsNumberString,
 } from 'class-validator';
 
 export class CreateDepartmentDto {
@@ -21,18 +20,16 @@ export class CreateDepartmentDto {
     example: 123,
     description: 'The code of the department',
   })
-  @IsNumberString()
+  @IsString()
   @IsNotEmpty()
   code: string;
 
   @ApiProperty({
     example: 1,
     description: 'The ID of the user who created the department',
-    required: false,
   })
-  @IsOptional()
   @IsNumber()
-  userId?: number;
+  userId: number;
 
   @ApiProperty({
     example: 2,

@@ -14,7 +14,7 @@ type QueryFilters = {
 
 export class FindUsersByFilterQuery {
   constructor(
-    public readonly filters: QueryFilters,
+    public readonly filters?: QueryFilters,
     public readonly pagination?: { items: number },
   ) {}
 }
@@ -28,23 +28,10 @@ export class FindUsersByFilterQueryHandler
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async execute({ filters, pagination }: FindUsersByFilterQuery) {
-    const whereFilters = [];
-    const { username, name, seller } = filters;
-    const { items = 20 } = pagination || {};
-    if (username) {
-      whereFilters.push({ username });
-    }
-    if (name) {
-      whereFilters.push({ firstName: name }, { lastName: name });
-    }
-    if (seller) {
-      whereFilters.push({ seller });
-    }
-    const [users, total] = await this.userRepository
+  async execute() {
+    return this.userRepository
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.usergroup', 'usergroup')
-      .where(whereFilters)
+      .leftJoinAndSelect('user.userGroup', 'userGroup')
       .select([
         'user.id',
         'user.username',
@@ -52,10 +39,9 @@ export class FindUsersByFilterQueryHandler
         'user.firstName',
         'user.lastName',
         'user.email',
-        'usergroup.name',
+        'userGroup.id',
+        'userGroup.description',
       ])
-      .getManyAndCount();
-
-    return [users, total] as [UserEntity[], number];
+      .getMany();
   }
 }

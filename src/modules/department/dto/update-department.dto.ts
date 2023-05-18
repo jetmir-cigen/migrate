@@ -3,7 +3,6 @@ import {
   IsBoolean,
   IsNotEmpty,
   IsNumber,
-  IsNumberString,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -21,18 +20,16 @@ export class UpdateDepartmentDto {
     example: 123,
     description: 'The code of the department',
   })
-  @IsNumberString({}, { message: 'Code must be a number' })
+  @IsString()
   @IsNotEmpty()
   code: string;
 
   @ApiProperty({
     example: 1,
     description: 'The ID of the user who created the department',
-    required: false,
   })
-  @IsOptional()
   @IsNumber()
-  userId?: number;
+  userId: number;
 
   @ApiProperty({
     example: 2,

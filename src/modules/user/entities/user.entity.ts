@@ -24,7 +24,7 @@ export class UserEntity {
     nullable: true,
   })
   @JoinColumn({ name: 'usergroup_id' })
-  usergroup: UserGroupEntity;
+  userGroup: UserGroupEntity;
 
   @ManyToOne(() => CustomerEntity)
   @JoinColumn({ name: 'customer_id' })
