@@ -24,7 +24,7 @@ export class ProductGroupEntity {
 
   @ManyToOne(() => ProductCategoryEntity)
   @JoinColumn({ name: 'product_category_id' })
-  product_category: ProductCategoryEntity;
+  productCategory: ProductCategoryEntity;
 
   @ManyToOne(() => CountryEntity, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'country_id' })

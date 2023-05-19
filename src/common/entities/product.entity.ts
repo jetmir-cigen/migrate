@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { ProductGroupEntity } from './product-group.entity';
 
-@Entity()
+@Entity({ name: 'product' })
 export class ProductEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -120,5 +120,5 @@ export class ProductEntity {
 
   @ManyToOne(() => ProductGroupEntity)
   @JoinColumn({ name: 'product_group_id' })
-  product_group: ProductGroupEntity;
+  productGroup: ProductGroupEntity;
 }

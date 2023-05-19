@@ -8,7 +8,9 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
+import { InvoiceRowEntity } from './invoice-row.entity';
 
 @Entity({ name: 'invoice', schema: 'control' })
 @Index('uk_invoices_vendor_id_invoice_no', ['vendorId', 'invoiceNo'], {
@@ -122,4 +124,7 @@ export class InvoiceEntity {
 
   @Column({ name: 'invoice_classification_id' })
   invoiceClassificationId: number;
+
+  @OneToMany(() => InvoiceRowEntity, (invoiceRow) => invoiceRow.invoice)
+  rows: InvoiceRowEntity[];
 }

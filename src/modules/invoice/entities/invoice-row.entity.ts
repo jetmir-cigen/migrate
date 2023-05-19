@@ -10,7 +10,7 @@ import { InvoiceEntity } from './invoice.entity';
 import { ProductEntity } from '@/common/entities/product.entity';
 
 @Entity('invoice_row')
-export class InvoiceRow {
+export class InvoiceRowEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -173,7 +173,7 @@ export class InvoiceRow {
 
   @ManyToOne(() => CostObjectEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'cost_object_id' })
-  cost_object: CostObjectEntity;
+  costObject: CostObjectEntity;
 
   @ManyToOne(() => InvoiceEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'invoice_id' })
