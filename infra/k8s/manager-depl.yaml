@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manager-deployment
+spec:
+  replicas: 1 # Adjust the number of replicas as per your requirements
+  selector:
+    matchLabels:
+      app: manager
+  template:
+    metadata:
+      labels:
+        app: manager
+    spec:
+      containers:
+        - name: manager
+          image: skytech/manager # Replace with the name of your Docker image
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 4000
+          # env:
+          #   # Add environment variables as needed for your Nest app
+          #   - name: DB_HOST
+          #     value: 127.0.0.1 # Use the local IP since SSH tunnel is inside the container
+          #   - name: DB_PORT
+          #     value: '3311' # Use the forwarded port via SSH tunnel
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: manager-service
+spec:
+  type: ClusterIP
+  selector:
+    app: manager
+  ports:
+    - protocol: TCP
+      name: manager
+      port: 4000
+      targetPort: 4000
