@@ -32,6 +32,7 @@ export class FindUsersByFilterQueryHandler
     return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.userGroup', 'userGroup')
+      .where('user.inactive != true')
       .select([
         'user.id',
         'user.username',

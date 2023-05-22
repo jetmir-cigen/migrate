@@ -21,7 +21,7 @@ export class GetCustomerQueryHandler
   }: GetCustomersQuery): Promise<CustomerEntity[]> {
     return this.repository.find({
       where: {
-        customer_head_id: customerHeadId,
+        customerHeadId,
       },
     });
   }
