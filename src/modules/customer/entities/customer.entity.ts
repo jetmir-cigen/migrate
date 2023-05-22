@@ -13,33 +13,40 @@ export class CustomerEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'char', length: 40, nullable: false })
+  @Column({ name: 'customer_no', type: 'char', length: 40, nullable: false })
   @Unique(['customer_no'])
-  customer_no: string;
+  customerNo: string;
 
-  @Column({ type: 'char', length: 20, nullable: false })
+  @Column({ name: 'org_no', type: 'char', length: 20, nullable: false })
   @Unique(['org_no'])
-  org_no: string;
+  orgNo: string;
 
-  @Column({ type: 'char', length: 20, nullable: true })
-  vat_no: string;
+  @Column({ name: 'vat_no', type: 'char', length: 20, nullable: true })
+  vatNo: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: false })
+  @Column({ name: 'name', type: 'varchar', length: 50, nullable: false })
   name: string;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'refactoring', type: 'boolean', default: false })
   refactoring: boolean;
 
-  @Column({ type: 'varchar', length: 45, nullable: true })
+  @Column({ name: 'address1', type: 'varchar', length: 45, nullable: true })
   address1: string;
 
-  @Column({ type: 'varchar', length: 45, nullable: true })
+  @Column({ name: 'address2', type: 'varchar', length: 45, nullable: true })
   address2: string;
 
-  @Column({ type: 'varchar', length: 10, nullable: false, default: '0001' })
+  @Column({
+    name: 'zip',
+    type: 'varchar',
+    length: 10,
+    nullable: false,
+    default: '0001',
+  })
   zip: string;
 
   @Column({
+    name: 'city',
     type: 'varchar',
     length: 45,
     nullable: false,
@@ -47,84 +54,127 @@ export class CustomerEntity {
   })
   city: string;
 
-  @Column({ type: 'varchar', length: 45, nullable: true })
-  billing_address1: string;
+  @Column({
+    name: 'billing_address1',
+    type: 'varchar',
+    length: 45,
+    nullable: true,
+  })
+  billingAddress1: string;
 
-  @Column({ type: 'varchar', length: 45, nullable: true })
-  billing_address2: string;
+  @Column({
+    name: 'billing_address2',
+    type: 'varchar',
+    length: 45,
+    nullable: true,
+  })
+  billingAddress2: string;
 
-  @Column({ type: 'varchar', length: 10, nullable: true })
-  billing_zip: string;
+  @Column({ name: 'billing_zip', type: 'varchar', length: 10, nullable: true })
+  billingZip: string;
 
-  @Column({ type: 'varchar', length: 45, nullable: true })
-  billing_city: string;
+  @Column({ name: 'billing_city', type: 'varchar', length: 45, nullable: true })
+  billingCity: string;
 
-  @Column({ type: 'int', default: 0 })
-  customer_status: number;
+  @Column({ name: 'customer_status', type: 'int', default: 0 })
+  customerStatus: number;
 
-  @Column({ type: 'int', nullable: false, default: 0 })
-  use_alt_pdf_front: number;
+  @Column({
+    name: 'use_alt_pdf_front',
+    type: 'int',
+    nullable: false,
+    default: 0,
+  })
+  useAltPdfFront: number;
 
-  @Column({ type: 'int', nullable: false, default: 0 })
-  recieve_mail: number;
+  @Column({ name: 'recieve_mail', type: 'int', nullable: false, default: 0 })
+  receiveMail: number;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  mail_template: string;
+  @Column({
+    name: 'mail_template',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  mailTemplate: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  mail_color_scheme: string;
+  @Column({
+    name: 'mail_color_scheme',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  mailColorScheme: string;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ name: 'customer_head_id', type: 'int', nullable: true })
   @Index(['customer_head_id'])
-  customer_head_id: number;
+  customerHeadId: number;
 
-  @Column({ type: 'boolean', default: false })
-  admin_cost_per_cost_object: boolean;
+  @Column({
+    name: 'admin_cost_per_cost_object',
+    type: 'boolean',
+    default: false,
+  })
+  adminCostPerCostObject: boolean;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  mail_template_department: string;
+  @Column({
+    name: 'mail_template_department',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  mailTemplateDepartment: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'comment', type: 'text', nullable: true })
   comment: string;
 
-  @Column({ type: 'int', nullable: false, default: 0 })
-  invoice_quantity: number;
+  @Column({
+    name: 'invoice_quantity',
+    type: 'int',
+    nullable: false,
+    default: 0,
+  })
+  invoiceQuantity: number;
 
   @Column({
+    name: 'invoice_cost',
     type: 'decimal',
     precision: 8,
     scale: 2,
     nullable: false,
     default: 0.0,
   })
-  invoice_cost: number;
+  invoiceCost: number;
 
   @Column({
+    name: 'init_arpu',
     type: 'decimal',
     precision: 8,
     scale: 2,
     nullable: false,
     default: 0.0,
   })
-  init_arpu: number;
+  initArpu: number;
 
   @Column({
+    name: 'init_uarpu',
     type: 'decimal',
     precision: 8,
     scale: 2,
     nullable: false,
     default: 0.0,
   })
-  init_uarpu: number;
+  initUarpu: number;
 
   @Column({
+    name: 'init_barpu',
     type: 'decimal',
     precision: 8,
     scale: 2,
     nullable: false,
     default: 0.0,
   })
-  init_barpu: number;
+  initBarpu: number;
 
   @Column({ name: 'country_id', type: 'int', default: 47 })
   @Index(['countryId'])

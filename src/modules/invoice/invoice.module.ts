@@ -9,9 +9,28 @@ import {
   FindInvoicesByFilterQueryHandler,
   FindVendorInvoicesByFilterQueryHandler,
 } from './queries';
+import { VendorEntity } from '@/common/entities/vendor.entity';
+import { InvoiceRowEntity } from './entities/invoice-row.entity';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { ProductEntity } from '@/common/entities/product.entity';
+import { ProductGroupEntity } from '@/common/entities/product-group.entity';
+import { ProductCategoryEntity } from '@/common/entities/product-category.entity';
+import { CountryEntity } from '@/common/entities/country.entity';
 
 @Module({
-  imports: [CqrsModule, TypeOrmModule.forFeature([InvoiceEntity])],
+  imports: [
+    CqrsModule,
+    TypeOrmModule.forFeature([
+      InvoiceEntity,
+      VendorEntity,
+      InvoiceRowEntity,
+      CostObjectEntity,
+      ProductEntity,
+      ProductGroupEntity,
+      ProductCategoryEntity,
+      CountryEntity,
+    ]),
+  ],
   controllers: [InvoiceController],
   providers: [
     InvoiceService,
