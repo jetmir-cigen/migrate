@@ -48,9 +48,8 @@ export class EmployeeConsentDto {
   consentsGiven: number;
 }
 
-export class EmployeeConsentListResponseDto extends SuccessResponseDto {
+export class EmployeeConsentListResponseDto {
   constructor(init: Pick<EmployeeConsentListResponseDto, 'employeeConsents'>) {
-    super();
     this.employeeConsents = init.employeeConsents;
   }
 
@@ -60,4 +59,16 @@ export class EmployeeConsentListResponseDto extends SuccessResponseDto {
     isArray: true,
   })
   employeeConsents: EmployeeConsentDto[];
+}
+
+export class EmployeeConsentResponseDto {
+  constructor(init: Pick<EmployeeConsentResponseDto, 'employeeConsent'>) {
+    this.employeeConsent = init.employeeConsent;
+  }
+
+  @ApiProperty({
+    description: 'Employee consents',
+    type: EmployeeConsentDto,
+  })
+  employeeConsent: EmployeeConsentDto;
 }

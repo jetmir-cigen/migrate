@@ -11,7 +11,10 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@/modules/auth/auth.guard';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
-import { EmployeeConsentListResponseDto } from './dto/employee-consent-response.dto';
+import {
+  EmployeeConsentListResponseDto,
+  EmployeeConsentResponseDto,
+} from './dto/employee-consent-response.dto';
 import { AuthUser } from '@/modules/auth/auth-user.decorator';
 import { EmployeeConsentEntity } from './entities/employee-consent.entity';
 import { CreateEmployeeConsentDto } from './dto/create-employee-consent.dto';
@@ -56,15 +59,13 @@ export class EmployeeConsentController {
   async create(
     @Body() createDepartmentDto: CreateEmployeeConsentDto,
     @AuthUser() user: Express.User,
-  ): Promise<EmployeeConsentEntity> {
-    console.log({ createDepartmentDto });
-    const employeeConsents = await this.employeeConsentService.create({
+  ): Promise<EmployeeConsentResponseDto> {
+    const employeeConsent = await this.employeeConsentService.create({
       createDepartmentDto,
       customer: { id: user.cid },
       customerHead: { id: user.chid },
       user: { id: user.id },
     });
-    // @ts-ignore
-    return new EmployeeConsentListResponseDto({ employeeConsents });
+    return new EmployeeConsentResponseDto({ employeeConsent });
   }
 }

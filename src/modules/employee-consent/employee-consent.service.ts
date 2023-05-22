@@ -56,6 +56,7 @@ export class EmployeeConsentService {
     try {
       const employeeConsent = await this.employeeConsentRepository.save({
         ...createDepartmentDto,
+        createdDate: new Date(),
         createdUserId: user.id,
         customerId: customer.id,
         customerHeadId: createDepartmentDto.isGlobal ? customerHead.id : null,
