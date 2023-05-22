@@ -41,12 +41,12 @@ export class FindInvoiceByFilterQueryHandler
             .getQuery();
           return 'invoice.id IN ' + subQuery;
         })
-        .leftJoinAndSelect('invoice.vendor', 'vendor')
-        .leftJoinAndSelect('invoice.rows', 'rows')
-        .leftJoinAndSelect('rows.product', 'product')
-        .leftJoinAndSelect('rows.costObject', 'costObject')
-        .leftJoinAndSelect('product.productGroup', 'productGroup')
-        .leftJoinAndSelect('productGroup.productCategory', 'productCategory')
+        .leftJoin('invoice.vendor', 'vendor')
+        .leftJoin('invoice.rows', 'rows')
+        .leftJoin('rows.product', 'product')
+        .leftJoin('rows.costObject', 'costObject')
+        .leftJoin('product.productGroup', 'productGroup')
+        .leftJoin('productGroup.productCategory', 'productCategory')
         .select([
           'invoice',
           'rows',

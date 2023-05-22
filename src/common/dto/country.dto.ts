@@ -19,7 +19,7 @@ export class CountryDto {
     description: 'The default white label ID.',
     nullable: true,
   })
-  default_whitelabl_id: number;
+  defaultWhiteLabelId: number;
 
   @ApiProperty({
     example: 'no',

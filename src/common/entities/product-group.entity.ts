@@ -13,14 +13,14 @@ export class ProductGroupEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 45 })
+  @Column({ name: 'name', length: 45 })
   name: string;
 
-  @Column()
-  product_category_id: number;
+  @Column({ name: 'product_category_id' })
+  productCategoryId: number;
 
-  @Column({ default: 47 })
-  country_id: number;
+  @Column({ name: 'country_id', default: 47 })
+  countryId: number;
 
   @ManyToOne(() => ProductCategoryEntity)
   @JoinColumn({ name: 'product_category_id' })

@@ -20,14 +20,14 @@ export class ProductGroupDto {
     example: 1,
     description: 'The unique identifier for the product category.',
   })
-  product_category_id: number;
+  productCategoryId: number;
 
   @ApiProperty({
     example: 47,
     description: 'The unique identifier for the country.',
     default: 47,
   })
-  country_id: number;
+  countryId: number;
 
   @ApiProperty({
     description: 'The product category associated with the product group.',

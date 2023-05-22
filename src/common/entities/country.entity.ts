@@ -1,22 +1,22 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'country' })
 export class CountryEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255 })
+  @Column({ name: 'name', length: 255 })
   name: string;
 
-  @Column({ nullable: true })
-  default_whitelabl_id: number;
+  @Column({ name: 'default_whitelabl_id', nullable: true })
+  defaultWhiteLabelId: number;
 
-  @Column({ default: 'no' })
+  @Column({ name: 'locale', default: 'no' })
   locale: string;
 
-  @Column({ default: 'no' })
+  @Column({ name: 'flag', default: 'no' })
   flag: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'currency', nullable: true })
   currency: string;
 }

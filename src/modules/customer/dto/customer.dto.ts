@@ -1,459 +1,165 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsInt,
-  IsOptional,
-  IsString,
-  MaxLength,
-} from 'class-validator';
 
 export class CustomerDto {
-  @ApiProperty({
-    description: 'The ID of the customer',
-    example: 1,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
+  @ApiProperty({ description: 'Customer ID', example: 1 })
   id: number;
 
-  @ApiProperty({
-    description: 'The customer number',
-    example: '1234567890',
-    required: true,
-    maxLength: 40,
-  })
-  @IsString()
-  @MaxLength(40)
-  customer_no: string;
+  @ApiProperty({ description: 'Customer number', example: 'CUST001' })
+  customerNo: string;
 
-  @ApiProperty({
-    description: 'The organization number',
-    example: '12345678901234567890',
-    required: true,
-    maxLength: 20,
-  })
-  @IsString()
-  @MaxLength(20)
-  org_no: string;
+  @ApiProperty({ description: 'Organization number', example: 'ORG001' })
+  orgNo: string;
 
-  @ApiProperty({
-    description: 'The VAT number',
-    example: 'VAT123456789',
-    required: false,
-    maxLength: 20,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(20)
-  vat_no: string;
+  @ApiProperty({ description: 'VAT number', example: 'VAT001' })
+  vatNo: string;
 
-  @ApiProperty({
-    description: 'The name of the customer',
-    example: 'Customer Name',
-    required: true,
-    maxLength: 50,
-  })
-  @IsString()
-  @MaxLength(50)
+  @ApiProperty({ description: 'Customer name', example: 'John Doe' })
   name: string;
 
-  @ApiProperty({
-    description: 'Flag indicating if refactoring is enabled for the customer',
-    example: false,
-    required: false,
-  })
-  @IsOptional()
-  @IsBoolean()
+  @ApiProperty({ description: 'Refactoring flag', example: false })
   refactoring: boolean;
 
-  @ApiProperty({
-    description: 'The first address line of the customer',
-    example: 'Address 1',
-    required: false,
-    maxLength: 45,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(45)
-  address1: string | null;
+  @ApiProperty({ description: 'Address line 1', example: '123 Street' })
+  address1: string;
 
-  @ApiProperty({
-    description: 'The second address line of the customer',
-    example: 'Address 2',
-    required: false,
-    maxLength: 45,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(45)
-  address2: string | null;
+  @ApiProperty({ description: 'Address line 2', example: 'Apt 4B' })
+  address2: string;
 
-  @ApiProperty({
-    description: 'The zip code of the customer',
-    example: '12345',
-    required: true,
-    maxLength: 10,
-  })
-  @IsString()
-  @MaxLength(10)
+  @ApiProperty({ description: 'ZIP code', example: '12345' })
   zip: string;
 
-  @ApiProperty({
-    description: 'The city of the customer',
-    example: 'City Name',
-    required: true,
-    maxLength: 45,
-  })
-  @IsString()
-  @MaxLength(45)
+  @ApiProperty({ description: 'City', example: 'New York' })
   city: string;
 
-  @ApiProperty({
-    description: 'The first billing address line of the customer',
-    example: 'Billing Address 1',
-    required: false,
-    maxLength: 45,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(45)
-  billing_address1: string | null;
+  @ApiProperty({ description: 'Billing address line 1', example: '456 Avenue' })
+  billingAddress1: string;
+
+  @ApiProperty({ description: 'Billing address line 2', example: 'Suite 10' })
+  billingAddress2: string;
+
+  @ApiProperty({ description: 'Billing ZIP code', example: '54321' })
+  billingZip: string;
+
+  @ApiProperty({ description: 'Billing city', example: 'San Francisco' })
+  billingCity: string;
+
+  @ApiProperty({ description: 'Customer status', example: 1 })
+  customerStatus: number;
+
+  @ApiProperty({ description: 'Alternate PDF front usage', example: 0 })
+  useAltPdfFront: number;
+
+  @ApiProperty({ description: 'Receive mail flag', example: 1 })
+  receiveMail: number;
+
+  @ApiProperty({ description: 'Mail template', example: 'template1' })
+  mailTemplate: string;
+
+  @ApiProperty({ description: 'Mail color scheme', example: 'scheme1' })
+  mailColorScheme: string;
+
+  @ApiProperty({ description: 'Customer head ID', example: 2 })
+  customerHeadId: number;
 
   @ApiProperty({
-    description: 'The second billing address line of the customer',
-    example: 'Billing Address 2',
-    required: false,
-    maxLength: 45,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(45)
-  billing_address2: string | null;
-
-  @ApiProperty({
-    description: 'The zip code of the billing address',
-    example: '54321',
-    required: false,
-    maxLength: 10,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(10)
-  billing_zip: string | null;
-
-  @ApiProperty({
-    description: 'The city of the billing address',
-    example: 'Billing City',
-    required: false,
-    maxLength: 45,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(45)
-  billing_city: string | null;
-
-  @ApiProperty({
-    description: 'The status of the customer',
-    example: 0,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  customer_status: number;
-
-  @ApiProperty({
-    description: 'The flag indicating whether to use an alternative PDF front',
-    example: 0,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  use_alt_pdf_front: number;
-
-  @ApiProperty({
-    description: 'The flag indicating whether to receive mail',
-    example: 0,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  recieve_mail: number;
-
-  @ApiProperty({
-    description: 'The mail template',
-    example: 'Template Name',
-    required: false,
-    maxLength: 255,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(255)
-  mail_template: string | null;
-
-  @ApiProperty({
-    description: 'The mail color scheme',
-    example: 'Color Scheme Name',
-    required: false,
-    maxLength: 255,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(255)
-  mail_color_scheme: string | null;
-
-  @ApiProperty({
-    description: 'The ID of the customer head',
-    example: 1,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  customer_head_id: number | null;
-
-  @ApiProperty({
-    description: 'Flag indicating if admin cost per cost object is enabled',
+    description: 'Admin cost per cost object flag',
     example: false,
-    required: false,
   })
-  @IsOptional()
-  @IsBoolean()
-  admin_cost_per_cost_object: boolean;
+  adminCostPerCostObject: boolean;
 
   @ApiProperty({
-    description: 'The mail template department',
-    example: 'Department Template Name',
-    required: false,
-    maxLength: 255,
+    description: 'Department mail template',
+    example: 'template2',
   })
-  @IsOptional()
-  @IsString()
-  @MaxLength(255)
-  mail_template_department: string | null;
+  mailTemplateDepartment: string;
 
-  @ApiProperty({
-    description: 'The comment',
-    example: 'Customer Comment',
-    required: false,
-    maxLength: Infinity,
-  })
-  @IsOptional()
-  @IsString()
-  comment: string | null;
+  @ApiProperty({ description: 'Comment', example: 'Some comment' })
+  comment: string;
 
-  @ApiProperty({
-    description: 'The invoice quantity',
-    example: 0,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  invoice_quantity: number;
+  @ApiProperty({ description: 'Invoice quantity', example: 10 })
+  invoiceQuantity: number;
 
-  @ApiProperty({
-    description: 'The invoice cost',
-    example: 0.0,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  invoice_cost: number;
+  @ApiProperty({ description: 'Invoice cost', example: 100.5 })
+  invoiceCost: number;
 
-  @ApiProperty({
-    description: 'The initial ARPU (Average Revenue Per User)',
-    example: 0.0,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  init_arpu: number;
+  @ApiProperty({ description: 'Initial ARPU', example: 50.75 })
+  initArpu: number;
 
-  @ApiProperty({
-    description: 'The initial UARPU (Unit Average Revenue Per User)',
-    example: 0.0,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  init_uarpu: number;
+  @ApiProperty({ description: 'Initial UARPU', example: 60.25 })
+  initUarpu: number;
 
-  @ApiProperty({
-    description: 'The initial BARPU (Business Average Revenue Per User)',
-    example: 0.0,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  init_barpu: number;
+  @ApiProperty({ description: 'Initial BARPU', example: 70.75 })
+  initBarpu: number;
 
-  @ApiProperty({
-    description: 'The ID of the country',
-    example: 47,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
+  @ApiProperty({ description: 'Country ID', example: 47 })
   countryId: number;
 
-  @ApiProperty({
-    description: 'The locale',
-    example: 'en',
-    required: false,
-    maxLength: 2,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(2)
+  @ApiProperty({ description: 'Locale', example: 'en' })
   locale?: string;
 
-  @ApiProperty({
-    description: 'The ID of the whitelabel',
-    example: 1,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
+  @ApiProperty({ description: 'Whitelabel ID', example: 1 })
   whitelabelId: number;
 
-  @ApiProperty({
-    description: 'The department mail send date',
-    example: 1,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
+  @ApiProperty({ description: 'Department mail send date', example: 3 })
   departmentMailSendDate?: number;
 
-  @ApiProperty({
-    description: 'The TCI (Total Cost of Investment) index percentage',
-    example: 25.0,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
+  @ApiProperty({ description: 'TCI index percentage', example: 25.5 })
   tciIndexPercentage: number;
 
   @ApiProperty({
-    description: 'The mail template for salary deduction approval',
-    example: 'Salary Deduct App Template Name',
-    required: false,
-    maxLength: 255,
+    description: 'Salary Deduct App mail template',
+    example: 'template3',
   })
-  @IsOptional()
-  @IsString()
-  @MaxLength(255)
   salaryDeductAppMailTemplate?: string;
 
   @ApiProperty({
-    description: 'The custom URL parameter for the customer',
-    example: 'custom-url-param',
-    required: false,
-    maxLength: 255,
+    description: 'Customer custom URL parameter',
+    example: 'param1',
   })
-  @IsOptional()
-  @IsString()
-  @MaxLength(255)
   customerCustomUrlParam?: string;
 
-  @ApiProperty({
-    description: 'The mail template for admin',
-    example: 'Admin Template Name',
-    required: false,
-    maxLength: 255,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(255)
+  @ApiProperty({ description: 'Mail template for admin', example: 'template4' })
   mailTemplateAdmin?: string;
 
   @ApiProperty({
-    description: 'The mail template for user reminder',
-    example: 'User Reminder Template Name',
-    required: false,
-    maxLength: 255,
+    description: 'Mail template for user reminder',
+    example: 'template5',
   })
-  @IsOptional()
-  @IsString()
-  @MaxLength(255)
   mailTemplateUserReminder?: string;
 
-  @ApiProperty({
-    description: 'The ID of the dealer user',
-    example: 1,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
+  @ApiProperty({ description: 'Dealer user ID', example: 5 })
   dealerUserId?: number;
 
-  @ApiProperty({
-    description: 'The ID of the device dealer user',
-    example: 1,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
+  @ApiProperty({ description: 'Device dealer user ID', example: 6 })
   deviceDealerUserId?: number;
 
   @ApiProperty({
-    description: 'The device policy message',
-    example: 'Device Policy Message',
-    required: false,
-    maxLength: Infinity,
+    description: 'Device policy message',
+    example: 'Policy message',
   })
-  @IsOptional()
-  @IsString()
-  devicePolicyMessage?: string | null;
+  devicePolicyMessage?: string;
 
-  @ApiProperty({
-    description: 'The creation date of the customer',
-    example: '2023-05-18T10:00:00.000Z',
-    required: false,
-  })
+  @ApiProperty({ description: 'Created date', example: '2023-05-22T10:00:00Z' })
   created: Date;
 
   @ApiProperty({
-    description: 'The last update date of the customer',
-    example: '2023-05-18T10:00:00.000Z',
-    required: false,
+    description: 'Last update date',
+    example: '2023-05-22T12:00:00Z',
   })
   lastUpdate: Date;
 
-  @ApiProperty({
-    description: 'The billing cycle in months',
-    example: 12,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  billingCycleMonths?: number;
+  @ApiProperty({ description: 'Billing cycle months', example: 1 })
+  billingCycleMonths: number;
 
-  @ApiProperty({
-    description: 'The device policy vendor id',
-    example: 12,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  devicePolicyVendorId?: number;
+  @ApiProperty({ description: 'Device policy vendor ID', example: 1 })
+  devicePolicyVendorId: number;
 
-  @ApiProperty({
-    description: 'The number of employees',
-    example: 12,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
+  @ApiProperty({ description: 'Number of employees', example: 100 })
   numberOfEmployees?: number;
 
   @ApiProperty({
-    description: 'The internal company identifier',
-    example: 'internal-company-identifier',
-    required: false,
-    maxLength: 45,
+    description: 'Internal company identifier',
+    example: 'COMP001',
   })
-  @IsOptional()
-  @IsString()
-  @MaxLength(45)
   internalCompanyIdentifier?: string;
 }

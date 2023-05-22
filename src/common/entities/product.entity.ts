@@ -12,19 +12,10 @@ export class ProductEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    name: 'product_group_id',
-    type: 'int',
-    nullable: true,
-  })
+  @Column({ name: 'product_group_id', type: 'int', nullable: true })
   productGroupId: number;
 
-  @Column({
-    name: 'name',
-    type: 'varchar',
-    length: 75,
-    nullable: true,
-  })
+  @Column({ name: 'name', type: 'varchar', length: 75, nullable: true })
   name: string;
 
   @Column({
@@ -36,11 +27,7 @@ export class ProductEntity {
   })
   costType: number;
 
-  @Column({
-    name: 'vat',
-    type: 'bit',
-    nullable: true,
-  })
+  @Column({ name: 'vat', type: 'bit', nullable: true })
   vat: boolean;
 
   @Column({
@@ -61,51 +48,22 @@ export class ProductEntity {
   })
   noPriceCheck: boolean;
 
-  @Column({
-    name: 'sort_order',
-    type: 'int',
-    default: null,
-  })
+  @Column({ name: 'sort_order', type: 'int', default: null })
   sortOrder: number | null;
 
-  @Column({
-    name: 'country_code',
-    type: 'char',
-    length: 4,
-    default: null,
-  })
+  @Column({ name: 'country_code', type: 'char', length: 4, default: null })
   countryCode: string | null;
 
-  @Column({
-    name: 'tax_report',
-    type: 'bit',
-    nullable: true,
-    default: false,
-  })
+  @Column({ name: 'tax_report', type: 'bit', nullable: true, default: false })
   taxReport: boolean;
 
-  @Column({
-    name: 'product_type',
-    type: 'int',
-    nullable: true,
-    default: 0,
-  })
+  @Column({ name: 'product_type', type: 'int', nullable: true, default: 0 })
   productType: number;
 
-  @Column({
-    name: 'vat_included',
-    type: 'bit',
-    nullable: true,
-    default: false,
-  })
+  @Column({ name: 'vat_included', type: 'bit', nullable: true, default: false })
   vatIncluded: boolean;
 
-  @Column({
-    name: 'country_id',
-    type: 'int',
-    nullable: true,
-    default: 47,
-  })
+  @Column({ name: 'country_id', type: 'int', nullable: true, default: 47 })
   countryId: number;
 
   @Column({

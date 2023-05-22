@@ -51,7 +51,7 @@ export class VendorEntity {
   paymentIbanNo: string | null;
 
   @Column({ name: 'whitelabel_id', nullable: true })
-  whitelabelId: number | null;
+  whiteLabelId: number | null;
 
   @Column({ name: 'country_id', default: 47 })
   countryId: number;
