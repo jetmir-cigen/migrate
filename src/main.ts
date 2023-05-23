@@ -20,7 +20,7 @@ async function bootstrap() {
   // Enable cors, so FE can access it.
   app.enableCors({
     credentials: true,
-    origin: ['http://localhost:3000', /.+vercel\.app/],
+    origin: ['http://localhost:3000', /\.vercel\.app$/],
     allowedHeaders: ['authorization', 'cookie', 'cookies', 'content-type'],
   });
 
