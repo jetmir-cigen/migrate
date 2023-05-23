@@ -17,6 +17,7 @@ export class CreateUserCommand {
       phoneNumber: string;
       countryId: number;
       userGroupId: number;
+      customerId: number;
     },
   ) {}
 }

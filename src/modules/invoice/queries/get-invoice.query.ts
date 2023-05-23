@@ -41,6 +41,21 @@ export class FindInvoiceByFilterQueryHandler
             .getQuery();
           return 'invoice.id IN ' + subQuery;
         })
+        .leftJoin('invoice.vendor', 'vendor')
+        .leftJoin('invoice.rows', 'rows')
+        .leftJoin('rows.product', 'product')
+        .leftJoin('rows.costObject', 'costObject')
+        .leftJoin('product.productGroup', 'productGroup')
+        .leftJoin('productGroup.productCategory', 'productCategory')
+        .select([
+          'invoice',
+          'rows',
+          'vendor.name',
+          'product.name',
+          'costObject.code',
+          'productGroup.name',
+          'productCategory.name',
+        ])
         .getOneOrFail();
 
       return invoice as InvoiceEntity;

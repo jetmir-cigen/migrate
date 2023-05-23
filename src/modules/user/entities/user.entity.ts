@@ -7,10 +7,8 @@ import {
   Unique,
   Index,
 } from 'typeorm';
-// import { Usergroup } from './usergroup.entity';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserGroupEntity } from './user-group.entity';
-// import { InvoiceAccount } from './invoice-account.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -20,11 +18,14 @@ export class UserEntity {
   @Column({ name: 'usergroup_id' })
   userGroupId: number;
 
+  @Column({ name: 'customer_id' })
+  customerId: number;
+
   @ManyToOne(() => UserGroupEntity, (usergroup) => usergroup.users, {
     nullable: true,
   })
   @JoinColumn({ name: 'usergroup_id' })
-  usergroup: UserGroupEntity;
+  userGroup: UserGroupEntity;
 
   @ManyToOne(() => CustomerEntity)
   @JoinColumn({ name: 'customer_id' })
