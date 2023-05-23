@@ -30,6 +30,7 @@ export class GetUserByIdQueryHandler
         'countryId',
         'phoneNumber',
         'userGroupId',
+        'customerId',
       ],
     });
   }

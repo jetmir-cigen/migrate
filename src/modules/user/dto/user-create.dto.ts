@@ -33,4 +33,8 @@ export class UserCreateDto {
   @IsInt()
   @IsNotEmpty()
   userGroupId: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  customerId: number;
 }

@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 import { EntityNotFoundError, Repository } from 'typeorm';
-import { EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserUpdatedEvent } from '@/modules/user/events/user-updated.event';
 
 export class UpdateUserCommand {
@@ -13,12 +13,15 @@ export class UpdateUserCommand {
       email?: string;
       password?: string;
       phoneNumber?: string;
-      userGroupId?: number;
+      username?: string;
+      // userGroupId?: number;
       countryId?: number;
+      customerId?: number;
     },
   ) {}
 }
 
+@CommandHandler(UpdateUserCommand)
 export class UpdateUserCommandHandler
   implements ICommandHandler<UpdateUserCommand>
 {

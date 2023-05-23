@@ -1,126 +1,250 @@
 import { SuccessResponseDto } from '@/common/dto/status-response.dto';
+import { ElementLabelDto } from '@/modules/element-label/dto/element-label-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
-
+import {
+  IsBoolean,
+  IsDate,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+} from 'class-validator';
+import { InvoiceRowDto } from './invoice-row.dto';
+import { VendorDto } from '@/common/dto/vendor.dto';
+import { CustomerDto } from '@/modules/customer/dto/customer.dto';
 export class InvoiceDto {
   @ApiProperty({
-    description: 'Unique identifier of the invoice',
+    description: 'The ID of the invoice',
     example: 1,
+    required: false,
   })
+  @IsOptional()
+  @IsInt()
   id: number;
 
   @ApiProperty({
-    description: 'Identifier of the vendor who issued the invoice',
+    description: 'The ID of the vendor associated with the invoice',
     example: 1,
+    required: true,
   })
+  @IsInt()
   vendorId: number;
 
   @ApiProperty({
-    description: 'Invoice number',
-    example: 'INV-001',
+    description: 'The vendor associated with the invoice',
+    type: VendorDto,
   })
+  vendor: VendorDto;
+
+  @ApiProperty({
+    description: 'The ID of the customer associated with the invoice',
+    example: 1,
+    required: true,
+  })
+  @IsInt()
+  customerId: number;
+
+  @ApiProperty({
+    description: 'The customer associated with the invoice',
+    type: CustomerDto,
+  })
+  customer: CustomerDto;
+
+  @ApiProperty({
+    description: 'The invoice number',
+    example: 'INV001',
+    required: true,
+    maxLength: 25,
+  })
+  @IsString()
+  @MaxLength(25)
   invoiceNo: string;
 
   @ApiProperty({
-    description: 'Date the invoice was issued',
-    example: '2022-01-01',
+    description: 'The date of the invoice',
+    example: '2023-05-18',
+    required: true,
   })
+  @IsDate()
   date: Date;
 
   @ApiProperty({
-    description: 'Date the invoice is due',
-    example: '2022-02-01',
+    description: 'The due date of the invoice',
+    example: '2023-06-01',
+    required: true,
   })
+  @IsDate()
   dueDate: Date;
 
   @ApiProperty({
-    description: 'Flag indicating whether the invoice has been sent',
-    example: true,
+    description: 'The status of invoice sent',
+    example: false,
+    required: false,
   })
+  @IsOptional()
+  @IsBoolean()
   sent: boolean;
 
   @ApiProperty({
-    description: 'Identifier of the invoice account',
+    description: 'The ID of the invoice account',
     example: 1,
+    required: false,
   })
-  invoiceAccountId: number;
+  @IsOptional()
+  @IsInt()
+  invoiceAccountId: number | null;
 
   @ApiProperty({
-    description: 'Amount of the invoice, in decimal format',
-    example: 100.0,
+    description: 'The amount of the invoice',
+    example: 100.5,
+    required: false,
   })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
   invoiceAmount: number;
 
   @ApiProperty({
-    description: 'Control amount of the invoice, in decimal format',
-    example: 100.0,
+    description: 'The control amount of the invoice',
+    example: 90.25,
+    required: false,
   })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
   invoiceControlAmount: number;
 
   @ApiProperty({
-    description: 'KID number associated with the invoice',
-    example: '1234567890',
-  })
-  kidnumber: string;
-
-  @ApiProperty({
-    description: 'Net amount of the vendor, in decimal format',
-    example: 80.0,
-  })
-  vendorNetAmount: number;
-
-  @ApiProperty({
-    description: 'VAT amount of the vendor, in decimal format',
-    example: 20.0,
-  })
-  vendorVatAmount: number;
-
-  @ApiProperty({
-    description: 'Gross amount of the vendor, in decimal format',
-    example: 100.0,
-  })
-  vendorGrossAmount: number;
-
-  @ApiProperty({
-    description: 'Name of the invoice file',
-    example: 'invoice.pdf',
-  })
-  invoiceFileName: string;
-
-  @ApiProperty({
-    description: 'Status of the EHF',
-    example: 'Sent',
-  })
-  ehfStatus: string;
-
-  @ApiProperty({
-    description: 'Recipient of the invoice',
-    example: 'John Doe',
-  })
-  invoiceRecipient: string;
-
-  @ApiProperty({
-    description: 'Date the invoice was created',
-    example: '2022-01-01T00:00:00.000Z',
-  })
-  created: Date;
-
-  @ApiProperty({
-    description: 'Identifier of the user who created the invoice',
+    description: 'The ID of the element label associated with the invoice',
     example: 1,
+    required: false,
   })
-  createdUserId: number;
+  @IsOptional()
+  @IsInt()
+  elementLabelId: number;
 
   @ApiProperty({
-    description: 'Date the invoice was last updated',
-    example: '2022-01-01T00:00:00.000Z',
+    description: 'The element label associated with the invoice',
+    type: ElementLabelDto,
   })
+  elementLabel: ElementLabelDto;
+
+  @ApiProperty({
+    description: 'The KID number',
+    example: 'KID123',
+    required: false,
+    maxLength: 100,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  kidnumber: string | null;
+
+  @ApiProperty({
+    description: 'The net amount of the vendor',
+    example: 80.5,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  vendorNetAmount: number | null;
+
+  @ApiProperty({
+    description: 'The VAT amount of the vendor',
+    example: 20.25,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  vendorVatAmount: number | null;
+
+  @ApiProperty({
+    description: 'The gross amount of the vendor',
+    example: 100.75,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  vendorGrossAmount: number | null;
+
+  @ApiProperty({
+    description: 'The file name of the invoice',
+    example: 'invoice.pdf',
+    required: false,
+    maxLength: 255,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  invoiceFileName: string | null;
+
+  @ApiProperty({
+    description: 'The EHF status',
+    example: 'approved',
+    required: false,
+    maxLength: 45,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(45)
+  ehfStatus: string | null;
+
+  @ApiProperty({
+    description: 'The recipient of the invoice',
+    example: 'John Doe',
+    required: false,
+    maxLength: 255,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  invoiceRecipient: string | null;
+
+  @ApiProperty({
+    description: 'The date the invoice was created',
+    example: '2023-05-18T10:30:00Z',
+    required: false,
+  })
+  @IsOptional()
+  @IsDate()
+  created: Date | null;
+
+  @ApiProperty({
+    description: 'The ID of the user who created the invoice',
+    example: 1,
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  createdUserId: number | null;
+
+  @ApiProperty({
+    description: 'The last update date of the invoice',
+    example: '2023-05-18T15:45:00Z',
+    required: false,
+  })
+  @IsOptional()
+  @IsDate()
   lastUpdate: Date;
 
   @ApiProperty({
-    description: 'Identifier of the invoice classification',
+    description: 'The ID of the invoice classification',
     example: 1,
+    required: true,
   })
+  @IsInt()
   invoiceClassificationId: number;
+
+  @ApiProperty({
+    description: 'The rows associated with the invoice',
+    type: [InvoiceRowDto],
+  })
+  rows: InvoiceRowDto[];
 }
 
 export class InvoiceListResponseDto extends SuccessResponseDto {
