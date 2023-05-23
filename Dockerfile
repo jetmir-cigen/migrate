@@ -1,5 +1,5 @@
 # Use the official Node.js 14.x base image
-FROM node:14
+FROM node:18
 
 # Install SSH client
 RUN apt-get update && apt-get install -y openssh-client
