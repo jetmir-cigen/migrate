@@ -3,17 +3,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from '../entities/user.entity';
 
 export class UserResponseDto extends SuccessResponseDto {
-  constructor(init: Pick<UserResponseDto, 'total' | 'users'>) {
+  constructor(init: Pick<UserResponseDto, 'users'>) {
     super();
-    this.total = init.total;
     this.users = init.users;
   }
-  @ApiProperty({
-    description: 'Number of all users in the system.',
-    type: 'integer',
-    example: 162,
-  })
-  total: number;
 
   @ApiProperty({
     description: 'List of users',
@@ -37,6 +30,13 @@ export class UserDto {
     example: 'admin',
   })
   username: string;
+
+  @ApiProperty({
+    description: 'Phone number of the user',
+    type: 'string',
+    example: '1234567',
+  })
+  phoneNumber: string;
 
   @ApiProperty({
     description: 'First name of the user',

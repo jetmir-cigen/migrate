@@ -24,7 +24,9 @@ import { CustomerModule } from './modules/customer/customer.module';
 import { MailerModule } from './modules/mailer/mailer.module';
 import { InvoiceModule } from './modules/invoice/invoice.module';
 import { TextTemplateModule } from './modules/text-template/text-template.module';
+import { EmployeeConsentModule } from './modules/employee-consent/employee-consent.module';
 import { WhitelabelModule } from './modules/whitelabel/whitelabel.module';
+import { CorsMiddleware } from './modules/auth/cors.middleware';
 
 @Module({
   imports: [
@@ -42,6 +44,7 @@ import { WhitelabelModule } from './modules/whitelabel/whitelabel.module';
     MailerModule,
     InvoiceModule,
     TextTemplateModule,
+    EmployeeConsentModule,
     WhitelabelModule,
     InvoiceModule,
   ],
@@ -52,6 +55,10 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+
+    consumer
+      .apply(CorsMiddleware)
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
