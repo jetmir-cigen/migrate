@@ -9,12 +9,12 @@ import { ConflictException } from '@nestjs/common';
 export class CreateUserCommand {
   constructor(
     public readonly data: {
-      username: string;
       password: string;
       firstName: string;
       lastName: string;
       email: string;
       phoneNumber: string;
+      username?: string;
       countryId: number;
       userGroupId: number;
       customerId: number;
@@ -34,6 +34,9 @@ export class CreateUserCommandHandler
 
   async execute({ data }: CreateUserCommand): Promise<UserEntity> {
     try {
+      if (data.phoneNumber) {
+        data.username = data.phoneNumber;
+      }
       const userCreate: Partial<UserEntity> = this.userRepository.create(data);
       const user = await this.userRepository.save(userCreate);
 

@@ -14,7 +14,6 @@ export class UpdateUserCommand {
       password?: string;
       phoneNumber?: string;
       username?: string;
-      // userGroupId?: number;
       countryId?: number;
       customerId?: number;
     },
@@ -34,7 +33,9 @@ export class UpdateUserCommandHandler
   async execute({ id, data }: UpdateUserCommand): Promise<void> {
     try {
       await this.userRepository.findOneOrFail({ where: { id } });
-
+      if (data.phoneNumber) {
+        data.username = data.phoneNumber;
+      }
       await this.userRepository.update(id, data);
 
       this.eventBus.publish(new UserUpdatedEvent(id));
