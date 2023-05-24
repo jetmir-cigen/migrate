@@ -22,10 +22,11 @@ import {
   InvoiceListResponseDto,
   InvoiceResponseDto,
 } from './dto/invoice-response.dto';
+import { UserRoleGuard } from '../user/user-role.guard';
 
 @ApiTags('Invoices')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
 @Controller('invoices')
 export class InvoiceController {
   constructor(private readonly queryBus: QueryBus) {}
@@ -46,10 +47,7 @@ export class InvoiceController {
   })
   async findAll(@AuthUser() user: Express.User) {
     const invoices = await this.queryBus.execute(
-      new FindInvoicesByFilterQuery({
-        userId: user.uid,
-        customerId: user.cid,
-      }),
+      new FindInvoicesByFilterQuery({ userId: user.uid }),
     );
 
     return new InvoiceListResponseDto({ invoices });
