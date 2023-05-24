@@ -6,6 +6,8 @@ import {
   JoinColumn,
   Unique,
   Index,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserGroupEntity } from './user-group.entity';

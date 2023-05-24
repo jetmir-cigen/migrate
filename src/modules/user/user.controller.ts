@@ -133,6 +133,11 @@ export class UserController {
     @Param('id') id: number,
     @Body() userCreateDto: Partial<UserCreateDto>,
   ): Promise<SuccessResponseDto> {
+    if (userCreateDto.password) {
+      userCreateDto.password = await this.userService.hashPassword(
+        userCreateDto.password,
+      );
+    }
     await this.commandBus.execute(new UpdateUserCommand(id, userCreateDto));
 
     return new SuccessResponseDto();
