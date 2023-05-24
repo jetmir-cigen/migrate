@@ -5,7 +5,6 @@ import { InvoiceEntity } from '../entities/invoice.entity';
 
 type QueryFilters = {
   userId: number;
-  customerId: number;
 };
 
 export class FindInvoicesByFilterQuery {
@@ -22,7 +21,7 @@ export class FindInvoicesByFilterQueryHandler
   ) {}
 
   async execute({ filters }: FindInvoicesByFilterQuery) {
-    const { customerId, userId } = filters;
+    const { userId } = filters;
 
     const invoices = await this.invoiceRepository
       .createQueryBuilder('invoice')
@@ -42,6 +41,7 @@ export class FindInvoicesByFilterQueryHandler
       .leftJoinAndSelect('invoice.vendor', 'vendor')
       .leftJoinAndSelect('invoice.customer', 'customer')
       .leftJoinAndSelect('invoice.elementLabel', 'elementLabel')
+      .orderBy('invoice.date', 'DESC')
       .getMany();
 
     return invoices;
