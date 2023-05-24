@@ -27,18 +27,18 @@ export class CreateEmployeeConsentCommandHandler
   async execute({
     data: { createEmployeeConsentDto, user, customer, customerHead },
   }: CreateEmployeeConsentCommand): Promise<EmployeeConsentEntity> {
-    const employeeConsent = await this.employeeConsentRepository.save({
+    const employeeConsent = await this.employeeConsentRepository.create({
       ...createEmployeeConsentDto,
       createdDate: new Date(),
-      createdUserId: user.id,
-      customerId: customer.id,
-      customerHeadId: createEmployeeConsentDto.isGlobal
-        ? customerHead.id
-        : null,
+      user: {
+        id: user.id,
+      },
+      customer: { id: customer.id },
+      customerHead: {
+        id: createEmployeeConsentDto.isGlobal ? customerHead.id : null,
+      },
     });
 
-    return this.employeeConsentRepository.findOneOrFail({
-      where: { id: employeeConsent.id },
-    });
+    return this.employeeConsentRepository.save(employeeConsent);
   }
 }
