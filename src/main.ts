@@ -21,7 +21,14 @@ async function bootstrap() {
   app.enableCors({
     credentials: true,
     origin: ['http://localhost:3000', /.+vercel\.app/],
-    allowedHeaders: ['authorization', 'cookie', 'cookies', 'content-type'],
+    allowedHeaders: [
+      'authorization',
+      'cookie',
+      'cookies',
+      'content-type',
+      'baggage',
+      'sentry-trace',
+    ],
   });
 
   //For custom validations
