@@ -27,4 +27,4 @@ COPY . .
 EXPOSE 4000
 
 # Start the SSH tunnel and the Nest app
-CMD sudo chmod 600 /root/.ssh/id_rsa && sudo chmod 600 /root/.ssh/known_hosts && ssh -f -N -L 3311:skytechcontrol-mysql-development.mysql.database.azure.com:3306 -i /root/.ssh/id_rsa jetmir@4.235.113.59 && npm run start:dev
+CMD chmod 600 /root/.ssh/id_rsa && chmod 600 /root/.ssh/known_hosts && ssh -f -N -L 3311:skytechcontrol-mysql-development.mysql.database.azure.com:3306 -i /root/.ssh/id_rsa jetmir@4.235.113.59 && npm run start:dev
