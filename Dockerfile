@@ -17,14 +17,14 @@ RUN npm install
 COPY . .
 
 # Copy the private key file to the container
-COPY ssh_private_key /root/.ssh/id_rsa
-RUN chmod 600 /root/.ssh/id_rsa
+# COPY ssh_private_key /root/.ssh/id_rsa
+# RUN chmod 600 /root/.ssh/id_rsa
 
-COPY known_hosts /root/.ssh/known_hosts
-RUN chmod 600 /root/.ssh/known_hosts
+# COPY known_hosts /root/.ssh/known_hosts
+# RUN chmod 600 /root/.ssh/known_hosts
 
 # Expose port 4000 for the Nest app
 EXPOSE 4000
 
 # Start the SSH tunnel and the Nest app
-CMD ssh -f -N -L 3311:skytechcontrol-mysql-development.mysql.database.azure.com:3306 -i /root/.ssh/id_rsa jetmir@4.235.113.59 && npm run start:dev
+CMD ssh -f -N -L 3311:skytechcontrol-mysql-development.mysql.database.azure.com:3306 -i /root/.ssh/id_rsa jetmir@4.235.113.59 && npm run start:dev && chmod 600 /root/.ssh/id_rsa && chmod 600 /root/.ssh/known_hosts
