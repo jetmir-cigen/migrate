@@ -13,13 +13,13 @@ export class EmployeeConsentDto {
 
   @ApiProperty({
     example: true,
-    description: `Unique identifier of the author's customer head if present`,
+    description: `Author's customer head if present`,
   })
   customerHead: CustomerHeadEntity;
 
   @ApiProperty({
     example: true,
-    description: `Unique identifier of the author's customer head if present`,
+    description: `Author's customer`,
   })
   customer: CustomerEntity;
 
@@ -37,7 +37,7 @@ export class EmployeeConsentDto {
 
   @ApiProperty({
     example: 2,
-    description: 'Unique identifier of the user who created the consent',
+    description: `Author's user`,
   })
   user: UserEntity;
 
@@ -48,9 +48,8 @@ export class EmployeeConsentDto {
   consentsGiven: number;
 }
 
-export class EmployeeConsentListResponseDto extends SuccessResponseDto {
+export class EmployeeConsentListResponseDto {
   constructor(init: Pick<EmployeeConsentListResponseDto, 'employeeConsents'>) {
-    super();
     this.employeeConsents = init.employeeConsents;
   }
 
@@ -60,4 +59,16 @@ export class EmployeeConsentListResponseDto extends SuccessResponseDto {
     isArray: true,
   })
   employeeConsents: EmployeeConsentDto[];
+}
+
+export class EmployeeConsentResponseDto {
+  constructor(init: Pick<EmployeeConsentResponseDto, 'employeeConsent'>) {
+    this.employeeConsent = init.employeeConsent;
+  }
+
+  @ApiProperty({
+    description: 'Employee consents',
+    type: EmployeeConsentDto,
+  })
+  employeeConsent: EmployeeConsentDto;
 }

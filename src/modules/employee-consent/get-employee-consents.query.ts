@@ -1,23 +1,29 @@
-import { Injectable } from '@nestjs/common';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { EmployeeConsentEntity } from './entities/employee-consent.entity';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { EmployeeConsentEntity } from './entities/employee-consent.entity';
 
-@Injectable()
-export class EmployeeConsentService {
+export class GetEmployeeConsentsQuery {
+  constructor(
+    public readonly data: {
+      customer: { id: number };
+      customerHead: { id: number };
+    },
+  ) {}
+}
+
+@QueryHandler(GetEmployeeConsentsQuery)
+export class GetEmployeeConsentsQueryHandler
+  implements IQueryHandler<GetEmployeeConsentsQuery>
+{
   constructor(
     @InjectRepository(EmployeeConsentEntity)
-    @InjectDataSource()
     private readonly employeeConsentRepository: Repository<EmployeeConsentEntity>,
   ) {}
 
-  async findAll({
-    customer,
-    customerHead,
-  }: {
-    customer: { id: number };
-    customerHead: { id: number };
-  }): Promise<EmployeeConsentEntity[]> {
+  async execute({
+    data: { customer, customerHead },
+  }: GetEmployeeConsentsQuery): Promise<EmployeeConsentEntity[]> {
     const employeeConsents = await this.employeeConsentRepository
       .createQueryBuilder('e')
       .leftJoin('e.employeeConsentCostObjects', 'employeeConsentCostObjects')
