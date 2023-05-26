@@ -45,6 +45,7 @@ import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { GetCustomersQuery } from '@/modules/user/queries/get-customers.query';
 
 @Controller('users')
+@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
 export class UserController {
   constructor(
     private readonly queryBus: QueryBus,
@@ -59,7 +60,6 @@ export class UserController {
   })
   @ApiUnauthorizedResponse()
   @Get('/')
-  // @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
   async getAll(): Promise<UserResponseDto> {
     // In case of complex queries or complex business logic, it is better to use service
     const users = await this.queryBus.execute(new FindUsersByFilterQuery());

@@ -32,8 +32,8 @@ export class UpdateUserCommandHandler
 
   async execute({ id, data }: UpdateUserCommand): Promise<void> {
     try {
-      await this.userRepository.findOneOrFail({ where: { id } });
-      if (data.phoneNumber) {
+      const user = await this.userRepository.findOneOrFail({ where: { id } });
+      if (data.phoneNumber && user.username === user.phoneNumber) {
         data.username = data.phoneNumber;
       }
       await this.userRepository.update(id, data);
