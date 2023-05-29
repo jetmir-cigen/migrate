@@ -3,6 +3,7 @@ declare global {
     ADMIN = 'admin',
     MANAGER = 'manager',
     USER = 'user',
+    CUSTOMER_ADMIN = 'customer_admin',
   }
 
   namespace Express {
@@ -26,8 +27,12 @@ declare global {
       id: number;
       role: UserRoles.ADMIN;
     }
+    interface CustomerAdminUser extends GenericUser {
+      id: number;
+      role: UserRoles.CUSTOMER_ADMIN;
+    }
 
-    type User = RegularUser | ManagerUser | AdminUser;
+    type User = RegularUser | ManagerUser | AdminUser | CustomerAdminUser;
 
     type AuthUser = {
       iss: string;
@@ -37,7 +42,7 @@ declare global {
       cid: number;
       chid: number;
       wlid: number;
-      role: 'admin' | 'manager' | 'user';
+      role: 'admin' | 'manager' | 'user' | 'customer_admin';
       iom: false;
       iat: number;
       exp: number;
