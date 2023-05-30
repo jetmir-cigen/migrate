@@ -16,4 +16,18 @@ export class UserService {
       throw err;
     }
   }
+
+  async validatePassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    try {
+      const response = await this.httpService.axiosRef.get(
+        `https://auth-dev.skytechcontrol.io/hash/verify?password=${password}&hash=${hashedPassword}`,
+      );
+      return response.data.valid;
+    } catch (err) {
+      throw err;
+    }
+  }
 }

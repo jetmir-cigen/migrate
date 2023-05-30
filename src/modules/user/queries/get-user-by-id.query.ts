@@ -1,10 +1,13 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsSelectByString, Repository } from 'typeorm';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 
 export class GetUserByIdQuery {
-  constructor(public readonly id: number) {}
+  constructor(
+    public readonly id: number,
+    public readonly showPassword?: boolean,
+  ) {}
 }
 
 @QueryHandler(GetUserByIdQuery)
@@ -17,21 +20,22 @@ export class GetUserByIdQueryHandler
   ) {}
 
   async execute(query: GetUserByIdQuery) {
-    const { id } = query;
+    const { id, showPassword } = query;
     return this.userRepository.findOne({
       where: { id },
-      select: [
-        'id',
-        'username',
-        'firstName',
-        'lastName',
-        'email',
-        'seller',
-        'countryId',
-        'phoneNumber',
-        'userGroupId',
-        'customerId',
-      ],
+      select: {
+        id: true,
+        username: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        seller: true,
+        countryId: true,
+        phoneNumber: true,
+        userGroupId: true,
+        customerId: true,
+        password: showPassword,
+      },
     });
   }
 }

@@ -46,6 +46,9 @@ export class UserEntity {
   @Column({ name: 'last_name' })
   lastName: string;
 
+  @Column({ name: 'is_password_change_required' })
+  isPasswordChangeRequired: boolean;
+
   @Column()
   email: string;
 

@@ -16,6 +16,7 @@ export class UpdateUserCommand {
       username?: string;
       countryId?: number;
       customerId?: number;
+      isPasswordChangeRequired?: boolean;
     },
   ) {}
 }
@@ -40,6 +41,14 @@ export class UpdateUserCommandHandler
       // should not update password if user is admin
       if (user.userGroupId === 1 && data.password) {
         delete data.password;
+      }
+
+      // Password updated from user page in manager
+      if (
+        typeof data.isPasswordChangeRequired === 'undefined' &&
+        data.password
+      ) {
+        data.isPasswordChangeRequired = true;
       }
 
       await this.userRepository.update(id, data);

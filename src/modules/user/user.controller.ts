@@ -6,6 +6,8 @@ import {
   Param,
   Patch,
   Post,
+  Put,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -35,6 +37,7 @@ import {
 } from '@/modules/user/commands';
 import { UserService } from '@/modules/user/user.service';
 import {
+  FailResponseDto,
   StatusResponseDTO,
   SuccessResponseDto,
 } from '@/common/dto/status-response.dto';
@@ -43,9 +46,9 @@ import { GetUserByIdQuery } from '@/modules/user/queries/get-user-by-id.query';
 import { AuthUser } from '@/modules/auth/auth-user.decorator';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { GetCustomersQuery } from '@/modules/user/queries/get-customers.query';
+import { UserPasswordUpdateDto } from './dto/user-password-update.dto';
 
 @Controller('users')
-@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
 export class UserController {
   constructor(
     private readonly queryBus: QueryBus,
@@ -60,6 +63,7 @@ export class UserController {
   })
   @ApiUnauthorizedResponse()
   @Get('/')
+  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
   async getAll(): Promise<UserResponseDto> {
     // In case of complex queries or complex business logic, it is better to use service
     const users = await this.queryBus.execute(new FindUsersByFilterQuery());
@@ -75,6 +79,7 @@ export class UserController {
   @ApiBadRequestResponse({ description: 'Bad Request' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Post()
+  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
   async createUser(
     @Body() userCreateDto: UserCreateDto,
   ): Promise<UserCreateResponseDto> {
@@ -99,7 +104,6 @@ export class UserController {
     return this.queryBus.execute(new GetCustomersQuery(user.chid));
   }
 
-  @Get(':id')
   @ApiParam({
     name: 'id',
     type: 'number',
@@ -111,6 +115,8 @@ export class UserController {
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  @Get(':id')
+  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
   async getTextTemplateById(@Param('id') id: number): Promise<UserEntity> {
     return this.queryBus.execute(new GetUserByIdQuery(id));
   }
@@ -127,7 +133,7 @@ export class UserController {
   @ApiForbiddenResponse({
     description: 'Allowed for all users except for admin and active users',
   })
-  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER', 'MANAGER_USER']))
   @Patch(':id')
   async updateUser(
     @Param('id') id: number,
@@ -139,6 +145,51 @@ export class UserController {
       );
     }
     await this.commandBus.execute(new UpdateUserCommand(id, userCreateDto));
+
+    return new SuccessResponseDto();
+  }
+
+  @ApiOperation({
+    summary: 'Update password for current user',
+  })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'updated successfully.',
+    type: StatusResponseDTO,
+  })
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse({
+    description: 'Allowed for all users except for admin and active users',
+  })
+  @UseGuards(
+    AuthGuard,
+    UserRoleGuard(['ADMIN_USER', 'REGULAR_USER', 'CUSTOMER_ADMIN_USER']),
+  )
+  @Put('password')
+  async updatePassword(
+    @Body() { password, newPassword }: UserPasswordUpdateDto,
+    @AuthUser() authUser: Express.User,
+  ): Promise<SuccessResponseDto | FailResponseDto> {
+    const user = await this.queryBus.execute(
+      new GetUserByIdQuery(authUser.uid, true),
+    );
+    // Validate existing password(old password)
+    const isPasswordValid = await this.userService.validatePassword(
+      password,
+      user.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid password');
+    }
+
+    newPassword = await this.userService.hashPassword(newPassword);
+    await this.commandBus.execute(
+      new UpdateUserCommand(user.id, {
+        password: newPassword,
+        isPasswordChangeRequired: false,
+      }),
+    );
 
     return new SuccessResponseDto();
   }

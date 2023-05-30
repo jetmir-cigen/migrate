@@ -8,7 +8,7 @@ import {
 import { Request } from 'express';
 
 const guards: Record<
-  'ADMIN_USER' | 'MANAGER_USER' | 'REGULAR_USER',
+  'ADMIN_USER' | 'MANAGER_USER' | 'REGULAR_USER' | 'CUSTOMER_ADMIN_USER',
   (user: Express.User) => boolean
 > = {
   ADMIN_USER: (user: Express.User) => {
@@ -19,6 +19,9 @@ const guards: Record<
   },
   REGULAR_USER: (user: Express.User) => {
     return user.role === 'user';
+  },
+  CUSTOMER_ADMIN_USER: (user: Express.User) => {
+    return user.role === 'customer_admin';
   },
 };
 
