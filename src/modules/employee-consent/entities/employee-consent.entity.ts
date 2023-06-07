@@ -15,17 +15,17 @@ import { EmployeeConsentCostObjectEntity } from '@/common/entities/employee-cons
 export class EmployeeConsentEntity {
   @PrimaryGeneratedColumn() id: number;
 
-  @ManyToOne(() => CustomerHeadEntity)
+  @ManyToOne(() => CustomerHeadEntity, { nullable: true })
   @JoinColumn({ name: 'customer_head_id' })
   customerHead: CustomerHeadEntity;
 
-  @ManyToOne(() => CustomerEntity)
+  @ManyToOne(() => CustomerEntity, { nullable: true })
   @JoinColumn({ name: 'customer_id' })
   customer: CustomerEntity;
 
   @Column({ type: 'text', name: 'text', charset: 'utf8mb4' }) text: string;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_user_id' })
   user: UserEntity;
 

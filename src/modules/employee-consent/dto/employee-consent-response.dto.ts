@@ -12,16 +12,18 @@ export class EmployeeConsentDto {
   id: number;
 
   @ApiProperty({
+    nullable: true,
     example: true,
     description: `Author's customer head if present`,
   })
-  customerHead: CustomerHeadEntity;
+  customerHead: CustomerHeadEntity | null;
 
   @ApiProperty({
+    nullable: true,
     example: true,
     description: `Author's customer`,
   })
-  customer: CustomerEntity;
+  customer: CustomerEntity | null;
 
   @ApiProperty({
     example: 'I agree to...',
@@ -36,10 +38,11 @@ export class EmployeeConsentDto {
   createdDate: Date;
 
   @ApiProperty({
+    nullable: true,
     example: 2,
     description: `Author's user`,
   })
-  user: UserEntity;
+  user: UserEntity | null;
 
   @ApiProperty({
     example: 2,
