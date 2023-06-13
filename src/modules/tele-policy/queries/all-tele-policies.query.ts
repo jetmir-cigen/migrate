@@ -18,16 +18,14 @@ export class FindTelePoliciesByFilterQueryHandler
 {
   constructor(
     @InjectRepository(SalaryDeductionProfileEntity)
-    private readonly invoiceRepository: Repository<SalaryDeductionProfileEntity>,
+    private readonly repository: Repository<SalaryDeductionProfileEntity>,
   ) {}
 
   async execute({ filters }: FindTelePoliciesByFilterQuery) {
     const { customerHeadId, userId } = filters;
 
-    console.log({ customerHeadId, userId });
-
-    const telePolicies = this.invoiceRepository
-      .createQueryBuilder('tp')
+    const telePolicies = this.repository
+      .createQueryBuilder('sdp')
       .orWhere((qb) => {
         const subQuery = qb
           .subQuery()
@@ -35,12 +33,42 @@ export class FindTelePoliciesByFilterQueryHandler
           .from('view.manager_access_customer', 'mac')
           .where('mac.user_id = :userId', { userId })
           .getQuery();
-        return 'tp.customerId IN ' + subQuery;
+        return 'sdp.customerId IN ' + subQuery;
       })
-      .leftJoinAndSelect('tp.telePolicyTemplate', 'tpt');
+      .leftJoinAndSelect('sdp.telePolicyTemplate', 'sdpt')
+      .leftJoinAndSelect('sdp.customer', 'c')
+      .leftJoinAndSelect('c.country', 'cc')
+      .leftJoinAndSelect('sdp.customerHead', 'ch')
+      .leftJoinAndSelect('ch.corporateCustomer', 'chc')
+      .leftJoinAndSelect('chc.country', 'chcc')
+      .loadRelationCountAndMap(
+        'sdp.subscribers',
+        'sdp.costObjects',
+        'subscribers',
+      )
+      .select([
+        'sdp.id',
+        'sdp.name',
+        'sdp.comment',
+        'sdp.freeAllowanceAmount',
+        'sdpt.id',
+        'sdpt.name',
+        'c.id',
+        'c.name',
+        'cc.id',
+        'cc.name',
+        'cc.currency',
+        'ch.id',
+        'ch.name',
+        'chc.id',
+        'chc.name',
+        'chcc.id',
+        'chcc.name',
+        'chcc.currency',
+      ]);
 
     if (customerHeadId) {
-      telePolicies.orWhere('tp.customer_head_id = :customerHeadId', {
+      telePolicies.orWhere('sdp.customer_head_id = :customerHeadId', {
         customerHeadId,
       });
     }

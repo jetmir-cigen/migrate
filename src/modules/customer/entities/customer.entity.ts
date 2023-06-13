@@ -1,3 +1,4 @@
+import { CountryEntity } from '@/common/entities/country.entity';
 import {
   Entity,
   Column,
@@ -6,6 +7,8 @@ import {
   UpdateDateColumn,
   Unique,
   Index,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity('customer')
@@ -179,6 +182,10 @@ export class CustomerEntity {
   @Column({ name: 'country_id', type: 'int', default: 47 })
   @Index(['countryId'])
   countryId: number;
+
+  @ManyToOne(() => CountryEntity)
+  @JoinColumn({ name: 'country_id' })
+  country: CountryEntity;
 
   @Column({ name: 'locale', type: 'varchar', length: 2, nullable: true })
   locale?: string;

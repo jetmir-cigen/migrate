@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { CustomerDto } from '@/modules/customer/dto/customer.dto';
 import { TelePolicyTemplateDto } from './tele-policy-template.dto';
 import { SuccessResponseDto } from '@/common/dto/status-response.dto';
+import { CostObjectDto } from '@/common/dto/cost-object.dto';
 
 export class SalaryDeductionProfileDto {
   @ApiProperty({
@@ -63,6 +64,18 @@ export class SalaryDeductionProfileDto {
     description: 'The associated tele policy template.',
   })
   telePolicyTemplate: TelePolicyTemplateDto;
+
+  @ApiProperty({
+    type: CostObjectDto,
+    description: 'Cost objects associated with the salary deduction profile.',
+  })
+  costObjects?: CostObjectDto;
+
+  @ApiProperty({
+    example: 1,
+    description: 'The count of subscribers associated with the profile.',
+  })
+  subscribers: number;
 }
 
 export class SalaryDeductionProfileListResponseDto extends SuccessResponseDto {

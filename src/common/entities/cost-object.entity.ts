@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { SalaryDeductionProfileEntity } from '@/modules/tele-policy/entities/salary-deduction-profile.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity({ name: 'cost_object' })
 export class CostObjectEntity {
@@ -290,6 +297,10 @@ export class CostObjectEntity {
     default: '0.00',
   })
   salaryDeductionMinimumAmount: number;
+
+  @ManyToOne(() => SalaryDeductionProfileEntity)
+  @JoinColumn({ name: 'salary_deduction_profile_id' })
+  salaryDeductionProfile: SalaryDeductionProfileEntity;
 
   @Column({
     name: 'salary_deduction_profile_id',
