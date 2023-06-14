@@ -27,6 +27,7 @@ import { TextTemplateModule } from './modules/text-template/text-template.module
 import { EmployeeConsentModule } from './modules/employee-consent/employee-consent.module';
 import { WhitelabelModule } from './modules/whitelabel/whitelabel.module';
 import { TelePolicyModule } from './modules/tele-policy/tele-policy.module';
+import { ReportModule } from './modules/report/report.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { TelePolicyModule } from './modules/tele-policy/tele-policy.module';
     WhitelabelModule,
     InvoiceModule,
     TelePolicyModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],
