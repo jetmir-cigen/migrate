@@ -8,6 +8,13 @@ import { CustomerSetupExportSettingsEntity } from '@/modules/report/entities/cus
 import { SetupExportSettingsController } from '@/modules/report/setup-export-settings.controller';
 import { UpsertSetupExportSettingsCommandHandler } from '@/modules/report/commands/upsert-setup-export-settings.controller';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { ReportQueryHandler } from './queries/report.query';
+import { DPOrderDownPaymentEntity } from './entities/device_policy.order_down_payment.entity';
+import { EOrderDownPaymentEntity } from './entities/ecom.order_down_payment.entity';
+import { DPOrderEntity } from './entities/device_policy.order.entity';
+import { DPProductEntity } from './entities/device_policy.product.entity';
+import { EOrderEntity } from './entities/ecom.order.entity';
+import { AAssetEntity } from './entities/assets.asset.entity';
 
 @Module({
   imports: [
@@ -15,6 +22,12 @@ import { CostObjectEntity } from '@/common/entities/cost-object.entity';
       OrderDownPaymentEntity,
       CostObjectEntity,
       CustomerSetupExportSettingsEntity,
+      EOrderDownPaymentEntity,
+      DPOrderDownPaymentEntity,
+      DPOrderEntity,
+      DPProductEntity,
+      EOrderEntity,
+      AAssetEntity,
     ]),
     CqrsModule,
   ],
@@ -22,6 +35,7 @@ import { CostObjectEntity } from '@/common/entities/cost-object.entity';
   providers: [
     GetSetupExportQueryHandler,
     UpsertSetupExportSettingsCommandHandler,
+    ReportQueryHandler,
   ],
 })
 export class ReportModule {}
