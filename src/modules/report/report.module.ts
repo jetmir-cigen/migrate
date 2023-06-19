@@ -8,7 +8,7 @@ import { CustomerSetupExportSettingsEntity } from '@/modules/report/entities/cus
 import { SetupExportSettingsController } from '@/modules/report/setup-export-settings.controller';
 import { UpsertSetupExportSettingsCommandHandler } from '@/modules/report/commands/upsert-setup-export-settings.controller';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
-import { ReportQueryHandler } from './queries/report.query';
+import { ReportGroupByOrderQueryHandler } from './queries/report.query';
 import { DPOrderDownPaymentEntity } from './entities/device_policy.order_down_payment.entity';
 import { EOrderDownPaymentEntity } from './entities/ecom.order_down_payment.entity';
 import { DPOrderEntity } from './entities/device_policy.order.entity';
@@ -35,7 +35,7 @@ import { AAssetEntity } from './entities/assets.asset.entity';
   providers: [
     GetSetupExportQueryHandler,
     UpsertSetupExportSettingsCommandHandler,
-    ReportQueryHandler,
+    ReportGroupByOrderQueryHandler,
   ],
 })
 export class ReportModule {}

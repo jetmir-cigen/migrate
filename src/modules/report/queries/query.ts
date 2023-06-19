@@ -1,4 +1,4 @@
-export const query = `
+export const groupByOrder = `
 SELECT name,
         employee_no,
         phone_no,
@@ -114,3 +114,42 @@ GROUP BY name,
         is_buyout,
         model
 ORDER BY name`;
+
+export const groupByEmployeeNo = `
+SELECT employee_no,
+        amount,
+        cse.salary_deduction_code_device AS accounting_code
+FROM (
+                SELECT co.employee_no,
+                        co.customer_id,
+                        dpod.amount AS amount
+                FROM device_policy.order_downpayment dpod
+                        LEFT JOIN control.cost_object co ON dpod.cost_object_id = co.id
+                        JOIN control.customer c ON c.id = co.customer_id
+                        LEFT JOIN department d ON d.id = co.department_id
+                WHERE (
+                                c.id = :customerId
+                                OR c.customer_head_id = :customerHeadId
+                        )
+                        AND DATE(dpod.payment_date) >= :from
+                        AND DATE(dpod.payment_date) <= :to
+                UNION
+                SELECT co.employee_no,
+                        co.customer_id,
+                        odp.amount AS amount
+                FROM ecom.order_down_payment odp
+                        LEFT JOIN cost_object co ON odp.cost_object_id = co.id
+                        JOIN customer c ON c.id = co.customer_id
+                        LEFT JOIN department d ON d.id = co.department_id
+                WHERE (
+                                c.id = :customerId
+                                OR c.customer_head_id = :customerHeadId
+                        )
+                        AND odp.is_active = 1
+                        AND DATE(odp.date) >= :from
+                        AND DATE(odp.date) <= :to
+                GROUP BY co.employee_no
+        ) AS employee
+        LEFT JOIN control.customer_setup_export cse ON employee.customer_id = cse.customer_id
+GROUP BY employee_no
+ORDER BY employee_no`;
