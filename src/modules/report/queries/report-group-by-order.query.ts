@@ -26,10 +26,6 @@ export class ReportGroupByOrderQueryHandler
 
   async execute(params: ReportGroupByOrderQuery): Promise<any> {
     const { customerHeadId, customerId, fromDate, toDate } = params;
-    // const customerId = params.customerId; // Replace with the actual customer ID
-    // const customerHeadId = params.customerHeadId; // Replace with the actual customer head ID
-    // const fromDate = '2023-01-01'; // Replace with the actual start date
-    // const toDate = '2023-12-31'; // Replace with the actual end date
 
     return this.dataSource.query(groupByOrder, [
       customerId,
