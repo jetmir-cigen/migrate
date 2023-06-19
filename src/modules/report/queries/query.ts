@@ -128,11 +128,11 @@ FROM (
                         JOIN control.customer c ON c.id = co.customer_id
                         LEFT JOIN department d ON d.id = co.department_id
                 WHERE (
-                                c.id = :customerId
-                                OR c.customer_head_id = :customerHeadId
+                                c.id = ?
+                                OR c.customer_head_id = ?
                         )
-                        AND DATE(dpod.payment_date) >= :from
-                        AND DATE(dpod.payment_date) <= :to
+                        AND DATE(dpod.payment_date) >= ?
+                        AND DATE(dpod.payment_date) <= ?
                 UNION
                 SELECT co.employee_no,
                         co.customer_id,
@@ -142,12 +142,12 @@ FROM (
                         JOIN customer c ON c.id = co.customer_id
                         LEFT JOIN department d ON d.id = co.department_id
                 WHERE (
-                                c.id = :customerId
-                                OR c.customer_head_id = :customerHeadId
+                                c.id = ?
+                                OR c.customer_head_id = ?
                         )
                         AND odp.is_active = 1
-                        AND DATE(odp.date) >= :from
-                        AND DATE(odp.date) <= :to
+                        AND DATE(odp.date) >= ?
+                        AND DATE(odp.date) <= ?
                 GROUP BY co.employee_no
         ) AS employee
         LEFT JOIN control.customer_setup_export cse ON employee.customer_id = cse.customer_id
