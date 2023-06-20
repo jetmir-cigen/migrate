@@ -8,13 +8,29 @@ import {
   ReportGroupByEmployeeNoQuery,
   ReportGroupByOrderQuery,
 } from './queries';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+@ApiTags('reports')
 @Controller('reports')
 export class ReportController {
   constructor(protected readonly queryBus: QueryBus) {}
 
   @Get('/order')
+  @ApiOperation({ summary: 'Get reports grouped by order' })
+  @ApiQuery({
+    name: 'fromDate',
+    type: String,
+    example: '2023-01-01',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'toDate',
+    type: String,
+    example: '2023-06-30',
+    required: true,
+  })
+  @ApiResponse({ status: 200, description: 'Success' })
   getReportGroupByOrder(
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
@@ -30,6 +46,20 @@ export class ReportController {
   }
 
   @Get('/employee-no')
+  @ApiOperation({ summary: 'Get reports grouped by employee number' })
+  @ApiQuery({
+    name: 'fromDate',
+    type: String,
+    example: '2023-01-01',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'toDate',
+    type: String,
+    example: '2023-06-30',
+    required: true,
+  })
+  @ApiResponse({ status: 200, description: 'Success' })
   getReportGroupByEmployeeNo(
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
