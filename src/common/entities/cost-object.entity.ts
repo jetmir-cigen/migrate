@@ -7,7 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-@Entity({ name: 'cost_object' })
+@Entity({ name: 'cost_object', schema: 'control' })
 export class CostObjectEntity {
   @PrimaryGeneratedColumn()
   id: number;
