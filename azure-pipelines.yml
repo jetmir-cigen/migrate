@@ -1,74 +1,7 @@
-# trigger:
-# - main
-# - staging
-# - dev
-# - feature/dockerize
-
-# resources:
-#   repositories:
-#     - repository: CD_Template
-#       endpoint: skytechrepos
-#       type: git
-#       name: 'Project Stardust/CD_Template'
-#       ref: refs/heads/main
-
-# variables:
-#   #VM_IMAGE_NAME: 'windows-2019'
-#   IMAGE_REPOSITORY: managerapi
-#   DOCKER_FILE_PATH:  '**/Dockerfile'
-#   DOCKER_REGISTRY_SERVICE_CONNECTION: acr-dev
-#   FILE: development/Api/managerapi.yml 
-#   #IMAGE_TAG: latest #for now we are using build id, this is for future image tagging
-#   IMAGE_REGISTRY: stardustcontainerregistryy.azurecr.io
-
-# stages:
-#   - stage: Build
-#     displayName: Build and Push Docker Image
-#     jobs:
-#     - job: Build
-#       displayName: Build
-#       pool:
-#         vmImage: ubuntu-latest
-#       steps:
-#         - checkout: self
-#         - checkout: CD_Template
-#           persistCredentials: true
-#         - task: Docker@2
-#           displayName: Docker login
-#           inputs:
-#             containerRegistry: $(DOCKER_REGISTRY_SERVICE_CONNECTION)
-#             command: 'login'
-#         - task: AzureCLI@2
-#           displayName: Docker Build and push
-#           inputs:
-#             azureSubscription: "azure-dev-subscription"
-#             scriptType: bash
-#             scriptLocation: inlineScript
-#             inlineScript: |
-#               cd "Manager API"
-#               az acr build -t "$(IMAGE_REPOSITORY):$(Build.BuildId)" -r stardustcontainerregistryy --platform linux .
-#         - script: |
-#             cd CD_Template
-#             sudo snap install yq
-#             git pull
-#             git checkout main
-
-#             export FULL_IMAGE="$(IMAGE_REGISTRY)/$(IMAGE_REPOSITORY):$(Build.BuildId)"
-
-#             yq -i 'select(.kind == "CronJob") |= .spec.jobTemplate.spec.template.spec.containers[0].image = strenv(FULL_IMAGE)' $(FILE)
-#             yq -i 'select(.kind == "Deployment") |= .spec.template.spec.containers[0].image = strenv(FULL_IMAGE)' $FILE
-
-#             git config --global user.email "devops@cigen.me"
-#             git config --global user.name "cd-pipeline.cigen"
-#             git add .
-#             git commit -m "update manifest for argocd"
-#             git push origin HEAD:main --force
-
 trigger:
 - main
 - staging
 - dev
-- pipeline-test
 
 resources:
   repositories:
@@ -84,7 +17,6 @@ resources:
       ref: refs/heads/main
 
 
-############
 pool:
   vmImage: ubuntu-latest
 
@@ -95,9 +27,6 @@ variables:
     - template: /vars/ManagerApi/staging/vars.yml@CI_Template
   - ${{ if eq(variables['build.sourceBranch'], 'refs/heads/main') }}:
     - template: /vars/ManagerApi/main/vars.yml@CI_Template
-  - ${{ if eq(variables['build.sourceBranch'], 'refs/heads/pipeline-test') }}: #COMMENT
-    - template: /vars/ManagerApi/main/vars.yml@CI_Template #COMMENT
-  # - group: variables-${{variables['Build.SourceBranchName']}}
 
 stages:
   - stage: Build
@@ -128,8 +57,7 @@ stages:
               az acr build -t "$(IMAGE_REPOSITORY):$(Build.BuildId)" -r stardustcontainerregistryy --platform linux .
         - task: AzureCLI@2
           displayName: Docker Build and push - production
-          #condition: eq(variables['Build.SourceBranch'], 'refs/heads/main') UNCOMMENT
-          condition: eq(variables['Build.SourceBranch'], 'refs/heads/pipeline-test') #COMMENT
+          condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
           inputs:
             azureSubscription: "prod-sc"
             scriptType: bash
