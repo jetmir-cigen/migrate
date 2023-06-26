@@ -2,24 +2,31 @@ trigger:
 - main
 - staging
 - dev
-- feature/dockerize
 
 resources:
   repositories:
+    - repository: CI_Template
+      endpoint: skytechrepos
+      type: git
+      name: 'Project Stardust/CI_Template'
+      ref: refs/heads/main
     - repository: CD_Template
       endpoint: skytechrepos
       type: git
       name: 'Project Stardust/CD_Template'
       ref: refs/heads/main
 
+
+pool:
+  vmImage: ubuntu-latest
+
 variables:
-  #VM_IMAGE_NAME: 'windows-2019'
-  IMAGE_REPOSITORY: managerapi
-  DOCKER_FILE_PATH:  '**/Dockerfile'
-  DOCKER_REGISTRY_SERVICE_CONNECTION: acr-dev
-  FILE: development/Api/managerapi.yml 
-  #IMAGE_TAG: latest #for now we are using build id, this is for future image tagging
-  IMAGE_REGISTRY: stardustcontainerregistryy.azurecr.io
+  - ${{ if eq(variables['build.sourceBranch'], 'refs/heads/dev') }}:
+    - template: /vars/ManagerApi/development/vars.yml@CI_Template
+  - ${{ if eq(variables['build.sourceBranch'], 'refs/heads/staging') }}:
+    - template: /vars/ManagerApi/staging/vars.yml@CI_Template
+  - ${{ if eq(variables['build.sourceBranch'], 'refs/heads/main') }}:
+    - template: /vars/ManagerApi/main/vars.yml@CI_Template
 
 stages:
   - stage: Build
@@ -39,7 +46,8 @@ stages:
             containerRegistry: $(DOCKER_REGISTRY_SERVICE_CONNECTION)
             command: 'login'
         - task: AzureCLI@2
-          displayName: Docker Build and push
+          displayName: Docker Build and push - dev
+          condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
           inputs:
             azureSubscription: "azure-dev-subscription"
             scriptType: bash
@@ -47,6 +55,16 @@ stages:
             inlineScript: |
               cd "Manager API"
               az acr build -t "$(IMAGE_REPOSITORY):$(Build.BuildId)" -r stardustcontainerregistryy --platform linux .
+        - task: AzureCLI@2
+          displayName: Docker Build and push - production
+          condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+          inputs:
+            azureSubscription: "prod-sc"
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              cd "Manager API"
+              az acr build -t "$(IMAGE_REPOSITORY):$(Build.BuildId)" -r prodstardustcontainerregistry --platform linux .
         - script: |
             cd CD_Template
             sudo snap install yq
