@@ -1,3 +1,4 @@
+import { EmployeeConsentCostObjectEntity } from '@/modules/employee-consent/entities/employee-consent-cost-object.entity';
 import { SalaryDeductionProfileEntity } from '@/modules/tele-policy/entities/salary-deduction-profile.entity';
 import {
   Entity,
@@ -5,6 +6,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'cost_object', schema: 'control' })
@@ -429,4 +431,10 @@ export class CostObjectEntity {
     length: 100,
   })
   carrierApiSubscriptionProductCode: string;
+
+  @OneToMany(
+    () => EmployeeConsentCostObjectEntity,
+    (ecco) => ecco.employeeConsent,
+  )
+  employeeConsentCostObjects: EmployeeConsentCostObjectEntity[];
 }

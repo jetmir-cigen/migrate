@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
   ApiResponse,
   ApiBody,
@@ -9,6 +9,7 @@ import {
   ApiUnauthorizedResponse,
   ApiInternalServerErrorResponse,
   ApiBadRequestResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@/modules/auth/auth.guard';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
@@ -20,8 +21,11 @@ import { AuthUser } from '@/modules/auth/auth-user.decorator';
 import { EmployeeConsentEntity } from './entities/employee-consent.entity';
 import { CreateEmployeeConsentDto } from './dto/create-employee-consent.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateEmployeeConsentCommand } from './employee-consent.command';
-import { GetEmployeeConsentsQuery } from './get-employee-consents.query';
+import { GetEmployeeConsentsQuery } from './queries';
+import {
+  CreateEmployeeConsentCommand,
+  RevokeEmployeeConsentCommand,
+} from './commands';
 
 @ApiTags('Employee-consents')
 @ApiBearerAuth()
@@ -77,5 +81,31 @@ export class EmployeeConsentController {
       }),
     );
     return new EmployeeConsentResponseDto({ employeeConsent });
+  }
+
+  @Post('/:employeeConsentId(\\d+)/revoke/:costObjectId(\\d+)')
+  @ApiOperation({ summary: 'Revoke employee consent' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({
+    name: 'employeeConsentId',
+    type: 'number',
+    description: 'Employee Consent ID',
+  })
+  @ApiParam({
+    name: 'costObjectId',
+    type: 'number',
+    description: 'Cost Object ID',
+  })
+  async revoke(
+    @Param('employeeConsentId') employeeConsentId: number,
+    @Param('costObjectId') costObjectId: number,
+  ) {
+    return this.commandBus.execute(
+      new RevokeEmployeeConsentCommand({
+        employeeConsentId,
+        costObjectId,
+      }),
+    );
   }
 }

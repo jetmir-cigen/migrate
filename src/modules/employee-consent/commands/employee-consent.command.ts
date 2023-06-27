@@ -1,8 +1,8 @@
 import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { EmployeeConsentEntity } from './entities/employee-consent.entity';
-import { CreateEmployeeConsentDto } from './dto/create-employee-consent.dto';
+import { EmployeeConsentEntity } from '../entities/employee-consent.entity';
+import { CreateEmployeeConsentDto } from '../dto/create-employee-consent.dto';
 
 export class CreateEmployeeConsentCommand {
   constructor(
@@ -27,7 +27,7 @@ export class CreateEmployeeConsentCommandHandler
   async execute({
     data: { createEmployeeConsentDto, user, customer, customerHead },
   }: CreateEmployeeConsentCommand): Promise<EmployeeConsentEntity> {
-    const employeeConsent = await this.employeeConsentRepository.create({
+    const employeeConsent = this.employeeConsentRepository.create({
       ...createEmployeeConsentDto,
       createdDate: new Date(),
       user: {

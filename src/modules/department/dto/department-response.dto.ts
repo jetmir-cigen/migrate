@@ -1,5 +1,4 @@
 import { SuccessResponseDto } from '@/common/dto/status-response.dto';
-import { UserDto } from '@/modules/user/dto/user-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class DepartmentDto {

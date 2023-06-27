@@ -1,17 +1,16 @@
 import { Module } from '@nestjs/common';
 import { EmployeeConsentController } from './employee-consent.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EmployeeConsentEntity } from './entities/employee-consent.entity';
-import { EmployeeConsentCostObjectEntity } from '@/common/entities/employee-consent-cost-object.entity';
-import {
-  CreateEmployeeConsentCommand,
-  CreateEmployeeConsentCommandHandler,
-} from './employee-consent.command';
-import {
-  GetEmployeeConsentsQuery,
-  GetEmployeeConsentsQueryHandler,
-} from './get-employee-consents.query';
 import { CqrsModule } from '@nestjs/cqrs';
+
+import { EmployeeConsentEntity } from './entities/employee-consent.entity';
+
+import {
+  CreateEmployeeConsentCommandHandler,
+  RevokeEmployeeConsentCommandHandler,
+} from './commands';
+import { GetEmployeeConsentsQueryHandler } from './queries';
+import { EmployeeConsentCostObjectEntity } from './entities/employee-consent-cost-object.entity';
 
 @Module({
   imports: [
@@ -24,9 +23,8 @@ import { CqrsModule } from '@nestjs/cqrs';
   controllers: [EmployeeConsentController],
   providers: [
     CreateEmployeeConsentCommandHandler,
-    CreateEmployeeConsentCommand,
-    GetEmployeeConsentsQuery,
     GetEmployeeConsentsQueryHandler,
+    RevokeEmployeeConsentCommandHandler,
   ],
 })
 export class EmployeeConsentModule {}

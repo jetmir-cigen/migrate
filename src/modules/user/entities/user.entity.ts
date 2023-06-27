@@ -6,11 +6,11 @@ import {
   JoinColumn,
   Unique,
   Index,
-  BeforeInsert,
-  BeforeUpdate,
+  OneToMany,
 } from 'typeorm';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserGroupEntity } from './user-group.entity';
+import { EmployeeConsentCostObjectEntity } from '@/modules/employee-consent/entities/employee-consent-cost-object.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -95,4 +95,10 @@ export class UserEntity {
 
   @Column({ default: false, name: 'has_frame_agreement_access' })
   hasFrameAgreementAccess: boolean;
+
+  @OneToMany(
+    () => EmployeeConsentCostObjectEntity,
+    (ecco) => ecco.employeeConsent,
+  )
+  employeeConsentCostObjects: EmployeeConsentCostObjectEntity[];
 }
