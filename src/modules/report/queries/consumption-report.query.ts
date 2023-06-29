@@ -5,29 +5,25 @@ import {
 import { DataSource } from 'typeorm';
 import { QueryHandler } from '@nestjs/cqrs';
 
-import { groupByOrder } from './query';
+import { consumptionQueryString } from './query';
 import { QueryFilter } from '.';
 
-export class ReportGroupByOrderQuery implements QueryInterface {
+export class ConsumptionReportQuery implements QueryInterface {
   $$resolveType: any;
 
   constructor(public readonly filters: QueryFilter) {}
 }
 
-@QueryHandler(ReportGroupByOrderQuery)
-export class ReportGroupByOrderQueryHandler
-  implements QueryHandlerInterface<ReportGroupByOrderQuery>
+@QueryHandler(ConsumptionReportQuery)
+export class ConsumptionReportQueryHandler
+  implements QueryHandlerInterface<ConsumptionReportQuery>
 {
   constructor(private dataSource: DataSource) {}
 
-  async execute({ filters }: ReportGroupByOrderQuery): Promise<any> {
+  async execute({ filters }: ConsumptionReportQuery): Promise<any> {
     const { customerHeadId, customerId, fromDate, toDate } = filters;
-
-    return this.dataSource.query(groupByOrder, [
-      customerId,
-      customerHeadId,
-      fromDate,
-      toDate,
+    // Parameters should be in the order of the query string
+    return this.dataSource.query(consumptionQueryString, [
       customerId,
       customerHeadId,
       fromDate,
