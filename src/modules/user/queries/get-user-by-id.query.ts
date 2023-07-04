@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsSelectByString, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 

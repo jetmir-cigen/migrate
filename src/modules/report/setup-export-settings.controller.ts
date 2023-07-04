@@ -6,7 +6,7 @@ import { GetSetupExportSettingsQuery } from '@/modules/report/queries';
 import { AuthGuard } from '@/modules/auth/auth.guard';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { UpsertSetupExportSettingsCommand } from '@/modules/report/commands/upsert-setup-export-settings.controller';
+import { UpsertSetupExportSettingsCommand } from '@/modules/report/commands/upsert-setup-export-settings.command';
 import { CreateSetupExportSettingsDto } from '@/modules/report/dto/create-setup-export-settings.dto';
 
 @Controller('reports/setup-export-settings')

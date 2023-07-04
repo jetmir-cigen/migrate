@@ -6,8 +6,6 @@ import {
   IsInt,
   IsOptional,
   Length,
-  isBoolean,
-  IsBoolean,
 } from 'class-validator';
 
 export class CreateTextTemplateDto {

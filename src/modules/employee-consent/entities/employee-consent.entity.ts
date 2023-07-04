@@ -9,7 +9,7 @@ import {
 import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
-import { EmployeeConsentCostObjectEntity } from '@/common/entities/employee-consent-cost-object.entity';
+import { EmployeeConsentCostObjectEntity } from './employee-consent-cost-object.entity';
 
 @Entity({ name: 'employee_consent' })
 export class EmployeeConsentEntity {

@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsString,
-  IsOptional,
-  IsNumber,
-  Min,
-  MaxLength,
-  IsBoolean,
-} from 'class-validator';
+import { IsString, IsNumber, Min, MaxLength, IsBoolean } from 'class-validator';
 
 export class UpdateTelePolicyDto {
   @ApiProperty({
@@ -16,16 +9,6 @@ export class UpdateTelePolicyDto {
   @IsString()
   @MaxLength(100)
   name: string;
-
-  //   @ApiProperty({ example: 1, description: 'The ID of the customer' })
-  //   @IsOptional()
-  //   @IsNumber()
-  //   customerId?: number;
-
-  //   @ApiProperty({ example: 2, description: 'The ID of the customer head' })
-  //   @IsOptional()
-  //   @IsNumber()
-  //   customerHeadId?: number;
 
   @ApiProperty({
     example: true,

@@ -11,11 +11,7 @@ import { MailerModule as NestJsMailerModule } from '@nestjs-modules/mailer';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DepartmentModule } from './modules/department/department.module';
-import {
-  configValidationSchema,
-  typeOrmAsyncConfig,
-  mailerAsyncConfig,
-} from './config';
+import { typeOrmAsyncConfig, mailerAsyncConfig, config } from './config';
 import { ElementLabelModule } from './modules/element-label/element-label.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthMiddleware } from './modules/auth/auth.middleware';
@@ -32,8 +28,8 @@ import { ReportModule } from './modules/report/report.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
-      validationSchema: configValidationSchema,
+      load: [config],
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     NestJsMailerModule.forRootAsync(mailerAsyncConfig),

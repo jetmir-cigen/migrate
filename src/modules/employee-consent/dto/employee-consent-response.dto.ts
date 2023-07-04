@@ -1,4 +1,3 @@
-import { SuccessResponseDto } from '@/common/dto/status-response.dto';
 import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';

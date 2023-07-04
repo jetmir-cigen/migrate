@@ -8,7 +8,6 @@ import {
   Post,
   Query,
   UnprocessableEntityException,
-  UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
@@ -23,7 +22,6 @@ import {
 } from '@nestjs/swagger';
 import {
   TextTemplateDto,
-  TextTemplateResponseDto,
   CreateTextTemplateDto,
   UpdateTextTemplateDto,
 } from '@/modules/text-template/dto';
@@ -32,8 +30,6 @@ import {
   GetTextTemplatesQuery,
   GetTextTemplateByIdQuery,
 } from '@/modules/text-template/queries';
-import { AuthGuard } from '@/modules/auth/auth.guard';
-import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { SuccessResponseDto } from '@/common/dto/status-response.dto';
 import {
   CreateTextTemplateCommand,
