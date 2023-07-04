@@ -13,7 +13,7 @@ export class AuthMiddleware implements NestMiddleware {
   ) {}
 
   async use(request: Request, _: Response, next: NextFunction) {
-    const AUTH_TOKEN_COOKIE = this.configService.get('AUTH_TOKEN_COOKIE');
+    const AUTH_TOKEN_COOKIE = this.configService.get('auth.authTokenCookie');
     let authToken = jwtFromBearer(request.headers.authorization);
 
     const {

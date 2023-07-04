@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as jsonwebtoken from 'jsonwebtoken';
 import { AxiosResponse } from 'axios';
 import { HttpService } from '@nestjs/axios';
-import { PUBLIC_KEY_URL } from '@/utils/constants';
 import { generatePublicKey } from './utils';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthJwtService {
@@ -12,10 +12,15 @@ export class AuthJwtService {
   protected PUBLIC_KEY: string;
   protected hasPublicKeyFailed = false;
 
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {}
 
   getPublicKey(): Promise<AxiosResponse<string>> {
-    return this.httpService.axiosRef(PUBLIC_KEY_URL);
+    return this.httpService.axiosRef(
+      this.configService.get('auth.publicKeyUrl'),
+    );
   }
 
   async updatePublicKey(): Promise<void> {
