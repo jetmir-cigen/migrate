@@ -1,5 +1,8 @@
+import { DepartmentEntity } from '@/modules/department/entities/department.entity';
+import { SmsPhoneBookEntity } from '@/modules/phone/entities/sms-phone-book.entity';
 import { EmployeeConsentCostObjectEntity } from '@/modules/employee-consent/entities/employee-consent-cost-object.entity';
 import { SalaryDeductionProfileEntity } from '@/modules/tele-policy/entities/salary-deduction-profile.entity';
+import { UserEntity } from '@/modules/user/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,6 +10,7 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 
 @Entity({ name: 'cost_object', schema: 'control' })
@@ -23,7 +27,6 @@ export class CostObjectEntity {
   @Column({
     name: 'code',
     type: 'varchar',
-    length: 45,
     unique: true,
   })
   code: string;
@@ -79,6 +82,10 @@ export class CostObjectEntity {
     type: 'int',
   })
   departmentId: number;
+
+  @ManyToOne(() => DepartmentEntity, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'department_id' })
+  department: DepartmentEntity;
 
   @Column({
     name: 'employee_no',
@@ -431,6 +438,13 @@ export class CostObjectEntity {
     length: 100,
   })
   carrierApiSubscriptionProductCode: string;
+
+  @OneToMany(() => SmsPhoneBookEntity, (spb) => spb.costObject)
+  phoneBook: SmsPhoneBookEntity[];
+
+  @OneToOne(() => UserEntity)
+  @JoinColumn({ name: 'code' })
+  user: UserEntity;
 
   @OneToMany(
     () => EmployeeConsentCostObjectEntity,

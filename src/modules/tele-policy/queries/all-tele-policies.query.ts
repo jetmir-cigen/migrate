@@ -26,7 +26,7 @@ export class FindTelePoliciesByFilterQueryHandler
 
     const telePolicies = this.repository
       .createQueryBuilder('sdp')
-      .orWhere((qb) => {
+      .where((qb) => {
         const subQuery = qb
           .subQuery()
           .select('mac.customer_id')

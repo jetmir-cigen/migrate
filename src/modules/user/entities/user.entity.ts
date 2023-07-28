@@ -7,9 +7,12 @@ import {
   Unique,
   Index,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserGroupEntity } from './user-group.entity';
+import { LogSmsPushEntity } from '@/modules/phone/entities/log-sms-push.entity';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 import { EmployeeConsentCostObjectEntity } from '@/modules/employee-consent/entities/employee-consent-cost-object.entity';
 
 @Entity('user')
@@ -95,6 +98,13 @@ export class UserEntity {
 
   @Column({ default: false, name: 'has_frame_agreement_access' })
   hasFrameAgreementAccess: boolean;
+
+  @OneToMany(() => LogSmsPushEntity, (logSmsPush) => logSmsPush.user)
+  logSmsPushes: LogSmsPushEntity[];
+
+  @OneToOne(() => CostObjectEntity)
+  @JoinColumn({ name: 'phone_number' })
+  costObject: CostObjectEntity;
 
   @OneToMany(
     () => EmployeeConsentCostObjectEntity,
