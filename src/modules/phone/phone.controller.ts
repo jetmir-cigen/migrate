@@ -31,15 +31,10 @@ import {
 } from './commands';
 import { SendSmsDto } from './dto/send-sms.dto';
 import { SMSLogsListResponseDto } from './dto/sms-logs-response.dto';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { UserRoleGuard } from '../user/user-role.guard';
-import { CostObjectDto } from '@/common/dto/cost-object.dto';
+import { AddNumbersToPhoneBookCommand } from './commands/phone-book-add-numbers.command';
 
 @ApiTags('Phone')
 @ApiBearerAuth()
@@ -74,11 +69,22 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Get all phone books' })
   @Get('books')
-  async getPhoneBook(@AuthUser() user: Express.User) {
+  async getPhoneBooks(@AuthUser() user: Express.User) {
     return this.queryBus.execute(
       new FindPhoneBooksByFilterQuery({
         user,
       }),
+    );
+  }
+
+  @ApiOperation({ summary: 'Add numbers to phone book' })
+  @Post('books')
+  async addNumbersToPhoneBook(
+    @AuthUser() user: Express.User,
+    @Body() body: any,
+  ) {
+    return this.commandBus.execute(
+      new AddNumbersToPhoneBookCommand(user, body.numbers),
     );
   }
 

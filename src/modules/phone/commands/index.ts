@@ -4,3 +4,4 @@ export * from './phone-groups-delete.command';
 export * from './phone-groups-add-numbers.command';
 export * from './phone-groups-delete-number.command';
 export * from './send-sms.command';
+export * from './phone-book-add-numbers.command';

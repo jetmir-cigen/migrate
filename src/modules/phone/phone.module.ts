@@ -3,8 +3,6 @@ import { PhoneService } from './phone.service';
 import { PhoneController } from './phone.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
-import { ActiveMobileUserView } from '@/common/views/active-mobile-users.view';
-import { ManagerAccessDepartmentView } from '@/common/views/manager-access-department.view';
 import { CqrsModule } from '@nestjs/cqrs';
 import { DepartmentService } from '../department/department.service';
 import { FindTelePoliciesByFilterQueryHandler } from '../tele-policy/queries';
@@ -13,16 +11,15 @@ import { SalaryDeductionProfileEntity } from '../tele-policy/entities/salary-ded
 import {
   FindActiveNumbersByFilterQueryHandler,
   FindGroupNumbersByFilterQueryHandler,
+  FindPhoneBooksByFilterQueryHandler,
   FindPhoneGroupByFilterQueryHandler,
   FindPhoneGroupNumbersByFilterQueryHandler,
   FindPhoneGroupsByFilterQueryHandler,
   GetSMSLogsByBatchFilterQueryHandler,
   GetSMSLogsByFilterQueryHandler,
 } from './queries';
-import { SmsGroupEntity } from './entities/sms-group.entity';
-import { SmsPhoneBookEntity } from './entities/sms-phone-book.entity';
-import { SmsGroupNumberEntity } from './entities/sms-group-number.entity';
 import {
+  AddNumbersToPhoneBookCommandHandler,
   AddNumbersToPhoneGroupCommandHandler,
   CreatePhoneGroupCommandHandler,
   DeleteNumberFromPhoneGroupCommandHandler,
@@ -30,9 +27,17 @@ import {
   SendSMSCommandHandler,
   UpdatePhoneGroupCommandHandler,
 } from './commands';
-import { LogSmsPushEntity } from './entities/log-sms-push.entity';
-import { ManagerAccessCustomerView } from '@/common/views/manager-access-customer.view';
-import { FindPhoneBooksByFilterQueryHandler } from './queries/get-phone-books.query';
+import {
+  ActiveMobileUserView,
+  ManagerAccessCustomerView,
+  ManagerAccessDepartmentView,
+} from '@/common/views';
+import {
+  LogSmsPushEntity,
+  SmsGroupEntity,
+  SmsGroupNumberEntity,
+  SmsPhoneBookEntity,
+} from './entities';
 
 @Module({
   imports: [
@@ -63,6 +68,7 @@ import { FindPhoneBooksByFilterQueryHandler } from './queries/get-phone-books.qu
     UpdatePhoneGroupCommandHandler,
     DeletePhoneGroupCommandHandler,
     AddNumbersToPhoneGroupCommandHandler,
+    AddNumbersToPhoneBookCommandHandler,
     FindPhoneGroupNumbersByFilterQueryHandler,
     DeleteNumberFromPhoneGroupCommandHandler,
     SendSMSCommandHandler,

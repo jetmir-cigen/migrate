@@ -12,6 +12,7 @@ export class AddNumbersToPhoneGroupCommand {
     public readonly data: {
       number: string;
       name: string;
+      countryId: number;
     }[],
   ) {}
 }
@@ -32,17 +33,18 @@ export class AddNumbersToPhoneGroupCommandHandler
       where: { id: groupId, userId: user.uid },
     });
 
-    const groupNumbers = data.map(({ number, name }) => {
+    const groupNumbers = data.map(({ number, name, countryId }) => {
       return this.groupNumberRepository.create({
         groupId: group.id,
         number,
         name,
+        countryId,
       });
     });
 
     const savedGroupNumbers = await this.groupNumberRepository.upsert(
       groupNumbers,
-      ['groupId', 'number'],
+      ['groupId', 'number', 'countryId'],
     );
 
     return savedGroupNumbers;
