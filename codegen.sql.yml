@@ -1,0 +1,9 @@
+language: mysql # note: mysql is supported, too
+dialect: 8.0.31
+resources: # where to find your tables, functions, views, procedures
+  - "schema/**/*.sql"
+queries: # where to find your queries
+  - "src/dao/queries/**/*.ts"
+generates: # where to output the generated code
+  types: src/dao/generated/types.ts
+  queryFunctions: src/dao/generated/queryFunctions.ts
