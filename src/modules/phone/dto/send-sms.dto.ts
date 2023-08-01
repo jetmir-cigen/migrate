@@ -1,25 +1,43 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsString,
   IsArray,
-  MaxLength,
-  IsOptional,
+  IsNumber,
+  ValidateNested,
 } from 'class-validator';
 
-export class SendSmsDto {
+class ReceiverDto {
+  @ApiProperty()
   @IsString()
-  @MaxLength(32)
+  number: string;
+
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsNumber()
+  countryId: number;
+}
+
+export class SendSmsDto {
+  @ApiProperty()
+  @IsString()
   sender: string;
 
+  @ApiProperty()
   @IsString()
-  @MaxLength(500)
   message: string;
 
+  @ApiProperty({ type: ReceiverDto, isArray: true })
+  @ValidateNested({ each: true })
   @IsArray()
-  @IsString({ each: true })
-  receivers: string[];
+  @Type(() => ReceiverDto)
+  receivers: ReceiverDto[];
 
+  @ApiProperty()
   @IsBoolean()
-  @IsOptional()
   isPrivate: boolean;
 }

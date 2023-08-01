@@ -3,10 +3,7 @@ import { v4 } from 'uuid';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 import { LogSmsPushEntity } from '../entities/log-sms-push.entity';
-import { ActiveMobileUserView } from '@/common/views/active-mobile-users.view';
-import { ManagerAccessDepartmentView } from '@/common/views/manager-access-department.view';
 
 export class SendSMSCommand {
   constructor(
@@ -14,7 +11,11 @@ export class SendSMSCommand {
       user: Express.User;
       sender: string;
       message: string;
-      receivers: string[];
+      receivers: {
+        number: string;
+        name: string;
+        countryId: number;
+      }[];
       isPrivate: boolean;
     },
   ) {}
@@ -25,8 +26,6 @@ export class SendSMSCommandHandler implements ICommandHandler<SendSMSCommand> {
   constructor(
     @InjectRepository(LogSmsPushEntity)
     private readonly repository: Repository<LogSmsPushEntity>,
-    @InjectRepository(CostObjectEntity)
-    private readonly costObjectRepository: Repository<CostObjectEntity>,
   ) {}
 
   async execute({ data }: SendSMSCommand) {
@@ -39,7 +38,8 @@ export class SendSMSCommandHandler implements ICommandHandler<SendSMSCommand> {
         sent: new Date(),
         message: message,
         response: 'OK',
-        receiver,
+        receiver: receiver.number,
+        land: receiver.countryId.toString(),
         sender: sender,
         customerId: user.cid,
         userId: user.uid,

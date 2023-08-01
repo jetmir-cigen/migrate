@@ -10,6 +10,7 @@ SELECT
         dp.id IS NOT NULL AS has_device_policy,
         is_password_change_required,
         ctr.currency,
+        ctr.id as country_id,
         c.id AS customer_id,
         c.name AS customer_name
 FROM
@@ -26,5 +27,4 @@ FROM
 WHERE
         u.id = ?
 GROUP BY
-        u.id;
-`;
+        u.id;`;

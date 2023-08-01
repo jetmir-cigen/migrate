@@ -31,15 +31,13 @@ import {
 } from './commands';
 import { SendSmsDto } from './dto/send-sms.dto';
 import { SMSLogsListResponseDto } from './dto/sms-logs-response.dto';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { UserRoleGuard } from '../user/user-role.guard';
-import { CostObjectDto } from '@/common/dto/cost-object.dto';
+import { AddNumbersToPhoneBookCommand } from './commands/phone-book-add-numbers.command';
+import { FindAllActiveNumbersByFilterQuery } from './queries/get-all-active-numbers.query';
+import { UpdatePhoneBookNumberCommand } from './commands/phone-book-update-numbers.command';
+import { UpdatePhoneGroupNumberCommand } from './commands/phone-groups-update-numbers.command';
 
 @ApiTags('Phone')
 @ApiBearerAuth()
@@ -56,7 +54,7 @@ export class PhoneController {
   @Get('/numbers')
   getActiveNumbers(@AuthUser() user: Express.User) {
     return this.queryBus.execute(
-      new FindActiveNumbersByFilterQuery({
+      new FindAllActiveNumbersByFilterQuery({
         userId: user.uid,
       }),
     );
@@ -74,11 +72,34 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Get all phone books' })
   @Get('books')
-  async getPhoneBook(@AuthUser() user: Express.User) {
+  async getPhoneBooks(@AuthUser() user: Express.User) {
     return this.queryBus.execute(
       new FindPhoneBooksByFilterQuery({
         user,
       }),
+    );
+  }
+
+  @ApiOperation({ summary: 'Add numbers to phone book' })
+  @Post('books')
+  async addNumbersToPhoneBook(
+    @AuthUser() user: Express.User,
+    @Body() body: any,
+  ) {
+    return this.commandBus.execute(
+      new AddNumbersToPhoneBookCommand(user, body.numbers),
+    );
+  }
+
+  @ApiOperation({ summary: 'Update phone book number' })
+  @Post('books/:id(\\d+)')
+  async updatePhoneBookNumber(
+    @AuthUser() user: Express.User,
+    @Body() body: any,
+    @Param('id') id: number,
+  ) {
+    return this.commandBus.execute(
+      new UpdatePhoneBookNumberCommand(user, id, body),
     );
   }
 
@@ -176,6 +197,19 @@ export class PhoneController {
     );
   }
 
+  @ApiOperation({ summary: 'Update phone group number' })
+  @Post('/groups/:groupId(\\d+)/numbers/:numberId(\\d+)')
+  async updatePhoneGroupNumber(
+    @AuthUser() user: Express.User,
+    @Body() body: any,
+    @Param('groupId') id: number,
+    @Param('numberId') numberId: number,
+  ) {
+    return this.commandBus.execute(
+      new UpdatePhoneGroupNumberCommand(user, id, numberId, body),
+    );
+  }
+
   @ApiOperation({ summary: 'Delete phone group numbers' })
   @Delete('/groups/:id(\\d+)/numbers/:numberId(\\d+)')
   async deleteNumberFromGroup(
@@ -191,7 +225,6 @@ export class PhoneController {
   @ApiOperation({ summary: 'Send SMS to selected numbers' })
   @Post('/send-sms')
   async sendSMS(@AuthUser() user: Express.User, @Body() body: SendSmsDto) {
-    console.log({ body, user });
     return this.commandBus.execute(
       new SendSMSCommand({
         ...body,
