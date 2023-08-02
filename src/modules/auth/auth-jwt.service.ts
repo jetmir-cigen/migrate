@@ -35,6 +35,8 @@ export class AuthJwtService {
 
   async verifyJwtWithAttempts(token: string): Promise<Express.User | null> {
     console.log('pubKey', this.PUBLIC_KEY);
+    this.logger.debug('JWT token verification started');
+    this.logger.debug('pubKey', this.PUBLIC_KEY);
 
     try {
       // check if public key is set
@@ -45,6 +47,7 @@ export class AuthJwtService {
       console.log('await this.updatePublicKey();', { error });
       this.logger.error('JWT token update failed');
     }
+    this.logger.debug('pubKey2', this.PUBLIC_KEY);
     console.log('pubKey2', this.PUBLIC_KEY);
 
     try {
@@ -88,6 +91,7 @@ export class AuthJwtService {
 
       return payload as Express.User;
     } catch (error: any) {
+      this.logger.debug('JWT VERIFICATION ERROR');
       console.log('verify', { error });
 
       // If the error is related to the public key
