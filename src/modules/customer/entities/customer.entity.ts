@@ -1,4 +1,5 @@
 import { CountryEntity } from '@/common/entities/country.entity';
+import { LogSmsPushEntity } from '@/modules/phone/entities/log-sms-push.entity';
 import {
   Entity,
   Column,
@@ -9,6 +10,7 @@ import {
   Index,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('customer')
@@ -274,4 +276,7 @@ export class CustomerEntity {
     nullable: true,
   })
   internalCompanyIdentifier?: string;
+
+  @OneToMany(() => LogSmsPushEntity, (logSmsPush) => logSmsPush.customer)
+  logSmsPushes: LogSmsPushEntity[];
 }

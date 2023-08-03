@@ -6,10 +6,12 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 
 @Entity({ schema: 'control', name: 'department' })
 @Unique(['customer', 'code'])
@@ -75,4 +77,7 @@ export class DepartmentEntity {
 
   @Column({ nullable: true, name: 'department_billing_ref' })
   departmentBillingRef: string;
+
+  @OneToMany(() => CostObjectEntity, (co) => co.department)
+  costObjects: CostObjectEntity[];
 }

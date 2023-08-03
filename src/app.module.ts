@@ -24,6 +24,7 @@ import { EmployeeConsentModule } from './modules/employee-consent/employee-conse
 import { WhitelabelModule } from './modules/whitelabel/whitelabel.module';
 import { TelePolicyModule } from './modules/tele-policy/tele-policy.module';
 import { ReportModule } from './modules/report/report.module';
+import { PhoneModule } from './modules/phone/phone.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { ReportModule } from './modules/report/report.module';
     InvoiceModule,
     TelePolicyModule,
     ReportModule,
+    PhoneModule,
   ],
   controllers: [AppController],
   providers: [AppService],

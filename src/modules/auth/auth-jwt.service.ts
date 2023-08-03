@@ -24,33 +24,16 @@ export class AuthJwtService {
   }
 
   async updatePublicKey(): Promise<void> {
-    try {
-      const { data } = await this.getPublicKey();
-      this.PUBLIC_KEY = data;
-    } catch (error) {
-      console.log('await this.updatePublicKey();', { error });
-      this.logger.error('JWT token update failed');
-    }
+    const { data } = await this.getPublicKey();
+    this.PUBLIC_KEY = data;
   }
 
   async verifyJwtWithAttempts(token: string): Promise<Express.User | null> {
-    console.log('pubKey', this.PUBLIC_KEY);
-    this.logger.debug('JWT token verification started');
-    this.logger.debug('pubKey', this.PUBLIC_KEY);
-
     try {
       // check if public key is set
       if (!this.PUBLIC_KEY) {
         await this.updatePublicKey();
       }
-    } catch (error) {
-      console.log('await this.updatePublicKey();', { error });
-      this.logger.error('JWT token update failed');
-    }
-    this.logger.debug('pubKey2', this.PUBLIC_KEY);
-    console.log('pubKey2', this.PUBLIC_KEY);
-
-    try {
       // verify and get the payload
       const payload = this.verifyJwt(token);
 
@@ -91,9 +74,6 @@ export class AuthJwtService {
 
       return payload as Express.User;
     } catch (error: any) {
-      this.logger.debug('JWT VERIFICATION ERROR');
-      console.log('verify', { error });
-
       // If the error is related to the public key
       if (error.code && error.code.includes('ERR_OSSL')) {
         this.hasPublicKeyFailed = true;
