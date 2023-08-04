@@ -167,6 +167,8 @@ export const accountQueryString = `SELECT co.code                        AS numb
      , co.dim_4                       AS DIM4
      , MAX(ir.from_period)            AS from_period
      , MAX(ir.to_period)              AS to_period
+     , SUM(IF(ir.amount >= 0, ir.vat_amount + ir.amount, 0)) AS gross_debit
+     , SUM(IF(ir.amount < 0, ir.vat_amount + ir.amount, 0)) AS gross_credit
      , d.project
      , SUM(ir.amount)                 AS net_amount
      , SUM(ir.vat_amount)             AS vat_amount
