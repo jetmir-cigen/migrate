@@ -9,6 +9,22 @@ type QueryFilters = {
   userId: number;
 };
 
+export interface CurrentUserProfileQueryResult {
+  id: number;
+  locale: string;
+  country_id: number;
+  username: string;
+  phone_number: string;
+  email: string;
+  name: string;
+  device_dealer_user_id: number;
+  has_device_policy: boolean;
+  is_password_change_required: boolean;
+  currency: string;
+  customer_id: number;
+  customer_name: string;
+}
+
 export class FindCurrentUserByFilterQuery {
   constructor(public readonly filters: QueryFilters) {}
 }
@@ -22,14 +38,12 @@ export class FindCurrentUserByFilterQueryHandler
     private readonly repository: Repository<UserEntity>,
   ) {}
 
-  async execute({
-    filters,
-  }: FindCurrentUserByFilterQuery): Promise<UserEntity> {
+  async execute({ filters }: FindCurrentUserByFilterQuery) {
     const { userId } = filters;
 
     try {
       const user = await this.repository.query(getCurrentUserQuery, [userId]);
-      return user[0];
+      return user[0] as CurrentUserProfileQueryResult;
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
         throw new NotFoundException(`User with ID ${userId} not found`);
