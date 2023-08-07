@@ -179,6 +179,8 @@ export const accountQueryString = `SELECT co.code                        AS numb
      , i.vendor_net_amount
      , i.vendor_vat_amount
      , i.vendor_gross_amount
+     , SUM(IF(ir.vat_amount != 0, ir.amount, 0)) AS netVat
+     , SUM(IF(ir.vat_amount = 0, ir.amount, 0)) AS netNoVat
 
 FROM control.customer c
 
