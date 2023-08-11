@@ -325,7 +325,7 @@ export const salaryDeductionUsageQueryString = `
      , SUM(IF(ir.product_id = 2141, ir.vat_amount, ir.salary_deduction_amount / ir.amount * ir.vat_amount)) AS vat
      , SUM(IF(ir.vat_amount > 0, ir.salary_deduction_amount, 0)) + co.fixed_salary_deduction_amount AS netVat
      , SUM(IF(ir.vat_amount <= 0, ir.salary_deduction_amount, 0)) AS netNoVat
-     , COUNT(*)                                                                                             AS posts
+     , COUNT(ir.*) as total_rows                                                                                       AS posts
 
 FROM invoice_row ir
 
