@@ -316,16 +316,16 @@ export const salaryDeductionUsageQueryString = `
      , co.employee_no
      , co.benefit_mobile
      , co.benefit_mobile_ceiling
-     , d.code                                                                                               AS department_code
-     , d.name                                                                                               AS department_name
+     , d.code AS department_code
+     , d.name AS department_name
      , cse.project_usage
      , cse.salary_deduction_code_usage AS accounting_code
      , i.date AS invoice_date
-     , SUM(ir.salary_deduction_amount) + co.fixed_salary_deduction_amount                                   AS amount
+     , SUM(ir.salary_deduction_amount) + co.fixed_salary_deduction_amount AS amount
      , SUM(IF(ir.product_id = 2141, ir.vat_amount, ir.salary_deduction_amount / ir.amount * ir.vat_amount)) AS vat
      , SUM(IF(ir.vat_amount > 0, ir.salary_deduction_amount, 0)) + co.fixed_salary_deduction_amount AS netVat
      , SUM(IF(ir.vat_amount <= 0, ir.salary_deduction_amount, 0)) AS netNoVat
-     , COUNT(ir.*) as total_rows                                                                                       AS posts
+     , COUNT(*) AS posts
 
 FROM invoice_row ir
 
