@@ -318,6 +318,9 @@ export const salaryDeductionUsageQueryString = `
      , co.benefit_mobile_ceiling
      , d.code                                                                                               AS department_code
      , d.name                                                                                               AS department_name
+     , cse.project_usage
+     , cse.salary_deduction_code_usage AS accounting_code
+     , i.date AS invoice_date
      , SUM(ir.salary_deduction_amount) + co.fixed_salary_deduction_amount                                   AS amount
      , SUM(IF(ir.product_id = 2141, ir.vat_amount, ir.salary_deduction_amount / ir.amount * ir.vat_amount)) AS vat
      , SUM(IF(ir.vat_amount > 0, ir.salary_deduction_amount, 0)) + co.fixed_salary_deduction_amount AS netVat
@@ -327,13 +330,13 @@ export const salaryDeductionUsageQueryString = `
 FROM invoice_row ir
 
          INNER JOIN cost_object co
-                    ON ir.cost_object_id = co.id
-
+                ON ir.cost_object_id = co.id
          INNER JOIN invoice i
-                    ON ir.invoice_id = i.id
+                ON ir.invoice_id = i.id
          INNER JOIN customer c
-                    ON c.id = co.customer_id
-
+                ON c.id = co.customer_id
+         INNER JOIN customer_setup_export cse
+                ON cse.customer_id = c.id
          LEFT JOIN department d
                    ON d.id = co.department_id
 
