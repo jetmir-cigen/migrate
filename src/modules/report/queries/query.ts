@@ -40,13 +40,6 @@ FROM (
                         co.dim_1,
                         co.code AS phone_no,
                         co.accounting_code AS co_accounting_code,
-                        d.code AS department_code,
-                        d.name AS department_name,
-                        product.model,
-                        dpod.payment_date,
-                        dpo.order_date,
-                        dpo.order_update,
-                        dpo.delivery_date,
                         dpo.down_payments,
                         dpo.total_amount,
                         dpod.currency,
@@ -56,6 +49,14 @@ FROM (
                         c.name AS customer_name,
                        SUM(IF(p.tax_report = 1,(ir.amount - ir.salary_deduction_amount) + CAST(p.vat = 1 AS SIGNED INTEGER) * (ir.amount - ir.salary_deduction_amount) * p.vat_rate,0)) AS content_service_amount,
                         c.id AS customer_id,
+                       d.code AS department_code,
+                       d.name AS department_name,
+                       SUM(IF(ir.vat_amount != 0, ir.amount, 0)) AS netVat,
+                       product.model,
+                    dpod.payment_date,
+                        dpo.order_date,
+                       dpo.order_update,
+                       dpo.delivery_date,
                         c.customer_head_id,
                         co.fixed_salary_deduction_amount AS fixed_salary_deduction_amount
                 FROM device_policy.order_downpayment dpod
@@ -92,6 +93,7 @@ FROM (
                         odp.amount,
                         odp.currency,
                         odp.is_buyout,
+                       SUM(IF(ir.vat_amount != 0, ir.amount, 0)) AS netVat,
                         c.name AS customer_name,
                         c.id AS customer_id,
                         c.customer_head_id,
@@ -337,8 +339,10 @@ export const salaryDeductionUsageQueryString = `
      , cse.project_usage
      , cse.salary_deduction_code_usage AS accounting_code
      , i.date AS invoice_date
+     , i.invoide_no
      , dpo.order_date
      , dpod.currency
+     , co.fixed_salary_deduction_amount
      , SUM(ir.salary_deduction_amount) + co.fixed_salary_deduction_amount AS amount
      , SUM(IF(ir.product_id = 2141, ir.vat_amount, ir.salary_deduction_amount / ir.amount * ir.vat_amount)) AS vat
      , SUM(IF(ir.vat_amount > 0, ir.salary_deduction_amount, 0)) + co.fixed_salary_deduction_amount AS netVat
