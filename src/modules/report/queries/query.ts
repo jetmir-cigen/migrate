@@ -339,7 +339,7 @@ export const salaryDeductionUsageQueryString = `
      , cse.project_usage
      , cse.salary_deduction_code_usage AS accounting_code
      , i.date AS invoice_date
-     , i.invoide_no
+     , i.invoice_no
      , dpo.order_date
      , dpod.currency
      , co.fixed_salary_deduction_amount
