@@ -2,7 +2,7 @@ export const groupByOrder = `
 SELECT name,
         employee_no,
         phone_no,
-        dim_1,
+        dim_1 as DIM1,
         co_accounting_code,
         department_code,
         department_name,
@@ -337,6 +337,10 @@ export const salaryDeductionUsageQueryString = `
      , d.name AS department_name
      , c.customer_head_id
      , cse.project_usage
+     , co.dim_1                       AS DIM1
+     , co.dim_2                       AS DIM2
+     , co.dim_3                       AS DIM3
+     , co.dim_4                       AS DIM4
      , cse.salary_deduction_code_usage AS accounting_code
      , i.date AS invoice_date
      , i.invoice_no
