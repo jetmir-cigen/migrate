@@ -1,7 +1,8 @@
 export const getCurrentUserQuery = `
 SELECT
         u.id,
-        IF(u.locale IS NULL, c.locale, u.locale) AS locale,
+        IFNULL(u.locale, c.locale) AS locale,
+        IFNULL(u.country_id, c.country_id) AS country_id,
         u.username,
         u.phone_number,
         u.email,
@@ -10,7 +11,6 @@ SELECT
         dp.id IS NOT NULL AS has_device_policy,
         is_password_change_required,
         ctr.currency,
-        ctr.id as country_id,
         c.id AS customer_id,
         c.name AS customer_name
 FROM
