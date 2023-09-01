@@ -26,10 +26,11 @@ import {
   CreateEmployeeConsentCommand,
   RevokeEmployeeConsentCommand,
 } from './commands';
+import { ADMIN_USERS } from '../user/user-groups';
 
 @ApiTags('Employee-consents')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+@UseGuards(AuthGuard, UserRoleGuard(ADMIN_USERS))
 @Controller('employee-consent')
 export class EmployeeConsentController {
   constructor(

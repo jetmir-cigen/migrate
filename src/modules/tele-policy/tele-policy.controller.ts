@@ -34,10 +34,11 @@ import {
   UpdateTelePolicyDto,
 } from './dto';
 import { FindTelePolicyTemplatesByFilterQuery } from './queries/all-tele-policy-templates.query';
+import { ADMIN_USERS } from '../user/user-groups';
 
 @ApiTags('Tele-policies')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+@UseGuards(AuthGuard, UserRoleGuard(ADMIN_USERS))
 @Controller('tele-policies')
 export class TelePolicyController {
   constructor(

@@ -6,22 +6,44 @@ import {
   mixin,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { UserRoles } from './user-roles';
 
-const guards: Record<
-  'ADMIN_USER' | 'MANAGER_USER' | 'REGULAR_USER' | 'CUSTOMER_ADMIN_USER',
-  (user: Express.User) => boolean
-> = {
-  ADMIN_USER: (user: Express.User) => {
-    return user.role === 'admin';
+const guards: Record<UserRoles, (user: Express.User) => boolean> = {
+  [UserRoles.ADMIN]: (user: Express.User) => {
+    return user.role === UserRoles.ADMIN;
   },
-  MANAGER_USER: (user: Express.User) => {
-    return user.role === 'manager';
+  [UserRoles.CUSTOMER_HEAD_ADMIN]: (user: Express.User) => {
+    return user.role === UserRoles.CUSTOMER_HEAD_ADMIN;
   },
-  REGULAR_USER: (user: Express.User) => {
-    return user.role === 'user';
+  [UserRoles.CUSTOMER_ADMIN]: (user: Express.User) => {
+    return user.role === UserRoles.CUSTOMER_ADMIN;
   },
-  CUSTOMER_ADMIN_USER: (user: Express.User) => {
-    return user.role === 'customer_admin';
+  [UserRoles.DEPARTMENT_HEAD]: (user: Express.User) => {
+    return user.role === UserRoles.DEPARTMENT_HEAD;
+  },
+  [UserRoles.DEPARTMENT_HEAD_CORP]: (user: Express.User) => {
+    return user.role === UserRoles.DEPARTMENT_HEAD_CORP;
+  },
+  [UserRoles.MOBILE_USER]: (user: Express.User) => {
+    return user.role === UserRoles.MOBILE_USER;
+  },
+  [UserRoles.SELLER]: (user: Express.User) => {
+    return user.role === UserRoles.SELLER;
+  },
+  [UserRoles.MANAGEMENT]: (user: Express.User) => {
+    return user.role === UserRoles.MANAGEMENT;
+  },
+  [UserRoles.DEALER]: (user: Express.User) => {
+    return user.role === UserRoles.DEALER;
+  },
+  [UserRoles.REPORT_USER]: (user: Express.User) => {
+    return user.role === UserRoles.REPORT_USER;
+  },
+  [UserRoles.IT_USER]: (user: Express.User) => {
+    return user.role === UserRoles.IT_USER;
+  },
+  [UserRoles.FINANCING_AGENT]: (user: Express.User) => {
+    return user.role === UserRoles.FINANCING_AGENT;
   },
 };
 

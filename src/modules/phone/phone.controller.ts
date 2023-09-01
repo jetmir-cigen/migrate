@@ -38,10 +38,11 @@ import { AddNumbersToPhoneBookCommand } from './commands/phone-book-add-numbers.
 import { FindAllActiveNumbersByFilterQuery } from './queries/get-all-active-numbers.query';
 import { UpdatePhoneBookNumberCommand } from './commands/phone-book-update-numbers.command';
 import { UpdatePhoneGroupNumberCommand } from './commands/phone-groups-update-numbers.command';
+import { ADMIN_USERS } from '../user/user-groups';
 
 @ApiTags('Phone')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+@UseGuards(AuthGuard, UserRoleGuard(ADMIN_USERS))
 @Controller('phone')
 export class PhoneController {
   constructor(

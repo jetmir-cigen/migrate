@@ -47,8 +47,10 @@ import { AuthUser } from '@/modules/auth/auth-user.decorator';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { GetCustomersQuery } from '@/modules/user/queries/get-customers.query';
 import { UserPasswordUpdateDto } from './dto/user-password-update.dto';
+import { ADMIN_USERS } from './user-groups';
 
 @Controller('users')
+@UseGuards(AuthGuard, UserRoleGuard(ADMIN_USERS))
 export class UserController {
   constructor(
     private readonly queryBus: QueryBus,
@@ -63,7 +65,6 @@ export class UserController {
   })
   @ApiUnauthorizedResponse()
   @Get('/')
-  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
   async getAll(): Promise<UserResponseDto> {
     // In case of complex queries or complex business logic, it is better to use service
     const users = await this.queryBus.execute(new FindUsersByFilterQuery());
@@ -79,7 +80,6 @@ export class UserController {
   @ApiBadRequestResponse({ description: 'Bad Request' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Post()
-  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
   async createUser(
     @Body() userCreateDto: UserCreateDto,
   ): Promise<UserCreateResponseDto> {
@@ -116,7 +116,6 @@ export class UserController {
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   @Get(':id')
-  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
   async getTextTemplateById(@Param('id') id: number): Promise<UserEntity> {
     return this.queryBus.execute(new GetUserByIdQuery(id));
   }
@@ -133,7 +132,6 @@ export class UserController {
   @ApiForbiddenResponse({
     description: 'Allowed for all users except for admin and active users',
   })
-  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER', 'MANAGER_USER']))
   @Patch(':id')
   async updateUser(
     @Param('id') id: number,
@@ -161,10 +159,6 @@ export class UserController {
   @ApiForbiddenResponse({
     description: 'Allowed for all users except for admin and active users',
   })
-  @UseGuards(
-    AuthGuard,
-    UserRoleGuard(['ADMIN_USER', 'REGULAR_USER', 'CUSTOMER_ADMIN_USER']),
-  )
   @Put('password')
   async updatePassword(
     @Body() { password, newPassword }: UserPasswordUpdateDto,
@@ -206,7 +200,6 @@ export class UserController {
   @ApiForbiddenResponse({
     description: 'Allowed for all users except for admin and active users',
   })
-  @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
   @Delete(':id')
   async deleteUser(@Param('id') id: number): Promise<SuccessResponseDto> {
     await this.commandBus.execute(new DeleteUserCommand(id));

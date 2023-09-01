@@ -23,10 +23,11 @@ import {
   InvoiceResponseDto,
 } from './dto/invoice-response.dto';
 import { UserRoleGuard } from '../user/user-role.guard';
+import { ADMIN_USERS } from '../user/user-groups';
 
 @ApiTags('Invoices')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+@UseGuards(AuthGuard, UserRoleGuard(ADMIN_USERS))
 @Controller('invoices')
 export class InvoiceController {
   constructor(private readonly queryBus: QueryBus) {}

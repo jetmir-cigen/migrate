@@ -29,10 +29,11 @@ import {
   DepartmentResponseDto,
 } from './dto/department-response.dto';
 import { UserRoleGuard } from '../user/user-role.guard';
+import { ADMIN_USERS } from '../user/user-groups';
 
 @ApiTags('Departments')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+@UseGuards(AuthGuard, UserRoleGuard(ADMIN_USERS))
 @Controller('departments')
 export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}

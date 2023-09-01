@@ -8,6 +8,7 @@ import {
   Post,
   Query,
   UnprocessableEntityException,
+  UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
@@ -38,10 +39,13 @@ import {
 } from '@/modules/text-template/commands';
 import { TextTemplateEntity } from './entities';
 import { AuthUser } from '../auth/auth-user.decorator';
+import { AuthGuard } from '../auth/auth.guard';
+import { UserRoleGuard } from '../user/user-role.guard';
+import { ADMIN_USERS } from '../user/user-groups';
 
 @ApiTags('text-templates')
 @Controller('text-templates')
-// @UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+@UseGuards(AuthGuard, UserRoleGuard(ADMIN_USERS))
 export class TextTemplateController {
   constructor(
     private readonly queryBus: QueryBus,

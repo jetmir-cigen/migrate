@@ -8,7 +8,6 @@ import { FindCurrentUserByFilterQuery } from './queries';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly queryBus: QueryBus) {}
-  v;
 
   @Get('/profile')
   async profile(@AuthUser() user: Express.User) {
