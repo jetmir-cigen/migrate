@@ -20,8 +20,9 @@ import {
   SalaryDeductionUsageReportQuery,
 } from './queries';
 import { TaxAdvantageReportQuery } from '@/modules/report/queries/tax-advantage-report.query';
+import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
 
-@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
 @ApiTags('reports')
 @Controller('reports')
 export class ReportController {

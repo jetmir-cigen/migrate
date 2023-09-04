@@ -7,21 +7,44 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-const guards: Record<
-  'ADMIN_USER' | 'MANAGER_USER' | 'REGULAR_USER' | 'CUSTOMER_ADMIN_USER',
-  (user: Express.User) => boolean
-> = {
-  ADMIN_USER: (user: Express.User) => {
-    return user.role === 'admin';
+import { UserRolesENUM } from './user-roles.enum';
+
+const guards: Record<UserRolesENUM, (role: UserRolesENUM) => boolean> = {
+  [UserRolesENUM.ADMIN]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.ADMIN;
   },
-  MANAGER_USER: (user: Express.User) => {
-    return user.role === 'manager';
+  [UserRolesENUM.CUSTOMER_HEAD_ADMIN]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.CUSTOMER_HEAD_ADMIN;
   },
-  REGULAR_USER: (user: Express.User) => {
-    return user.role === 'user';
+  [UserRolesENUM.CUSTOMER_ADMIN]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.CUSTOMER_ADMIN;
   },
-  CUSTOMER_ADMIN_USER: (user: Express.User) => {
-    return user.role === 'customer_admin';
+  [UserRolesENUM.DEPARTMENT_HEAD]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.DEPARTMENT_HEAD;
+  },
+  [UserRolesENUM.DEPARTMENT_HEAD_CORP]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.DEPARTMENT_HEAD_CORP;
+  },
+  [UserRolesENUM.MOBILE_USER]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.MOBILE_USER;
+  },
+  [UserRolesENUM.SELLER]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.SELLER;
+  },
+  [UserRolesENUM.MANAGEMENT]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.MANAGEMENT;
+  },
+  [UserRolesENUM.DEALER]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.DEALER;
+  },
+  [UserRolesENUM.REPORT_USER]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.REPORT_USER;
+  },
+  [UserRolesENUM.IT_USER]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.IT_USER;
+  },
+  [UserRolesENUM.FINANCING_AGENT]: (role: UserRolesENUM) => {
+    return role === UserRolesENUM.FINANCING_AGENT;
   },
 };
 
@@ -38,7 +61,7 @@ export function UserRoleGuard(guardsIds: Array<keyof typeof guards>) {
       const canAccess = guardsIds.some((guardId) => {
         const guard = guards[guardId];
 
-        return guard(user);
+        return guard(user.role);
       });
 
       if (canAccess) {
