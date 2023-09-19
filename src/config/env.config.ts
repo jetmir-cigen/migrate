@@ -16,4 +16,10 @@ export const config = () => ({
     password: process.env.DB_PASS,
     ssl: process.env.DB_SSL,
   },
+  smtp: {
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT, 10),
+    user: process.env.SMTP_USER,
+    password: process.env.SMTP_PASS,
+  },
 });

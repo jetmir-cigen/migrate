@@ -14,6 +14,7 @@ import { UserGroupEntity } from './user-group.entity';
 import { LogSmsPushEntity } from '@/modules/phone/entities/log-sms-push.entity';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 import { EmployeeConsentCostObjectEntity } from '@/modules/employee-consent/entities/employee-consent-cost-object.entity';
+import { TextTemplateEntity } from '@/modules/text-template/entities';
 
 @Entity('user')
 export class UserEntity {
@@ -32,7 +33,7 @@ export class UserEntity {
   @JoinColumn({ name: 'usergroup_id' })
   userGroup: UserGroupEntity;
 
-  @ManyToOne(() => CustomerEntity)
+  @ManyToOne(() => CustomerEntity, (customer) => customer.users)
   @JoinColumn({ name: 'customer_id' })
   customer: CustomerEntity;
 
@@ -111,4 +112,6 @@ export class UserEntity {
     (ecco) => ecco.employeeConsent,
   )
   employeeConsentCostObjects: EmployeeConsentCostObjectEntity[];
+
+  textTemplate: TextTemplateEntity;
 }

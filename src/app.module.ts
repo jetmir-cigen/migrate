@@ -25,6 +25,7 @@ import { WhitelabelModule } from './modules/whitelabel/whitelabel.module';
 import { TelePolicyModule } from './modules/tele-policy/tele-policy.module';
 import { ReportModule } from './modules/report/report.module';
 import { PhoneModule } from './modules/phone/phone.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { PhoneModule } from './modules/phone/phone.module';
     TelePolicyModule,
     ReportModule,
     PhoneModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

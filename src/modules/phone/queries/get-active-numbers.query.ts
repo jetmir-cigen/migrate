@@ -62,8 +62,6 @@ export class FindActiveNumbersByFilterQueryHandler
       ])
       .getMany();
 
-    console.log('data[0', data[0][0]);
-
     return data;
   }
 }

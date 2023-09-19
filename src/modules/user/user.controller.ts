@@ -47,6 +47,7 @@ import { AuthUser } from '@/modules/auth/auth-user.decorator';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { GetCustomersQuery } from '@/modules/user/queries/get-customers.query';
 import { UserPasswordUpdateDto } from './dto/user-password-update.dto';
+import { GenerateUserPasswordCommand } from './commands/user-generate-password.command';
 import { ADMIN_USERS_GROUP } from './user-role.groups';
 
 @Controller('users')
@@ -82,12 +83,17 @@ export class UserController {
   @Post()
   async createUser(
     @Body() userCreateDto: UserCreateDto,
+    @AuthUser() user: Express.User,
   ): Promise<UserCreateResponseDto> {
+    const plainPassword = userCreateDto.password;
+
     userCreateDto.password = await this.userService.hashPassword(
       userCreateDto.password,
     );
     return new UserCreateResponseDto({
-      user: await this.commandBus.execute(new CreateUserCommand(userCreateDto)),
+      user: await this.commandBus.execute(
+        new CreateUserCommand({ ...userCreateDto, plainPassword }, user),
+      ),
     });
   }
 
@@ -205,5 +211,28 @@ export class UserController {
     await this.commandBus.execute(new DeleteUserCommand(id));
 
     return new SuccessResponseDto();
+  }
+
+  // create an endpoint to generate new password for user
+  @ApiOperation({
+    summary: 'Generate new password for user',
+  })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Generated successfully.',
+    type: StatusResponseDTO,
+  })
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse({
+    description: 'Allowed only for admin users',
+  })
+  @Post(':id/generate-password')
+  async generatePassword(
+    @Param('id') id: number,
+    @AuthUser() user: Express.User,
+  ) {
+    return this.commandBus.execute(new GenerateUserPasswordCommand(id, user));
+
+    return;
   }
 }

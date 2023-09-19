@@ -48,7 +48,6 @@ export class PhoneController {
   constructor(
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
-    private readonly departmentService: DepartmentService,
   ) {}
 
   @ApiOperation({ summary: 'Get all active numbers' })
@@ -191,8 +190,6 @@ export class PhoneController {
     @Param('id') id: number,
     @Body() body: any,
   ) {
-    console.log({ body, id });
-
     return this.commandBus.execute(
       new AddNumbersToPhoneGroupCommand(user, id, body.numbers),
     );

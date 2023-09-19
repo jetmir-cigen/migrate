@@ -34,8 +34,6 @@ export class AddNumbersToPhoneBookCommandHandler
       });
     });
 
-    console.log('numbers', numbers);
-
     const savedGroupNumbers = await this.repository.upsert(numbers, [
       'userId',
       'phoneNumber',
