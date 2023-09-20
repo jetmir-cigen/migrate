@@ -25,13 +25,14 @@ export class GenerateUserPasswordCommandHandler
   ) {}
 
   async execute({ id, currentUser }: GenerateUserPasswordCommand) {
-    const password = generateRandomPassword();
+    const password = generateRandomPassword(16);
 
     const hashedPassword = await this.userService.hashPassword(password);
 
     const user = await this.userRepository.findOneOrFail({ where: { id } });
 
     user.password = hashedPassword;
+    user.isPasswordChangeRequired = true;
 
     await this.userRepository.save(user);
 
@@ -48,7 +49,6 @@ export const generateRandomPassword = (length = 8): string => {
     lowercase: 'abcdefghijklmnopqrstuvwxyz',
     uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
     numbers: '0123456789',
-    symbols: '^!$%&|[](){}:;.,*+-#@<>~',
   };
   const staticPassword = Object.values(characters).join(''); // joining all characters
   let randomPassword = '';

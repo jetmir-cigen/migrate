@@ -43,7 +43,10 @@ export class CreateUserCommandHandler
       if (data.phoneNumber) {
         data.username = data.phoneNumber;
       }
-      const userCreate: Partial<UserEntity> = this.userRepository.create(data);
+      const userCreate: Partial<UserEntity> = this.userRepository.create({
+        ...data,
+        isPasswordChangeRequired: true,
+      });
 
       const user = await this.userRepository.save(userCreate);
 
