@@ -8,6 +8,6 @@ export class WelcomeEmailTextTemplate extends BaseTextTemplate {
       username: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

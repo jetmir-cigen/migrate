@@ -10,6 +10,6 @@ export class AppGenerateAccessCodeMailTextTemplate extends BaseTextTemplate {
       userPhoneNumber: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

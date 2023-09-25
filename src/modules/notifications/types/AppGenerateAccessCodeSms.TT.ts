@@ -10,6 +10,6 @@ export class AppGenerateAccessCodeSmsTextTemplate extends BaseTextTemplate {
       userPhoneNumber: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

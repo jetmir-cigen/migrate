@@ -9,6 +9,6 @@ export class CostObjectAwarenessSmsNoDeadlineTextTemplate extends BaseTextTempla
       amount: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

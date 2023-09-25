@@ -15,6 +15,6 @@ export class InjuryReportFormFilledForManagerTextTemplate extends BaseTextTempla
       customerName: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

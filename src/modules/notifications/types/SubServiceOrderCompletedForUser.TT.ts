@@ -8,6 +8,6 @@ export class SubServiceOrderCompletedForUserTextTemplate extends BaseTextTemplat
       serviceName: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

@@ -8,6 +8,6 @@ export class DealerDeviceOrderDeliverWithAddressTextTemplate extends BaseTextTem
       address: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

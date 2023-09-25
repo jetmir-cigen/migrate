@@ -9,6 +9,6 @@ export class DeviceOrderManagerNewOrderTextTemplate extends BaseTextTemplate {
       employeeName: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

@@ -8,6 +8,6 @@ export class HardwareOrderConfirmationDustinTextTemplate extends BaseTextTemplat
       userName: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

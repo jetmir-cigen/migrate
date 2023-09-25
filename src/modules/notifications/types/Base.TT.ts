@@ -3,8 +3,4 @@ export abstract class BaseTextTemplate {
   static code: string;
   text: Record<string, string>;
   subject?: Record<string, string>;
-
-  constructor(type: 'EMAIL' | 'SMS' | 'SYSTEM') {
-    this.type = type;
-  }
 }

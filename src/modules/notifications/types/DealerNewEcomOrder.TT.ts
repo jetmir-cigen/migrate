@@ -11,6 +11,6 @@ export class DealerNewEcomOrderTextTemplate extends BaseTextTemplate {
       orderId: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

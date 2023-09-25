@@ -10,6 +10,6 @@ export class CostObjectAwarenessSmsWithDeadlineTextTemplate extends BaseTextTemp
       deadline: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

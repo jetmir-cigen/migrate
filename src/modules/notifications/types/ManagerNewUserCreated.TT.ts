@@ -9,6 +9,6 @@ export class ManagerNewUserCreated extends BaseTextTemplate {
       newPassword: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

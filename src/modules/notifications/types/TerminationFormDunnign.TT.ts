@@ -9,6 +9,6 @@ export class TerminationFormDunnignTextTemplate extends BaseTextTemplate {
       link: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

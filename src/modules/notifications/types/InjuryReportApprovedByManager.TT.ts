@@ -11,6 +11,6 @@ export class InjuryReportApprovedByManagerTextTemplate extends BaseTextTemplate 
       customerName: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

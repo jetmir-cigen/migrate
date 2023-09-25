@@ -9,6 +9,6 @@ export class PortationFormDunningTextTemplate extends BaseTextTemplate {
       link: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

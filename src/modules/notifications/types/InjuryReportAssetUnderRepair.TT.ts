@@ -12,6 +12,6 @@ export class InjuryReportAssetUnderRepairTextTemplate extends BaseTextTemplate {
       customerName: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

@@ -10,6 +10,6 @@ export class EcomPolicyOrderManagerApprovalNeededTextTemplate extends BaseTextTe
       url: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

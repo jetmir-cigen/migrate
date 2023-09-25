@@ -4,6 +4,6 @@ export class DealerDeviceOrderDeliverNoAddressTextTemplate extends BaseTextTempl
   public static readonly code = 'DEALER_DEVICE_ORDER_DELIVER_NO_ADDRESS';
 
   constructor() {
-    super('SMS');
+    super();
   }
 }

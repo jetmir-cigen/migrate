@@ -13,6 +13,6 @@ export class InjuryReportAssetDiscardedTextTemplate extends BaseTextTemplate {
       customerName: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

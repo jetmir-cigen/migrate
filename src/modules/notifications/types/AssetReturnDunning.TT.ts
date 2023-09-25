@@ -9,6 +9,6 @@ export class AssetReturnDunningTextTemplate extends BaseTextTemplate {
       companyName: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

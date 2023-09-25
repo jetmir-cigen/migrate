@@ -15,6 +15,6 @@ export class TerminationFormFilledTextTemplate extends BaseTextTemplate {
       url: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

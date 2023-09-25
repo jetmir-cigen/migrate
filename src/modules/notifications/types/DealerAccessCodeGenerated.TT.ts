@@ -10,6 +10,6 @@ export class DealerAccessCodeGeneratedTextTemplate extends BaseTextTemplate {
       phoneNumber: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

@@ -8,6 +8,6 @@ export class DeviceOrderManagerApprovalNeededTextTemplate extends BaseTextTempla
       managerName: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

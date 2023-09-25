@@ -10,6 +10,6 @@ export class ResaleListingOrderConfirmationTextTemplate extends BaseTextTemplate
       price: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

@@ -8,6 +8,6 @@ export class AppAwarenessMessageTextTemplate extends BaseTextTemplate {
       customerName: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

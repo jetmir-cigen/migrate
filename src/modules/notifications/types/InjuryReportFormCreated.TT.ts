@@ -14,6 +14,6 @@ export class InjuryReportFormCreatedTextTemplate extends BaseTextTemplate {
       customerName: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

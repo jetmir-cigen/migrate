@@ -8,6 +8,6 @@ export class SMSTestTextTemplate extends BaseTextTemplate {
       userName: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

@@ -14,6 +14,6 @@ export class PortationFormFilledTextTemplate extends BaseTextTemplate {
       url: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

@@ -17,6 +17,6 @@ export class ActivationTextTemplate extends BaseTextTemplate {
       customerName: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

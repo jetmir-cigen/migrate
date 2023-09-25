@@ -8,6 +8,6 @@ export class DealerDeviceOrderCompleteTextTemplate extends BaseTextTemplate {
       estimatedDelivery: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

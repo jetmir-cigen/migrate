@@ -17,6 +17,6 @@ export class TerminationTextTemplate extends BaseTextTemplate {
       customerName: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

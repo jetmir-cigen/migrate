@@ -10,6 +10,6 @@ export class ManagerAccessCodeGeneratedTextTemplate extends BaseTextTemplate {
       phoneNumber: string;
     },
   ) {
-    super('SMS');
+    super();
   }
 }

@@ -16,6 +16,6 @@ export class ResaleListingNewOrderTextTemplate extends BaseTextTemplate {
       userEmail: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }

@@ -14,6 +14,6 @@ export class AuthorizationTextTemplate extends BaseTextTemplate {
       organizationNumber: string;
     },
   ) {
-    super('EMAIL');
+    super();
   }
 }
