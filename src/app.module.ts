@@ -27,6 +27,7 @@ import { ReportModule } from './modules/report/report.module';
 import { PhoneModule } from './modules/phone/phone.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { AssetModule } from './modules/asset/asset.module';
+import { DrillDownModule } from '@/modules/drilldown/drilldown.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { AssetModule } from './modules/asset/asset.module';
     PhoneModule,
     NotificationsModule,
     AssetModule,
+    DrillDownModule,
   ],
   controllers: [AppController],
   providers: [AppService],
