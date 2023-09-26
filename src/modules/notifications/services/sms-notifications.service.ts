@@ -11,10 +11,12 @@ import { LogSmsPushEntity } from '@/modules/phone/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 } from 'uuid';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SmsNotificationsService {
   constructor(
+    private readonly configService: ConfigService,
     private readonly httpService: HttpService,
     @InjectRepository(LogSmsPushEntity)
     private readonly repository: Repository<LogSmsPushEntity>,
@@ -73,11 +75,16 @@ export class SmsNotificationsService {
 
     const formData = new FormData();
 
+    const test =
+      this.configService.get('environment').toLowerCase() === 'production'
+        ? 'false'
+        : 'true';
+
     formData.append('sender', sender);
     formData.append('message', message);
     formData.append('numbers', this.joinNumbers(numbers));
-    formData.append('test', 'true');
-    formData.append('apiKey', `Mzk0Mzc5NGEzMjQ3NDEzOTQxNTczNTU5NWE0MjMxNmI=`);
+    formData.append('test', test);
+    formData.append('apiKey', this.configService.get('telia.api_key'));
     formData.append('custom', 'batch');
     formData.append('output', 'true');
 
@@ -111,8 +118,13 @@ export class SmsNotificationsService {
       formData.append(`messages[${index}][text]`, item.text);
     });
 
-    formData.append('test', 'true');
-    formData.append('apiKey', `Mzk0Mzc5NGEzMjQ3NDEzOTQxNTczNTU5NWE0MjMxNmI=`);
+    const test =
+      this.configService.get('environment').toLowerCase() === 'production'
+        ? 'false'
+        : 'true';
+
+    formData.append('test', test);
+    formData.append('apiKey', this.configService.get('telia.api_key'));
     formData.append('custom', 'batch');
     formData.append('output', 'true');
 
