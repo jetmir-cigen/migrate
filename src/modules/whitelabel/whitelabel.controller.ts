@@ -4,9 +4,10 @@ import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { Repository } from 'typeorm';
 import { WhiteLabelEntity } from './entities/whitelabel.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
 
 @Controller('whitelabels')
-@UseGuards(AuthGuard, UserRoleGuard(['ADMIN_USER']))
+@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
 export class WhitelabelController {
   constructor(
     @InjectRepository(WhiteLabelEntity)

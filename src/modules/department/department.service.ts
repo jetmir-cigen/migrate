@@ -5,6 +5,25 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DepartmentEntity } from './entities/department.entity';
 import { EntityNotFoundError, Repository } from 'typeorm';
 
+const selectedFields = [
+  'department.id',
+  'department.code',
+  'department.name',
+  'department.project',
+  'department.inactive',
+  'department.deputyMail',
+  'department.departmentBillingRef',
+  'user.id',
+  'user.firstName',
+  'user.lastName',
+  'deputyUser.id',
+  'deputyUser.firstName',
+  'deputyUser.lastName',
+  'department.customerId',
+  'department.userId',
+  'department.deputyUserId',
+];
+
 @Injectable()
 export class DepartmentService {
   constructor(
@@ -45,6 +64,7 @@ export class DepartmentService {
           .getQuery();
         return 'department.id IN ' + subQuery;
       })
+      .select(selectedFields)
       .getMany();
 
     return departments;
@@ -66,6 +86,7 @@ export class DepartmentService {
             .getQuery();
           return 'department.id IN ' + subQuery;
         })
+        .select(selectedFields)
         .getOneOrFail();
 
       return department;

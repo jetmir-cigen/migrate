@@ -30,8 +30,6 @@ export class UpdatePhoneBookNumberCommandHandler
       where: { userId: user.uid, id: numberId },
     });
 
-    console.log({ data });
-
     number = {
       ...number,
       ...data,

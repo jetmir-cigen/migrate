@@ -36,6 +36,7 @@ export class GetUserByIdQueryHandler
         customerId: true,
         password: showPassword,
       },
+      relations: ['userGroup'],
     });
   }
 }

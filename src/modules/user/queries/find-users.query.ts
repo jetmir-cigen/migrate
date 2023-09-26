@@ -43,6 +43,7 @@ export class FindUsersByFilterQueryHandler
         'user.phoneNumber',
         'userGroup.id',
         'userGroup.description',
+        'userGroup.name',
       ])
       .getMany();
   }

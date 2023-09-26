@@ -4,6 +4,8 @@ import { v4 } from 'uuid';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LogSmsPushEntity } from '../entities/log-sms-push.entity';
+import { NotificationsService } from '@/modules/notifications/services';
+import { ISendNotification } from '@/modules/notifications/dto/send-notification.dto';
 
 export class SendSMSCommand {
   constructor(
@@ -26,43 +28,28 @@ export class SendSMSCommandHandler implements ICommandHandler<SendSMSCommand> {
   constructor(
     @InjectRepository(LogSmsPushEntity)
     private readonly repository: Repository<LogSmsPushEntity>,
+    private readonly notificationService: NotificationsService,
   ) {}
 
   async execute({ data }: SendSMSCommand) {
     const { user, sender, message, receivers, isPrivate } = data;
 
-    const batchId = v4();
+    const test: ISendNotification = {
+      sender,
+      message,
+      numbers: receivers.map((receiver) => ({
+        countryId: receiver.countryId,
+        number: receiver.number,
+      })),
+      type: 'SMS',
+      code: 'SMS_SENDER',
+      userId: user.uid,
+      customerId: user.cid,
+      isPrivate: isPrivate,
+    };
 
-    const logs = receivers.map((receiver) =>
-      this.repository.create({
-        sent: new Date(),
-        message: message,
-        response: 'OK',
-        receiver: receiver.number,
-        land: receiver.countryId.toString(),
-        sender: sender,
-        customerId: user.cid,
-        userId: user.uid,
-        type: 'SMS_SENDER',
-        batchId,
-        isPrivate: isPrivate ? 1 : 0,
-      }),
-    );
+    this.notificationService.send(test);
 
-    const result = await this.repository.upsert(logs, [
-      'receiver',
-      'sent',
-      'message',
-      'response',
-      'sender',
-      'customerId',
-      'userId',
-      'type',
-      'land',
-      'batchId',
-      'isPrivate',
-    ]);
-
-    return result;
+    return true;
   }
 }

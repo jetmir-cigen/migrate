@@ -12,6 +12,8 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
+import { TextTemplateEntity } from '@/modules/text-template/entities';
+import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 
 @Entity({ name: 'cost_object', schema: 'control' })
 export class CostObjectEntity {
@@ -52,6 +54,10 @@ export class CostObjectEntity {
     nullable: true,
   })
   customerId: number;
+
+  @ManyToOne(() => CustomerEntity, (customer) => customer.costObjects)
+  @JoinColumn({ name: 'customer_id' })
+  customer: CustomerEntity;
 
   @Column({
     name: 'type',
@@ -451,4 +457,6 @@ export class CostObjectEntity {
     (ecco) => ecco.employeeConsent,
   )
   employeeConsentCostObjects: EmployeeConsentCostObjectEntity[];
+
+  textTemplate: TextTemplateEntity;
 }

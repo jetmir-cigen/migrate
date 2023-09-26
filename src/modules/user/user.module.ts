@@ -21,11 +21,29 @@ import {
 import { GetUserByIdQueryHandler } from '@/modules/user/queries/get-user-by-id.query';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { GetCustomerQueryHandler } from '@/modules/user/queries/get-customers.query';
+import { GenerateUserPasswordCommandHandler } from './commands/user-generate-password.command';
+import {
+  EmailNotificationsService,
+  NotificationsService,
+  SmsNotificationsService,
+} from '../notifications/services';
+import { LogSmsPushEntity } from '../phone/entities';
+import { LogMailEntity } from '../notifications/entities/log-mail.entity';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { TextTemplateEntity } from '../text-template/entities';
 
 @Module({
   imports: [
     CqrsModule,
-    TypeOrmModule.forFeature([UserEntity, UserGroupEntity, CustomerEntity]),
+    TypeOrmModule.forFeature([
+      UserEntity,
+      UserGroupEntity,
+      CustomerEntity,
+      LogSmsPushEntity,
+      LogMailEntity,
+      CostObjectEntity,
+      TextTemplateEntity,
+    ]),
     HttpModule,
   ],
   controllers: [UserController],
@@ -40,6 +58,10 @@ import { GetCustomerQueryHandler } from '@/modules/user/queries/get-customers.qu
     UserCreatedEventHandler,
     UserUpdatedEventHandler,
     UserDeletedEventHandler,
+    GenerateUserPasswordCommandHandler,
+    NotificationsService,
+    SmsNotificationsService,
+    EmailNotificationsService,
   ],
 })
 export class UserModule {}

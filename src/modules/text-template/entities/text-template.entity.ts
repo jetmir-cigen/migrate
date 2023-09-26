@@ -8,8 +8,9 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { UserEntity } from '@/modules/user/entities/user.entity';
 
-@Entity({ name: 'text_template', schema: 'control' })
+@Entity({ name: 'control.text_template', schema: 'control' })
 export class TextTemplateEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
@@ -24,13 +25,22 @@ export class TextTemplateEntity {
   @JoinColumn({ name: 'whitelabel_id' })
   whitelabel: WhiteLabelEntity;
 
+  @Column({ name: 'whitelabel_id', nullable: true })
+  whitelabelId: number;
+
   @ManyToOne(() => CustomerHeadEntity)
   @JoinColumn({ name: 'customer_head_id' })
   customerHead: CustomerHeadEntity;
 
+  @Column({ name: 'customer_head_id', nullable: true })
+  customerHeadId: number;
+
   @ManyToOne(() => CustomerEntity)
   @JoinColumn({ name: 'customer_id' })
   customer: CustomerEntity;
+
+  @Column({ name: 'customer_id', nullable: true })
+  customerId: number;
 
   @Column('text', { name: 'sender', nullable: true })
   sender: string;
@@ -46,4 +56,6 @@ export class TextTemplateEntity {
 
   @Column('text', { name: 'description', nullable: true })
   description: string;
+
+  users: UserEntity[];
 }

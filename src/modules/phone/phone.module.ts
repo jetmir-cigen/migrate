@@ -41,10 +41,20 @@ import {
   SmsGroupNumberEntity,
   SmsPhoneBookEntity,
 } from './entities';
+import {
+  EmailNotificationsService,
+  NotificationsService,
+  SmsNotificationsService,
+} from '../notifications/services';
+import { UserEntity } from '../user/entities/user.entity';
+import { TextTemplateEntity } from '../text-template/entities';
+import { HttpModule } from '@nestjs/axios';
+import { LogMailEntity } from '../notifications/entities/log-mail.entity';
 
 @Module({
   imports: [
     CqrsModule,
+    HttpModule,
     TypeOrmModule.forFeature([
       CostObjectEntity,
       ActiveMobileUserView,
@@ -56,6 +66,9 @@ import {
       SmsPhoneBookEntity,
       SmsGroupNumberEntity,
       LogSmsPushEntity,
+      LogMailEntity,
+      UserEntity,
+      TextTemplateEntity,
     ]),
   ],
   controllers: [PhoneController],
@@ -81,6 +94,9 @@ import {
     FindAllActiveNumbersByFilterQueryHandler,
     UpdatePhoneBookNumberCommandHandler,
     UpdatePhoneGroupNumberCommandHandler,
+    NotificationsService,
+    SmsNotificationsService,
+    EmailNotificationsService,
   ],
 })
 export class PhoneModule {}

@@ -2,11 +2,12 @@ export const groupByOrder = `
 SELECT name,
         employee_no,
         phone_no,
-        dim_1,
+        dim_1 as DIM1,
         co_accounting_code,
         department_code,
         department_name,
         model,
+        currency,
         IF(
                 is_buyout = 1,
                 DATE_FORMAT(payment_date, '%Y-%m-%d'),
@@ -21,8 +22,10 @@ SELECT name,
         SUM(amount) AS amount,
         is_buyout,
         down_payment.customer_id,
+        content_service_amount,
         customer_name,
         customer_head_id,
+        fixed_salary_deduction_amount,
         IF(
                 is_buyout = 1
                 AND cse.salary_deduction_code_buyout IS NOT NULL,
@@ -37,27 +40,33 @@ FROM (
                         co.dim_1,
                         co.code AS phone_no,
                         co.accounting_code AS co_accounting_code,
-                        d.code AS department_code,
-                        d.name AS department_name,
-                        product.model,
-                        dpod.payment_date,
-                        dpo.order_date,
-                        dpo.order_update,
-                        dpo.delivery_date,
                         dpo.down_payments,
                         dpo.total_amount,
+                        dpod.currency,
                         dpo.total_amount - dpo.remainder_amount AS cover_amount,
                         dpod.amount,
                         dpod.is_buyout,
                         c.name AS customer_name,
+                       SUM(IF(p.tax_report = 1,(ir.amount - ir.salary_deduction_amount) + CAST(p.vat = 1 AS SIGNED INTEGER) * (ir.amount - ir.salary_deduction_amount) * p.vat_rate,0)) AS content_service_amount,
                         c.id AS customer_id,
-                        c.customer_head_id
+                       d.code AS department_code,
+                       d.name AS department_name,
+                       SUM(IF(ir.vat_amount != 0, ir.amount, 0)) AS netVat,
+                       product.model,
+                    dpod.payment_date,
+                        dpo.order_date,
+                       dpo.order_update,
+                       dpo.delivery_date,
+                        c.customer_head_id,
+                        co.fixed_salary_deduction_amount AS fixed_salary_deduction_amount
                 FROM device_policy.order_downpayment dpod
                         LEFT JOIN control.cost_object co ON dpod.cost_object_id = co.id
                         JOIN control.customer c ON c.id = co.customer_id
                         LEFT JOIN device_policy.order dpo ON dpod.order_id = dpo.id
                         LEFT JOIN device_policy.product product ON dpo.product_id = product.id
                         LEFT JOIN department d ON d.id = co.department_id
+                        LEFT JOIN control.invoice_row ir ON ir.cost_object_id = co.id
+                        LEFT JOIN control.product p ON ir.product_id = p.id
                 WHERE (
                                 c.id = ?
                                 OR c.customer_head_id = ?
@@ -79,18 +88,24 @@ FROM (
                         o.DeliveredDate AS delivery_date,
                         o.down_payments,
                         o.cover_amount + o.remainder_amount AS total_amount,
+                       SUM(IF(p.tax_report = 1,(ir.amount - ir.salary_deduction_amount) + CAST(p.vat = 1 AS SIGNED INTEGER) * (ir.amount - ir.salary_deduction_amount) * p.vat_rate,0)) AS content_service_amount,
                         o.cover_amount,
                         odp.amount,
+                        odp.currency,
                         odp.is_buyout,
+                       SUM(IF(ir.vat_amount != 0, ir.amount, 0)) AS netVat,
                         c.name AS customer_name,
                         c.id AS customer_id,
-                        c.customer_head_id
+                        c.customer_head_id,
+                        co.fixed_salary_deduction_amount AS fixed_salary_deduction_amount
                 FROM ecom.order_down_payment odp
                         LEFT JOIN control.cost_object co ON odp.cost_object_id = co.id
                         JOIN control.customer c ON c.id = co.customer_id
                         LEFT JOIN control.department d ON d.id = co.department_id
                         LEFT JOIN ecom.orders o ON odp.order_id = o.id
                         LEFT JOIN assets.asset a ON a.id = odp.asset_id
+                        LEFT JOIN control.invoice_row ir ON ir.cost_object_id = co.id
+                        LEFT JOIN control.product p ON ir.product_id = p.id
                 WHERE (
                                 c.id = ?
                                 OR c.customer_head_id = ?
@@ -112,6 +127,8 @@ GROUP BY name,
         cover_amount,
         down_payments,
         is_buyout,
+        fixed_salary_deduction_amount,
+        currency,
         model
 ORDER BY name
 `;
@@ -167,6 +184,8 @@ export const accountQueryString = `SELECT co.code                        AS numb
      , co.dim_4                       AS DIM4
      , MAX(ir.from_period)            AS from_period
      , MAX(ir.to_period)              AS to_period
+     , SUM(IF(ir.amount >= 0, ir.vat_amount + ir.amount, 0)) AS gross_debit
+     , SUM(IF(ir.amount < 0, ir.vat_amount + ir.amount, 0)) AS gross_credit
      , d.project
      , SUM(ir.amount)                 AS net_amount
      , SUM(ir.vat_amount)             AS vat_amount
@@ -177,6 +196,8 @@ export const accountQueryString = `SELECT co.code                        AS numb
      , i.vendor_net_amount
      , i.vendor_vat_amount
      , i.vendor_gross_amount
+     , SUM(IF(ir.vat_amount != 0, ir.amount, 0)) AS netVat
+     , SUM(IF(ir.vat_amount = 0, ir.amount, 0)) AS netNoVat
 
 FROM control.customer c
 
@@ -312,24 +333,41 @@ export const salaryDeductionUsageQueryString = `
      , co.employee_no
      , co.benefit_mobile
      , co.benefit_mobile_ceiling
-     , d.code                                                                                               AS department_code
-     , d.name                                                                                               AS department_name
-     , SUM(ir.salary_deduction_amount) + co.fixed_salary_deduction_amount                                   AS amount
+     , d.code AS department_code
+     , d.name AS department_name
+     , c.customer_head_id
+     , cse.project_usage
+     , co.dim_1                       AS DIM1
+     , co.dim_2                       AS DIM2
+     , co.dim_3                       AS DIM3
+     , co.dim_4                       AS DIM4
+     , cse.salary_deduction_code_usage AS accounting_code
+     , i.date AS invoice_date
+     , i.invoice_no
+     , dpo.order_date
+     , dpod.currency
+     , co.fixed_salary_deduction_amount
+     , SUM(ir.salary_deduction_amount) + co.fixed_salary_deduction_amount AS amount
      , SUM(IF(ir.product_id = 2141, ir.vat_amount, ir.salary_deduction_amount / ir.amount * ir.vat_amount)) AS vat
-     , COUNT(*)                                                                                             AS posts
+     , SUM(IF(ir.vat_amount > 0, ir.salary_deduction_amount, 0)) + co.fixed_salary_deduction_amount AS netVat
+     , SUM(IF(ir.vat_amount <= 0, ir.salary_deduction_amount, 0)) AS netNoVat
+     , COUNT(*) AS posts
 
 FROM invoice_row ir
 
          INNER JOIN cost_object co
-                    ON ir.cost_object_id = co.id
-
+                ON ir.cost_object_id = co.id
          INNER JOIN invoice i
-                    ON ir.invoice_id = i.id
+                ON ir.invoice_id = i.id
          INNER JOIN customer c
-                    ON c.id = co.customer_id
-
+                ON c.id = co.customer_id
+         INNER JOIN customer_setup_export cse
+                ON cse.customer_id = c.id
          LEFT JOIN department d
                    ON d.id = co.department_id
+        LEFT JOIN device_policy.order_downpayment dpod
+                  ON dpod.cost_object_id = co.id
+         LEFT JOIN device_policy.order dpo ON dpod.order_id = dpo.id
 
 WHERE (c.id = ? OR c.customer_head_id = ?)
   AND DATE(i.date) >= ?
