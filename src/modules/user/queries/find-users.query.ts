@@ -24,7 +24,7 @@ export class FindUsersByFilterQueryHandler
   ) {}
 
   async execute({ filters }: FindUsersByFilterQuery) {
-    const { customerHeadId, userId } = filters;
+    const { userId } = filters;
     return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.userGroup', 'userGroup')
@@ -38,9 +38,6 @@ export class FindUsersByFilterQueryHandler
                 .select('mac.customer_id')
                 .from('view.manager_access_customer', 'mac')
                 .where('mac.user_id = :userId', { userId })
-                .orWhere('mac.customer_head_id = :customerHeadId', {
-                  customerHeadId,
-                })
                 .getQuery();
               return 'user.customerId IN ' + subQuery;
             },
