@@ -66,9 +66,14 @@ export class UserController {
   })
   @ApiUnauthorizedResponse()
   @Get('/')
-  async getAll(): Promise<UserResponseDto> {
+  async getAll(@AuthUser() user: Express.User): Promise<UserResponseDto> {
     // In case of complex queries or complex business logic, it is better to use service
-    const users = await this.queryBus.execute(new FindUsersByFilterQuery());
+    const users = await this.queryBus.execute(
+      new FindUsersByFilterQuery({
+        customerHeadId: user.chid,
+        userId: user.uid,
+      }),
+    );
 
     return new UserResponseDto({ users });
   }
@@ -232,7 +237,5 @@ export class UserController {
     @AuthUser() user: Express.User,
   ) {
     return this.commandBus.execute(new GenerateUserPasswordCommand(id, user));
-
-    return;
   }
 }
