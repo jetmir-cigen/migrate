@@ -1,7 +1,7 @@
 import { getOauthServerUrl } from '@/utils/constants';
 
 export const config = () => ({
-  environment: process.env.ENVIRONMENT,
+  environment: process.env.ENVIRONMENT || 'development',
   port: parseInt(process.env.PORT, 10) || 4000,
   auth: {
     authTokenCookie: process.env.AUTH_TOKEN_COOKIE,
@@ -21,5 +21,8 @@ export const config = () => ({
     port: parseInt(process.env.SMTP_PORT, 10),
     user: process.env.SMTP_USER,
     password: process.env.SMTP_PASS,
+  },
+  telia: {
+    api_key: process.env.TELIA_API_KEY,
   },
 });
