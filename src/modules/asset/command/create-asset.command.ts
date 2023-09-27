@@ -9,16 +9,14 @@ export class CreateAssetCommand implements ICommand {
   constructor(
     public readonly payload: {
       assetDescription: string;
-      devicePolicyProductId: number;
-      ecomProductId: number;
       costObjectId: number;
       userTypeId: number;
-      userTypeDescription: string;
+      userName: string;
       statusId: number;
       ecomOrderId?: number;
       orderId?: number;
       customerAddressId: number;
-      ownershipId: string;
+      ownershipTypeId: number;
       comment: string;
       cost: number;
       user: Express.User;
@@ -39,7 +37,7 @@ export class CreateAssetCommandHandler
     public readonly ecomOrderEntityRepository: Repository<EcomOrderEntity>,
   ) {}
 
-  async execute({ payload }) {
+  async execute({ payload }: CreateAssetCommand) {
     const ecomPolicy = await this.ecomPolicyRepository
       .createQueryBuilder('ecomPolicy')
       .where('ecomPolicy.customerId = :customerId', {
@@ -50,8 +48,19 @@ export class CreateAssetCommandHandler
       })
       .getOne();
 
-    const assetCreateData: AssetEntity = {
-      ...payload,
+    const assetCreateData: Partial<AssetEntity> = {
+      assetDescription: payload.assetDescription,
+      costObjectId: payload.costObjectId,
+      userTypeId: payload.userTypeId,
+      userTypeDescription: payload.userName,
+      statusId: payload.statusId,
+      ...(payload.ecomOrderId && { ecomOrderId: payload.ecomOrderId }),
+      ...(payload.orderId && { orderId: payload.orderId }),
+      comment: payload.comment,
+      cost: payload.cost,
+      customerAddressId: payload.customerAddressId,
+      customerId: payload.user.cid,
+      ownershipId: payload.ownershipTypeId,
       createdDate: new Date(),
       createdUserId: payload.user.id,
     };
@@ -62,7 +71,7 @@ export class CreateAssetCommandHandler
         orderDate: new Date(),
         policyId: ecomPolicy.id,
         costObjectId: payload.costObjectId,
-        customerId: payload.user.customerId,
+        customerId: payload.user.cid,
         coverAmount: payload.cost,
         status: 10, // migration status
       });

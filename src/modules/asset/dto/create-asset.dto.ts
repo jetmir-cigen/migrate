@@ -6,12 +6,6 @@ export class CreateAssetDto {
   assetDescription: string;
 
   @IsNumber()
-  devicePolicyProductId: number;
-
-  @IsNumber()
-  ecomProductId: number;
-
-  @IsNumber()
   costObjectId: number;
 
   @IsNumber()
@@ -22,7 +16,7 @@ export class CreateAssetDto {
   userTypeId: number;
 
   @IsString()
-  userTypeDescription: string;
+  userName: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -33,11 +27,9 @@ export class CreateAssetDto {
   customerAddressId: number;
 
   @IsNotEmpty()
-  ownershipId: string;
+  @IsNumber()
+  ownershipTypeId: number;
 
   @IsString()
   comment: string;
-
-  @IsNumber()
-  createdUserId: number;
 }
