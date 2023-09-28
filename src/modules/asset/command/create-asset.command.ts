@@ -11,12 +11,16 @@ export class CreateAssetCommand implements ICommand {
       assetDescription: string;
       costObjectId: number;
       userTypeId: number;
+      ecomPolicyId: number;
       userName: string;
       statusId: number;
       ecomOrderId?: number;
       orderId?: number;
       customerAddressId: number;
+      customerId: number;
       ownershipTypeId: number;
+      imeiSnr: string;
+      typeId: number;
       comment: string;
       cost: number;
       user: Express.User;
@@ -50,16 +54,18 @@ export class CreateAssetCommandHandler
 
     const assetCreateData: Partial<AssetEntity> = {
       assetDescription: payload.assetDescription,
-      costObjectId: payload.costObjectId,
       userTypeId: payload.userTypeId,
       userTypeDescription: payload.userName,
       statusId: payload.statusId,
       ...(payload.ecomOrderId && { ecomOrderId: payload.ecomOrderId }),
       ...(payload.orderId && { orderId: payload.orderId }),
+      ...(payload.costObjectId && { costObjectId: payload.costObjectId }),
       comment: payload.comment,
       cost: payload.cost,
       customerAddressId: payload.customerAddressId,
-      customerId: payload.user.cid,
+      typeId: payload.typeId,
+      imeiSnr: payload.imeiSnr,
+      customerId: payload.customerId,
       ownershipId: payload.ownershipTypeId,
       createdDate: new Date(),
       createdUserId: payload.user.id,
@@ -69,9 +75,9 @@ export class CreateAssetCommandHandler
     if (!ecomPolicy) {
       const ecomOrderCreate = this.ecomOrderEntityRepository.create({
         orderDate: new Date(),
-        policyId: ecomPolicy.id,
+        policyId: payload.ecomPolicyId,
         costObjectId: payload.costObjectId,
-        customerId: payload.user.cid,
+        customerId: payload.customerId,
         coverAmount: payload.cost,
         status: 10, // migration status
       });

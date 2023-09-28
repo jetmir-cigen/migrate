@@ -1,12 +1,24 @@
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateAssetDto {
   @IsNotEmpty()
   @IsString()
   assetDescription: string;
 
+  @IsOptional()
   @IsNumber()
+  ecomPolicyId: number | null;
+
+  @IsOptional()
+  @IsNumber()
+  typeId: number;
+
+  @IsNumber()
+  @IsOptional()
   costObjectId: number;
+
+  @IsString()
+  imeiSnr: string;
 
   @IsNumber()
   cost: number;
@@ -25,6 +37,10 @@ export class CreateAssetDto {
   @IsNotEmpty()
   @IsNumber()
   customerAddressId: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  customerId: number;
 
   @IsNotEmpty()
   @IsNumber()
