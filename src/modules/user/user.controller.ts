@@ -90,14 +90,9 @@ export class UserController {
     @Body() userCreateDto: UserCreateDto,
     @AuthUser() user: Express.User,
   ): Promise<UserCreateResponseDto> {
-    const plainPassword = userCreateDto.password;
-
-    userCreateDto.password = await this.userService.hashPassword(
-      userCreateDto.password,
-    );
     return new UserCreateResponseDto({
       user: await this.commandBus.execute(
-        new CreateUserCommand({ ...userCreateDto, plainPassword }, user),
+        new CreateUserCommand(userCreateDto, user),
       ),
     });
   }

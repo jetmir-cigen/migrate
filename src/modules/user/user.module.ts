@@ -17,6 +17,7 @@ import {
   UserCreatedEventHandler,
   UserUpdatedEventHandler,
   UserDeletedEventHandler,
+  UserPasswordGeneratedEventHandler,
 } from '@/modules/user/events';
 import { GetUserByIdQueryHandler } from '@/modules/user/queries/get-user-by-id.query';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
@@ -58,6 +59,7 @@ import { TextTemplateEntity } from '../text-template/entities';
     UserCreatedEventHandler,
     UserUpdatedEventHandler,
     UserDeletedEventHandler,
+    UserPasswordGeneratedEventHandler,
     GenerateUserPasswordCommandHandler,
     NotificationsService,
     SmsNotificationsService,
