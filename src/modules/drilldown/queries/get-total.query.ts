@@ -26,13 +26,13 @@ export class GetTotalQueryHandler
     @InjectRepository(CustomerViewEntity)
     readonly viewCustomerRepository: Repository<CustomerViewEntity>,
   ) {}
-  async execute({ filters }: GetTotalQuery) {
+  execute({ filters }: GetTotalQuery) {
     const { year, period } = filters;
     const filterCondition =
       period <= 0
         ? `AND YEAR(ir.date) = ${year}`
         : `AND (YEAR(ir.date) = ${year} AND MONTH(ir.date) = ${period})`;
-    const result = await this.viewCustomerRepository.query(`
+    return this.viewCustomerRepository.query(`
       SELECT SUM(ir.amount) AS amount,
                         SUM(ir.salary_deduction_amount) AS salaryDeductionAmount,
                         c.id AS customerId,
@@ -49,7 +49,5 @@ export class GetTotalQueryHandler
             GROUP BY    c.id
             ORDER BY    SUM(ir.amount) DESC
     `);
-
-    return result;
   }
 }
