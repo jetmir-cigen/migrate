@@ -6,10 +6,6 @@ import {
   ApiParam,
   ApiResponse,
 } from '@nestjs/swagger';
-import {
-  CreateTextTemplateDto,
-  TextTemplateDto,
-} from '@/modules/text-template/dto';
 import { AuthUser } from '@/modules/auth/auth-user.decorator';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateAssetDto } from '@/modules/asset/dto/create-asset.dto';
@@ -17,23 +13,25 @@ import { AuthGuard } from '@/modules/auth/auth.guard';
 import { CreateAssetCommand } from '@/modules/asset/commands/create-asset.command';
 import { AssetEntity } from '@/modules/asset/entities/asset.entity';
 import { GetAssetByIdQuery } from '@/modules/asset/queries/get-asset-by-id.query';
+import { UserRoleGuard } from '@/modules/user/user-role.guard';
+import { ADMIN_USERS_GROUP } from '@/modules/user/user-role.groups';
 
 @Controller('assets')
+@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
 export class AssetController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
 
-  @ApiBody({ type: CreateTextTemplateDto })
+  @ApiBody({ type: CreateAssetDto })
   @ApiResponse({
     status: 201,
     description: 'Creates new asset',
-    type: TextTemplateDto,
+    type: CreateAssetDto,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  @UseGuards(AuthGuard)
   @Post('/')
   async create(
     @Body() body: CreateAssetDto,
@@ -59,7 +57,6 @@ export class AssetController {
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   @Get('/:id')
-  @UseGuards(AuthGuard)
   async get(@Param('id') id: number) {
     return this.queryBus.execute(new GetAssetByIdQuery(id));
   }
