@@ -27,7 +27,7 @@ export class GetProductCategoriesQueryHandler
   implements QueryHandlerInterface<GetProductCategoriesQuery>
 {
   constructor(
-    @InjectRepository(GetProductCategoriesQuery)
+    @InjectRepository(CustomerViewEntity)
     readonly viewCustomerRepository: Repository<CustomerViewEntity>,
     @InjectRepository(ManagerAccessFrameAgreementViewEntity)
     readonly mafRepository: Repository<ManagerAccessFrameAgreementViewEntity>,
