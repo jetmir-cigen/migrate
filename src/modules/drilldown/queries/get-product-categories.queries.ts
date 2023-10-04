@@ -28,7 +28,7 @@ export class GetProductCategoriesQueryHandler
 {
   constructor(
     @InjectRepository(CustomerViewEntity)
-    readonly viewCustomerRepository: Repository<CustomerViewEntity>,
+    readonly customerViewRepository: Repository<CustomerViewEntity>,
     @InjectRepository(ManagerAccessFrameAgreementViewEntity)
     readonly mafRepository: Repository<ManagerAccessFrameAgreementViewEntity>,
   ) {}
@@ -51,7 +51,7 @@ export class GetProductCategoriesQueryHandler
 
     const customersAccessList = await getCustomerAccessList(user.uid);
 
-    return this.viewCustomerRepository.query(`
+    return this.customerViewRepository.query(`
             SELECT      SUM(ir.amount) AS amount,
                         SUM(ir.salary_deduction_amount) AS salary_deduction_amount,
                         ir.product_category_id,
