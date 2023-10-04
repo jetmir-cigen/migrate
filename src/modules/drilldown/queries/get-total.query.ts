@@ -6,6 +6,7 @@ import { QueryHandler } from '@nestjs/cqrs';
 import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { filterCondition } from '../helpers/query';
 
 type QueryFilters = {
   year: number;
@@ -28,10 +29,6 @@ export class GetTotalQueryHandler
   ) {}
   execute({ filters }: GetTotalQuery) {
     const { year, period } = filters;
-    const filterCondition =
-      period <= 0
-        ? `AND YEAR(ir.date) = ${year}`
-        : `AND (YEAR(ir.date) = ${year} AND MONTH(ir.date) = ${period})`;
     return this.viewCustomerRepository.query(`
       SELECT SUM(ir.amount) AS amount,
                         SUM(ir.salary_deduction_amount) AS salaryDeductionAmount,
@@ -43,7 +40,10 @@ export class GetTotalQueryHandler
                         c.customer_head_frame_agreement_id AS customerHeadFrameAgreementId,
                         c.customer_head_frame_agreement_name AS customerHeadFrameAgreementName
             FROM        view.customer c
-            LEFT JOIN   view.invoice_row ir ON ir.customer_id = c.id ${filterCondition}
+            LEFT JOIN   view.invoice_row ir ON ir.customer_id = c.id ${filterCondition(
+              period,
+              year,
+            )}
             AND         ir.vendor_id != 1
             AND         ir.cost_object_type != 'C'
             GROUP BY    c.id
