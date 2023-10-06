@@ -2,7 +2,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { NotificationsService } from '@/modules/notifications/services';
 import { UserEntity } from '../entities/user.entity';
-import { ManagerNewUserCreated } from '@/modules/notifications/types';
+import { ManagerPasswordGenerated } from '@/modules/notifications/types';
 
 export class UserCreatedEvent {
   constructor(
@@ -21,7 +21,7 @@ export class UserCreatedEventHandler
   handle(event: UserCreatedEvent): void {
     const { user, currentUser } = event;
 
-    const notificationParams = new ManagerNewUserCreated({
+    const notificationParams = new ManagerPasswordGenerated({
       newPassword: user.password,
       userPhoneNumber: user.phoneNumber,
     });

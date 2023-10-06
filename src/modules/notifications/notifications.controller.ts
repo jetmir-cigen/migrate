@@ -1,6 +1,10 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { NotificationsService } from './services';
-import { SMSTestTextTemplate, WelcomeEmailTextTemplate } from './types';
+import {
+  BaseTextTemplate,
+  SMSTestTextTemplate,
+  WelcomeEmailTextTemplate,
+} from './types';
 import { AuthGuard } from '../auth/auth.guard';
 import { AuthUser } from '../auth/auth-user.decorator';
 
@@ -24,12 +28,11 @@ export class NotificationsController {
   }
 
   @Post('/users')
-  sendToUsers(@Body() data: any, @AuthUser() user: Express.User) {
+  sendToUsers(@Body() data: BaseTextTemplate, @AuthUser() user: Express.User) {
     // this.emailNotificationService.sendEmail();
     const map = new Map();
-    const values = new SMSTestTextTemplate(data);
-    map.set(9061, values);
-    map.set(9060, values);
+    map.set(9061, data);
+    map.set(9060, data);
 
     return this.notificationService.sendToUsers(
       {

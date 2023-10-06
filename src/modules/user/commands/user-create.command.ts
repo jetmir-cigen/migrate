@@ -6,11 +6,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserCreatedEvent } from '@/modules/user/events/user-created.event';
 import { ConflictException } from '@nestjs/common';
 import { UserService } from '../user.service';
-import { generateRandomPassword } from '@/utils/generatePassword';
 
 export class CreateUserCommand {
   constructor(
     public readonly data: {
+      password: string;
+      plainPassword: string;
       firstName: string;
       lastName: string;
       email: string;
@@ -37,23 +38,20 @@ export class CreateUserCommandHandler
 
   async execute({ data, currentUser }: CreateUserCommand): Promise<UserEntity> {
     try {
+      const { plainPassword } = data;
+
       if (data.phoneNumber) {
         data.username = data.phoneNumber;
       }
-
-      const password = generateRandomPassword(16);
-      const hashedPassword = await this.userService.hashPassword(password);
-
       const userCreate: Partial<UserEntity> = this.userRepository.create({
         ...data,
-        password: hashedPassword,
         isPasswordChangeRequired: true,
       });
 
       const user = await this.userRepository.save(userCreate);
 
       this.eventBus.publish(
-        new UserCreatedEvent({ ...user, password }, currentUser),
+        new UserCreatedEvent({ ...user, password: plainPassword }, currentUser),
       );
 
       return user;

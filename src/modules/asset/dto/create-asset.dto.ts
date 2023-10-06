@@ -1,24 +1,18 @@
-import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 
 export class CreateAssetDto {
   @IsNotEmpty()
   @IsString()
   assetDescription: string;
 
-  @IsOptional()
   @IsNumber()
-  ecomPolicyId: number | null;
-
-  @IsOptional()
-  @IsNumber()
-  typeId: number;
+  devicePolicyProductId: number;
 
   @IsNumber()
-  @IsOptional()
+  ecomProductId: number;
+
+  @IsNumber()
   costObjectId: number;
-
-  @IsString()
-  imeiSnr: string;
 
   @IsNumber()
   cost: number;
@@ -28,7 +22,7 @@ export class CreateAssetDto {
   userTypeId: number;
 
   @IsString()
-  userName: string;
+  userTypeDescription: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -39,13 +33,11 @@ export class CreateAssetDto {
   customerAddressId: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  customerId: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  ownershipTypeId: number;
+  ownershipId: string;
 
   @IsString()
   comment: string;
+
+  @IsNumber()
+  createdUserId: number;
 }
