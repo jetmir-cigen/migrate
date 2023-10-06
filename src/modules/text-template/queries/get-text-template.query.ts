@@ -2,9 +2,14 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TextTemplateEntity } from '@/modules/text-template/entities';
+import { ManagerAccessCustomerView } from '@/common/views';
+import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 
 export class GetTextTemplatesQuery {
-  constructor(public readonly code?: string) {}
+  constructor(
+    public readonly code: string,
+    public readonly user: Express.User,
+  ) {}
 }
 
 @QueryHandler(GetTextTemplatesQuery)
@@ -14,46 +19,25 @@ export class GetTextTemplatesQueryHandler
   constructor(
     @InjectRepository(TextTemplateEntity)
     private readonly textTemplateRepository: Repository<TextTemplateEntity>,
+    @InjectRepository(CustomerEntity)
+    private readonly customerRepository: Repository<CustomerEntity>,
   ) {}
 
   async execute({ code }: GetTextTemplatesQuery) {
     console.log('GetTextTemplatesQueryHandler -> execute -> code', code);
-    const where = code
-      ? {
-          customer: null,
-          customerHead: null,
-          code,
-          locale: 'en',
-        }
-      : {};
-    const textTemplates = await this.textTemplateRepository.find({
-      relations: ['whitelabel', 'customerHead', 'customer'],
-      where,
-      select: {
-        id: true,
-        code: true,
-        locale: true,
-        type: true,
-        whitelabel: {
-          name: true,
-        },
-        customer: {
-          name: true,
-        },
-        customerHead: {
-          name: true,
-        },
-        subject: true,
-        text: true,
-      },
-    });
-    const mappedTextTemplates = textTemplates.map((textTemplate) => ({
-      ...textTemplate,
-      customer: textTemplate.customer?.name || 'N/A',
-      whitelabel: textTemplate.whitelabel?.name,
-      customerHead: textTemplate.customerHead?.name || 'N/A',
-    }));
 
-    return code ? mappedTextTemplates[0] : mappedTextTemplates;
+    const companyIds = await this.customerRepository
+      .createQueryBuilder('c')
+      .innerJoin(ManagerAccessCustomerView, 'mac', 'mac.customer_id = c.id')
+      .where('mac.user_id = :userId', { userId: 1 })
+      .select(['mac.customer_id'])
+      .getMany();
+
+    const textTemplates = await this.textTemplateRepository
+      .createQueryBuilder('tt')
+      .where('tt.customer_id IN (:...companyIds)', { companyIds })
+      .orWhere();
+
+    return textTemplates;
   }
 }
