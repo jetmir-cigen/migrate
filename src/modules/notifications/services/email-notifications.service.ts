@@ -95,7 +95,7 @@ export class EmailNotificationsService {
 
     const { data: response } = await lastValueFrom(
       this.httpService
-        .post('http://10.20.0.10/web/api/mail.php', formData)
+        .post('https://control.skytechcontrol.io/web/api/mail.php', formData)
         .pipe(
           catchError((error: AxiosError) => {
             this.logger.error(error);
