@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { catchError, lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { AxiosError } from 'axios';
@@ -15,6 +15,8 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SmsNotificationsService {
+  private readonly logger = new Logger(SmsNotificationsService.name);
+
   constructor(
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
@@ -89,12 +91,17 @@ export class SmsNotificationsService {
     formData.append('output', 'true');
 
     const { data: response } = await lastValueFrom(
-      this.httpService.post(`https://api.txtlocal.com/send/`, formData).pipe(
-        catchError((error: AxiosError) => {
-          throw 'An error happened!';
-        }),
-      ),
+      this.httpService
+        .post(`https://telia.textlocal.com/api2/send/`, formData)
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(error);
+            throw error;
+          }),
+        ),
     );
+
+    this.logger.log(response);
 
     if (Array.isArray(response.errors) && response.errors.length > 0) {
       this.insertLogs({ ...data, response: JSON.stringify(response.errors) });
@@ -130,13 +137,16 @@ export class SmsNotificationsService {
 
     const { data: response } = await lastValueFrom(
       this.httpService
-        .post(`https://api.txtlocal.com/bulk_json/`, formData)
+        .post(`https://telia.textlocal.com/api2/bulk_json/`, formData)
         .pipe(
           catchError((error: AxiosError) => {
-            throw 'An error happened!';
+            this.logger.error(error);
+            throw error;
           }),
         ),
     );
+
+    this.logger.log(response);
 
     if (Array.isArray(response.errors) && response.errors.length > 0) {
       this.insertBulkLogs({

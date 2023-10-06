@@ -2,26 +2,26 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { NotificationsService } from '@/modules/notifications/services';
 import { UserEntity } from '../entities/user.entity';
-import { ManagerNewUserCreated } from '@/modules/notifications/types';
+import { ManagerPasswordGenerated } from '@/modules/notifications/types';
 
-export class UserCreatedEvent {
+export class UserPasswordGeneratedEvent {
   constructor(
     public readonly user: UserEntity,
     public readonly currentUser: Express.User,
   ) {}
 }
 
-@EventsHandler(UserCreatedEvent)
-export class UserCreatedEventHandler
-  implements IEventHandler<UserCreatedEvent>
+@EventsHandler(UserPasswordGeneratedEvent)
+export class UserPasswordGeneratedEventHandler
+  implements IEventHandler<UserPasswordGeneratedEvent>
 {
   constructor(private readonly notificationService: NotificationsService) {}
 
-  private readonly logger = new Logger(UserCreatedEventHandler.name);
-  handle(event: UserCreatedEvent): void {
+  private readonly logger = new Logger(UserPasswordGeneratedEventHandler.name);
+  handle(event: UserPasswordGeneratedEvent): void {
     const { user, currentUser } = event;
 
-    const notificationParams = new ManagerNewUserCreated({
+    const notificationParams = new ManagerPasswordGenerated({
       newPassword: user.password,
       userPhoneNumber: user.phoneNumber,
     });
@@ -32,7 +32,7 @@ export class UserCreatedEventHandler
       currentUser,
     );
 
-    // Handle the UserCreatedEvent event.
-    this.logger.log(`User with ID ${event.user.id} has been created.`);
+    // Handle the UserPasswordGeneratedEvent event.
+    this.logger.log(`UserPasswordGeneratedEvent: ${user.id}`);
   }
 }

@@ -11,10 +11,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SalaryDeductionProfileEntity } from './entities/salary-deduction-profile.entity';
 import { TelePolicyTemplateEntity } from './entities/tele-policy-template.entity';
 import {
+  AssignTelePolicyCommandHandler,
   CreateTelePolicyCommandHandler,
   DeleteTelePolicyCommandHandler,
   UpdateTelePolicyCommandHandler,
 } from './commands';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 
 @Module({
   imports: [
@@ -22,6 +24,7 @@ import {
     TypeOrmModule.forFeature([
       SalaryDeductionProfileEntity,
       TelePolicyTemplateEntity,
+      CostObjectEntity,
     ]),
   ],
   controllers: [TelePolicyController],
@@ -32,6 +35,7 @@ import {
     CreateTelePolicyCommandHandler,
     UpdateTelePolicyCommandHandler,
     DeleteTelePolicyCommandHandler,
+    AssignTelePolicyCommandHandler,
     FindTelePolicyTemplatesByFilterQueryHandler,
   ],
 })

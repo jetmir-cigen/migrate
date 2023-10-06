@@ -155,7 +155,7 @@ export class NotificationsService {
           code,
         },
       )
-      .where('u.id IN (:...ids)', { ids: data.keys() })
+      .where('u.id IN (:...ids)', { ids: [...data.keys()] })
       .orderBy(
         `(CASE WHEN tt.customer_id = c.id THEN 8 ELSE 0 END) +
       (CASE WHEN tt.customer_head_id = c.customer_head_id THEN 4 ELSE 0 END) +
@@ -173,7 +173,8 @@ export class NotificationsService {
       type = item.textTemplate.type;
       sender = item.textTemplate.sender;
       return {
-        receiver: `${item.countryId}${item.phoneNumber}`,
+        number: { countryId: item.countryId, number: item.phoneNumber },
+        email: item.email,
         text: this.injectDataToContent(
           item.textTemplate.text,
           data.get(item.id).text,
@@ -188,13 +189,15 @@ export class NotificationsService {
       };
     });
 
-    this.sendBulk({
+    const dataBulk: ISendBulkNotification = {
       code,
       sender,
       type,
       receivers: result,
       userId: user.uid,
-    });
+    };
+
+    this.sendBulk(dataBulk);
 
     return { query };
   }

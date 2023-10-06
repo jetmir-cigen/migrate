@@ -22,6 +22,7 @@ import {
   GetTelePolicyByFilterQuery,
 } from './queries';
 import {
+  AssignTelePolicyCommand,
   CreateTelePolicyCommand,
   DeleteTelePolicyCommand,
   UpdateTelePolicyCommand,
@@ -35,6 +36,7 @@ import {
 } from './dto';
 import { FindTelePolicyTemplatesByFilterQuery } from './queries/all-tele-policy-templates.query';
 import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
+import { AssignTelePolicyDto } from './dto/assign-tele-policy.dto';
 
 @ApiTags('Tele-policies')
 @ApiBearerAuth()
@@ -154,5 +156,27 @@ export class TelePolicyController {
     return new TelePolicyTemplateListResponseDto({
       telePolicyTemplates,
     });
+  }
+
+  @Post('/assign')
+  async assignTelePolicyToUser(
+    @Body() body: AssignTelePolicyDto,
+    @AuthUser() user: Express.User,
+  ) {
+    // if null pass the check
+    if (body.telePolicyId) {
+      // check if user has access to this tele policy
+      await this.queryBus.execute(
+        new GetTelePolicyByFilterQuery({
+          customerHeadId: user.chid,
+          userId: user.uid,
+          id: body.telePolicyId,
+        }),
+      );
+    }
+
+    await this.commandBus.execute(new AssignTelePolicyCommand(body, user));
+
+    return new SuccessResponseDto();
   }
 }
