@@ -85,7 +85,7 @@ export class EmailNotificationsService {
     const formData = {
       code: data.numbers[0].number,
       type: data.code,
-      receiver: data.emails[0],
+      reciever: data.emails[0],
       subject: data.subject,
       message: data.message,
       customerId: data.customerId.toString(),
