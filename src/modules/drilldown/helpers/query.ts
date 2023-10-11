@@ -1,3 +1,5 @@
+import { DrillDownServiceType } from '../dto/product-categories-param.dto';
+
 export const filterCondition = (period: number, year: number) =>
   period <= 0
     ? `AND YEAR(ir.date) = ${year}`
@@ -15,4 +17,13 @@ export const getOrgFilter = (
     return ` AND c.customer_head_id = ${customerHeadId} `;
   }
   return ` AND c.id = ${customerId} `;
+};
+
+export const getTypes = (type: DrillDownServiceType, typeId: number) => {
+  const frameAgreementId =
+    type === DrillDownServiceType.FRAME_AGREEMENT ? typeId : null;
+  const customerHeadId =
+    type === DrillDownServiceType.CUSTOMER_HEAD ? typeId : null;
+  const customerId = type === DrillDownServiceType.CUSTOMER ? typeId : null;
+  return { frameAgreementId, customerHeadId, customerId };
 };

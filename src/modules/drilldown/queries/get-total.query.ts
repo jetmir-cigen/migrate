@@ -6,15 +6,27 @@ import { QueryHandler } from '@nestjs/cqrs';
 import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { filterCondition } from '../helpers/query';
+import { DrillDownService } from '@/modules/drilldown/drilldown.service';
 
 type QueryFilters = {
   year: number;
   period: number;
 };
 
+type List = {
+  amount: number;
+  salaryDeductionAmount: number;
+  customerId: number;
+  customerName: string;
+  customerOrgNo: string;
+  customerHeadId: number;
+  customerHeadName: string;
+  customerHeadFrameAgreementId: number;
+  customerHeadFrameAgreementName: string;
+};
+
 export class GetTotalQuery implements QueryInterface {
-  $$resolveType: any;
+  $$resolveType: List[];
 
   constructor(public readonly filters: QueryFilters) {}
 }
@@ -26,8 +38,9 @@ export class GetTotalQueryHandler
   constructor(
     @InjectRepository(CustomerViewEntity)
     readonly viewCustomerRepository: Repository<CustomerViewEntity>,
+    readonly drillDownService: DrillDownService,
   ) {}
-  execute({ filters }: GetTotalQuery) {
+  async execute({ filters }: GetTotalQuery): Promise<List[]> {
     const { year, period } = filters;
     return this.viewCustomerRepository.query(`
       SELECT SUM(ir.amount) AS amount,
@@ -40,9 +53,9 @@ export class GetTotalQueryHandler
                         c.customer_head_frame_agreement_id AS customerHeadFrameAgreementId,
                         c.customer_head_frame_agreement_name AS customerHeadFrameAgreementName
             FROM        view.customer c
-            LEFT JOIN   view.invoice_row ir ON ir.customer_id = c.id ${filterCondition(
-              period,
+            LEFT JOIN   view.invoice_row ir ON ir.customer_id = c.id ${this.drillDownService.getPeriodFilter(
               year,
+              period,
             )}
             AND         ir.vendor_id != 1
             AND         ir.cost_object_type != 'C'

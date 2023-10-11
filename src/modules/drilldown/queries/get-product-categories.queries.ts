@@ -6,9 +6,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
 import { Repository } from 'typeorm';
-import { ManagerAccessFrameAgreementViewEntity } from '@/common/entities/manager-access-frame-agreement-view.entity';
-import { filterCondition, getOrgFilter } from '../helpers/query';
 import { DrillDownServiceType } from '../dto/product-categories-param.dto';
+import { DrillDownService } from '../drilldown.service';
 
 type QueryFilters = {
   year: number;
@@ -17,8 +16,15 @@ type QueryFilters = {
   typeId: number;
 };
 
+type List = {
+  amount: number;
+  salaryDeductionAmount: number;
+  productCategoryId: number;
+  productCategoryName: string;
+};
+
 export class GetProductCategoriesQuery implements QueryInterface {
-  $$resolveType: any;
+  $$resolveType: List[];
   constructor(readonly filters: QueryFilters, readonly user: Express.User) {}
 }
 
@@ -29,40 +35,33 @@ export class GetProductCategoriesQueryHandler
   constructor(
     @InjectRepository(CustomerViewEntity)
     readonly customerViewRepository: Repository<CustomerViewEntity>,
-    @InjectRepository(ManagerAccessFrameAgreementViewEntity)
-    readonly mafRepository: Repository<ManagerAccessFrameAgreementViewEntity>,
+    readonly drillDownService: DrillDownService,
   ) {}
-  async execute({ filters, user }: GetProductCategoriesQuery) {
+  async execute({ filters, user }: GetProductCategoriesQuery): Promise<List[]> {
     const { year, period, type, typeId } = filters;
 
-    const frameAgreementId =
-      type === DrillDownServiceType.FRAME_AGREEMENT ? typeId : null;
-    const customerHeadId =
-      type === DrillDownServiceType.CUSTOMER_HEAD ? typeId : null;
-    const customerId = type === DrillDownServiceType.CUSTOMER ? typeId : null;
+    const { frameAgreementId, customerHeadId, customerId } =
+      this.drillDownService.getTypes(type, typeId);
 
-    const getCustomerAccessList = async (userId: number) => {
-      const maf = await this.mafRepository.find({
-        where: { userId: userId },
-        select: ['customerId'],
-      });
-      return maf.map((item) => item.customerId).join(',');
-    };
-
-    const customersAccessList = await getCustomerAccessList(user.uid);
+    const customersAccessList =
+      await this.drillDownService.getCustomerAccessList(user.uid);
 
     return this.customerViewRepository.query(`
             SELECT      SUM(ir.amount) AS amount,
-                        SUM(ir.salary_deduction_amount) AS salary_deduction_amount,
-                        ir.product_category_id,
-                        ir.product_category_name
+                        SUM(ir.salary_deduction_amount) AS salaryDeductionAmount,
+                        ir.product_category_id as productCategoryId,
+                        ir.product_category_name as productCategoryName
             FROM        view.invoice_row ir
             JOIN        view.customer c ON ir.customer_id = c.id
-            WHERE       c.id IN(${customersAccessList})
+            WHERE       c.id IN(${customersAccessList}})
             AND         ir.vendor_id != 1
             AND         ir.cost_object_type != 'C'
-            ${filterCondition(year, period)}
-            ${getOrgFilter(frameAgreementId, customerHeadId, customerId)}
+            ${this.drillDownService.getPeriodFilter(year, period)}
+            ${this.drillDownService.getOrgFilter(
+              frameAgreementId,
+              customerHeadId,
+              customerId,
+            )}
             GROUP BY    ir.product_category_id
             ORDER BY    SUM(ir.amount) DESC`);
   }
