@@ -221,24 +221,9 @@ WHERE (c.id = ? OR c.customer_head_id = ?)
   AND i.vendor_id != 1
   AND ir.product_id != 2141
 
-GROUP BY co.id
-       , co.code
-       , co.name
-       , co.dim_1
-       , co.dim_2
-       , co.dim_3
-       , co.dim_4
-       , co.employee_no
-       , co.accounting_code
-       , d.name
+GROUP BY co.accounting_code
        , d.code
-       , d.project
-       , c.org_no
-       , c.name
        , i.invoice_no
-       , i.vendor_net_amount
-       , i.vendor_vat_amount
-       , i.vendor_gross_amount
 
 ORDER BY co.name
 `;
