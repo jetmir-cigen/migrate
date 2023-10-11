@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
 import { Repository } from 'typeorm';
-import { DrillDownServiceType } from '../dto/product-categories-param.dto';
+import { DrillDownServiceType } from '@/modules/drilldown/dto';
 import { DrillDownService } from '../drilldown.service';
 
 type QueryFilters = {

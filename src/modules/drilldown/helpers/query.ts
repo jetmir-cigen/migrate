@@ -1,4 +1,4 @@
-import { DrillDownServiceType } from '../dto/product-categories-param.dto';
+import { DrillDownServiceType } from '@/modules/drilldown/dto';
 
 export const filterCondition = (period: number, year: number) =>
   period <= 0

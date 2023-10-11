@@ -1,4 +1,4 @@
-import { DrillDownServiceType } from '../dto/product-categories-param.dto';
+import { DrillDownServiceType } from '@/modules/drilldown/dto';
 import {
   QueryHandlerInterface,
   QueryInterface,
