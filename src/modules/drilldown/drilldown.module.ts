@@ -3,11 +3,11 @@ import { DrillDownController } from './drilldown.controller';
 import { DrillDownService } from './drilldown.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
-import { CqrsModule } from '@nestjs/cqrs';
 import { GetTotalQueryHandler } from '@/modules/drilldown/queries/get-total.query';
 import { InvoiceRowViewEntity } from '@/common/entities/invoice-row-view.entity';
 import { GetProductCategoriesQueryHandler } from '@/modules/drilldown/queries/get-product-categories.queries';
 import { ManagerAccessFrameAgreementViewEntity } from '@/common/entities/manager-access-frame-agreement-view.entity';
+import { QueryModule } from '@/modules/query/query.module';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { ManagerAccessFrameAgreementViewEntity } from '@/common/entities/manager
       InvoiceRowViewEntity,
       ManagerAccessFrameAgreementViewEntity,
     ]),
-    CqrsModule,
+    QueryModule,
   ],
   controllers: [DrillDownController],
   providers: [

@@ -28,6 +28,7 @@ import { PhoneModule } from './modules/phone/phone.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { AssetModule } from './modules/asset/asset.module';
 import { DrillDownModule } from '@/modules/drilldown/drilldown.module';
+import { QueryModule } from './modules/query/query.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { DrillDownModule } from '@/modules/drilldown/drilldown.module';
     NotificationsModule,
     AssetModule,
     DrillDownModule,
+    QueryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -40,7 +40,7 @@ export class GetTotalQueryHandler
     readonly viewCustomerRepository: Repository<CustomerViewEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
-  async execute({ filters }: GetTotalQuery): Promise<List[]> {
+  execute({ filters }: GetTotalQuery) {
     const { year, period } = filters;
     return this.viewCustomerRepository.query(`
       SELECT SUM(ir.amount) AS amount,

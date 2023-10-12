@@ -9,19 +9,19 @@ import { InvoiceRowViewEntity } from '@/common/entities/invoice-row-view.entity'
 import { InjectRepository } from '@nestjs/typeorm';
 import { DrillDownService } from '../drilldown.service';
 
+type List = {
+  amount: number;
+  salaryDeductionAmount: number;
+  productGroupId: number;
+  productGroupName: string;
+};
+
 type QueryFilters = {
   year: number;
   period: number;
   type: DrillDownServiceType;
   typeId: number;
   productCategoryId: number;
-};
-
-type List = {
-  amount: number;
-  salaryDeductionAmount: number;
-  productGroupId: number;
-  productGroupName: string;
 };
 
 export class GetProductGroupsQuery implements QueryInterface {
