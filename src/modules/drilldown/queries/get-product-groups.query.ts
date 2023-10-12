@@ -17,8 +17,15 @@ type QueryFilters = {
   productCategoryId: number;
 };
 
+type List = {
+  amount: number;
+  salaryDeductionAmount: number;
+  productGroupId: number;
+  productGroupName: string;
+};
+
 export class GetProductGroupsQuery implements QueryInterface {
-  $$resolveType: any;
+  $$resolveType: List[];
   constructor(
     public readonly filters: QueryFilters,
     public readonly user: Express.User,
@@ -34,7 +41,7 @@ export class GetProductGroupsQueryHandler
     readonly invoiceRowViewRepository: Repository<InvoiceRowViewEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
-  async execute({ filters, user }: GetProductGroupsQuery) {
+  async execute({ filters, user }: GetProductGroupsQuery): Promise<List[]> {
     const { year, period, type, typeId, productCategoryId } = filters;
 
     const { frameAgreementId, customerHeadId, customerId } =

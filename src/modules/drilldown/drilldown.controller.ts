@@ -9,7 +9,11 @@ import { GetProductCategoriesQuery } from '@/modules/drilldown/queries/get-produ
 import { AuthUser } from '@/modules/auth/auth-user.decorator';
 import { ProductGroupsParamDto } from '@/modules/drilldown/dto/product-groups-param.dto';
 import { GetProductGroupsQuery } from '@/modules/drilldown/queries/get-product-groups.query';
-import { ListTotalDto, ListProductCategoriesDto } from './dto';
+import {
+  ListTotalDto,
+  ListProductCategoriesDto,
+  ProductGroupsListDto,
+} from './dto';
 
 @Controller('drilldown')
 @UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
@@ -33,7 +37,7 @@ export class DrillDownController {
     @Param()
     params: ProductGroupsParamDto,
     @AuthUser() user: Express.User,
-  ): Promise<any> {
+  ): Promise<ProductGroupsListDto[]> {
     return this.queryBus.execute(new GetProductGroupsQuery(params, user));
   }
 }
