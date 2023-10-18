@@ -48,6 +48,11 @@ export class CreateAssetCommandHandler
         .andWhere('ecomPolicy.isActive = :isActive', { isActive: 1 })
         .getOne();
 
+      let leasingVendorId = null;
+      if (payload.ownershipTypeId > 0) {
+        leasingVendorId = payload.ownershipTypeId;
+      }
+
       const assetCreateData: Partial<AssetEntity> = {
         assetDescription: payload.assetDescription,
         userTypeId: payload.userTypeId,
@@ -62,9 +67,11 @@ export class CreateAssetCommandHandler
         typeId: payload.typeId,
         imeiSnr: payload.imeiSnr,
         customerId: payload.customerId,
-        ownershipId: payload.ownershipTypeId,
+        ownershipId: 1,
         createdDate: new Date(),
         createdUserId: payload.user.uid,
+        leasingVendorId,
+        ...(payload.ownershipTypeId > 1 && { isLeased: true }),
       };
       await queryRunner.startTransaction();
       // there is no active ecom policy
