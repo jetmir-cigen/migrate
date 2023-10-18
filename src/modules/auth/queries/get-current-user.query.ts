@@ -18,7 +18,7 @@ export interface CurrentUserProfileQueryResult {
   email: string;
   name: string;
   device_dealer_user_id: number;
-  has_device_policy: boolean;
+  has_device_policy: string;
   is_password_change_required: boolean;
   currency: string;
   customer_id: number;
@@ -42,8 +42,14 @@ export class FindCurrentUserByFilterQueryHandler
     const { userId } = filters;
 
     try {
-      const user = await this.repository.query(getCurrentUserQuery, [userId]);
-      return user[0] as CurrentUserProfileQueryResult;
+      const user = (
+        await this.repository.query(getCurrentUserQuery, [userId])
+      )[0] as CurrentUserProfileQueryResult;
+
+      return {
+        ...user,
+        has_device_policy: Number(user.has_device_policy),
+      };
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
         throw new NotFoundException(`User with ID ${userId} not found`);
