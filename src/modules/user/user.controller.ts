@@ -142,13 +142,16 @@ export class UserController {
   async updateUser(
     @Param('id') id: number,
     @Body() userCreateDto: Partial<UserCreateDto>,
+    @AuthUser() authUser: Express.User,
   ): Promise<SuccessResponseDto> {
     if (userCreateDto.password) {
       userCreateDto.password = await this.userService.hashPassword(
         userCreateDto.password,
       );
     }
-    await this.commandBus.execute(new UpdateUserCommand(id, userCreateDto));
+    await this.commandBus.execute(
+      new UpdateUserCommand(id, userCreateDto, authUser),
+    );
 
     return new SuccessResponseDto();
   }
@@ -185,10 +188,14 @@ export class UserController {
 
     newPassword = await this.userService.hashPassword(newPassword);
     await this.commandBus.execute(
-      new UpdateUserCommand(user.id, {
-        password: newPassword,
-        isPasswordChangeRequired: false,
-      }),
+      new UpdateUserCommand(
+        user.id,
+        {
+          password: newPassword,
+          isPasswordChangeRequired: false,
+        },
+        authUser,
+      ),
     );
 
     return new SuccessResponseDto();
