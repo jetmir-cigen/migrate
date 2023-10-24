@@ -7,6 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../user/entities/user.entity';
 import { FindCurrentUserByFilterQueryHandler } from './queries';
 import { DevicePolicyEntity } from '@/common/entities/device-policy.entity';
+import { ChangePasswordCommandHandler } from './commands/change-password.command';
+import { PasswordChangedEventHandler } from './events/password-changed.event';
+import { UserService } from '../user/user.service';
 
 @Module({
   imports: [
@@ -14,7 +17,13 @@ import { DevicePolicyEntity } from '@/common/entities/device-policy.entity';
     CqrsModule,
     TypeOrmModule.forFeature([UserEntity, DevicePolicyEntity]),
   ],
-  providers: [AuthJwtService, FindCurrentUserByFilterQueryHandler],
+  providers: [
+    AuthJwtService,
+    UserService,
+    FindCurrentUserByFilterQueryHandler,
+    ChangePasswordCommandHandler,
+    PasswordChangedEventHandler,
+  ],
   exports: [AuthJwtService],
   controllers: [AuthController],
 })

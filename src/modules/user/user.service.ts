@@ -22,8 +22,11 @@ export class UserService {
     hashedPassword: string,
   ): Promise<boolean> {
     try {
+      const encodedPassword = encodeURIComponent(password);
+      const encodedHashedPassword = encodeURIComponent(hashedPassword);
+
       const response = await this.httpService.axiosRef.get(
-        `https://auth-dev.skytechcontrol.io/hash/verify?password=${password}&hash=${hashedPassword}`,
+        `https://auth-dev.skytechcontrol.io/hash/verify?password=${encodedPassword}&hash=${encodedHashedPassword}`,
       );
       return response.data.valid;
     } catch (err) {

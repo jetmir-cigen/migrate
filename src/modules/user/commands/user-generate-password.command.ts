@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from '../user.service';
 import { generateRandomPassword } from '@/utils/generatePassword';
 import { UserPasswordGeneratedEvent } from '../events';
+import { ForbiddenException } from '@nestjs/common';
 
 export class GenerateUserPasswordCommand {
   constructor(
@@ -26,16 +27,25 @@ export class GenerateUserPasswordCommandHandler
   ) {}
 
   async execute({ id, currentUser }: GenerateUserPasswordCommand) {
-    const password = generateRandomPassword(16);
+    const password = generateRandomPassword();
 
     const hashedPassword = await this.userService.hashPassword(password);
 
     const user = await this.userRepository.findOneOrFail({ where: { id } });
+    const authUser = await this.userRepository.findOneOrFail({
+      where: { id: currentUser.uid },
+    });
 
-    user.password = hashedPassword;
-    user.isPasswordChangeRequired = true;
+    // If the current user is not the same as the user being updated,
+    // then we need to check if the current user has a higher userGroupId than the user being updated
+    if (authUser.id !== user.id && authUser.userGroupId >= user.userGroupId) {
+      throw new ForbiddenException('You are not allowed to update this user');
+    }
 
-    await this.userRepository.save(user);
+    await this.userRepository.update(id, {
+      password: hashedPassword,
+      isPasswordChangeRequired: true,
+    });
 
     this.eventBus.publish(
       new UserPasswordGeneratedEvent({ ...user, password }, currentUser),
