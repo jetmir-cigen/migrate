@@ -82,20 +82,20 @@ export class EmailNotificationsService {
   }
 
   async sendProduction(data: ISendNotification) {
-    const formData = new FormData();
-
-    formData.append('code', data.numbers[0].number);
-    formData.append('type', data.code);
-    formData.append('receiver', data.emails[0]);
-    formData.append('subject', data.subject);
-    formData.append('message', data.message);
-    formData.append('customerId', data.customerId.toString());
-    formData.append('cc', '');
-    formData.append('bcc', '');
+    const formData = {
+      code: data.numbers[0].number,
+      type: data.code,
+      reciever: data.emails[0],
+      subject: data.subject,
+      message: data.message,
+      customerId: data.customerId.toString(),
+      cc: '',
+      bcc: '',
+    };
 
     const { data: response } = await lastValueFrom(
       this.httpService
-        .post('http://10.20.0.10/web/api/mail.php', formData)
+        .post('https://control.skytechcontrol.io/web/api/mail.php', formData)
         .pipe(
           catchError((error: AxiosError) => {
             this.logger.error(error);
