@@ -50,6 +50,8 @@ import { UserEntity } from '../user/entities/user.entity';
 import { TextTemplateEntity } from '../text-template/entities';
 import { HttpModule } from '@nestjs/axios';
 import { LogMailEntity } from '../notifications/entities/log-mail.entity';
+import { FindUserAliasesByFilterQueryHandler } from './queries/get-user-aliases.query';
+import { UserAliasEntity } from './entities/user-alias.entity';
 
 @Module({
   imports: [
@@ -69,6 +71,7 @@ import { LogMailEntity } from '../notifications/entities/log-mail.entity';
       LogMailEntity,
       UserEntity,
       TextTemplateEntity,
+      UserAliasEntity,
     ]),
   ],
   controllers: [PhoneController],
@@ -94,6 +97,7 @@ import { LogMailEntity } from '../notifications/entities/log-mail.entity';
     FindAllActiveNumbersByFilterQueryHandler,
     UpdatePhoneBookNumberCommandHandler,
     UpdatePhoneGroupNumberCommandHandler,
+    FindUserAliasesByFilterQueryHandler,
     NotificationsService,
     SmsNotificationsService,
     EmailNotificationsService,

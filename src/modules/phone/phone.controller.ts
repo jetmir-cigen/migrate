@@ -10,9 +10,7 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AuthUser } from '../auth/auth-user.decorator';
-import { DepartmentService } from '../department/department.service';
 import {
-  FindActiveNumbersByFilterQuery,
   FindGroupNumbersByFilterQuery,
   FindPhoneBooksByFilterQuery,
   FindPhoneGroupByFilterQuery,
@@ -39,6 +37,7 @@ import { FindAllActiveNumbersByFilterQuery } from './queries/get-all-active-numb
 import { UpdatePhoneBookNumberCommand } from './commands/phone-book-update-numbers.command';
 import { UpdatePhoneGroupNumberCommand } from './commands/phone-groups-update-numbers.command';
 import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
+import { FindUserAliasesByFilterQuery } from './queries/get-user-aliases.query';
 
 @ApiTags('Phone')
 @ApiBearerAuth()
@@ -252,5 +251,15 @@ export class PhoneController {
     );
 
     return new SMSLogsListResponseDto({ smsLogs });
+  }
+
+  @ApiOperation({ summary: 'Get user aliases' })
+  @Get('/aliases')
+  async getUserAliases(@AuthUser() user: Express.User) {
+    return this.queryBus.execute(
+      new FindUserAliasesByFilterQuery({
+        user,
+      }),
+    );
   }
 }

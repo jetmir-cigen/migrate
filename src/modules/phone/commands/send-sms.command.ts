@@ -1,5 +1,4 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { v4 } from 'uuid';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -48,7 +47,7 @@ export class SendSMSCommandHandler implements ICommandHandler<SendSMSCommand> {
       isPrivate: isPrivate,
     };
 
-    this.notificationService.send(test);
+    await this.notificationService.send(test);
 
     return true;
   }
