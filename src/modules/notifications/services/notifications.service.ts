@@ -127,7 +127,7 @@ export class NotificationsService {
       customerId: query.customerId,
     };
 
-    this.send(result);
+    await this.send(result);
 
     return { query };
   }
@@ -197,7 +197,7 @@ export class NotificationsService {
       userId: user.uid,
     };
 
-    this.sendBulk(dataBulk);
+    await this.sendBulk(dataBulk);
 
     return { query };
   }
@@ -207,10 +207,10 @@ export class NotificationsService {
 
     switch (type) {
       case 'SMS':
-        this.smsService.send(data);
+        await this.smsService.send(data);
         break;
       case 'EMAIL':
-        this.emailService.send(data);
+        await this.emailService.send(data);
         break;
       default:
         break;
@@ -222,7 +222,7 @@ export class NotificationsService {
 
     switch (type) {
       case 'SMS':
-        this.smsService.sendBulk(data);
+        await this.smsService.sendBulk(data);
         break;
       case 'EMAIL':
         // await this.emailService.send(data);

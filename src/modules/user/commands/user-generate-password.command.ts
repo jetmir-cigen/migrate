@@ -44,7 +44,6 @@ export class GenerateUserPasswordCommandHandler
 
     await this.userRepository.update(id, {
       password: hashedPassword,
-      isPasswordChangeRequired: true,
     });
 
     this.eventBus.publish(
