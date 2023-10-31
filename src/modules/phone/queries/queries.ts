@@ -15,8 +15,8 @@ FROM cost_object co
          JOIN department d ON d.id = co.department_id
          LEFT JOIN salary_deduction_profile sdp ON sdp.id = co.salary_deduction_profile_id
          INNER JOIN view.active_mobile_user amu ON amu.id = co.id
-         INNER JOIN view.manager_access_department mad ON mad.department_id = amu.department_id
-WHERE mad.user_id = ?
+         INNER JOIN view.manager_access_department mad ON mad.department_id = amu.department_id AND mad.user_id = ?
+WHERE co.mass_message_recipient = 1
 
 UNION
 
