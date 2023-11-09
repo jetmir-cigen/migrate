@@ -43,7 +43,7 @@ export class DepartmentService {
 
       return this.departmentRepository.findOneOrFail({
         where: { id: department.id },
-        relations: ['user', 'deputyUser'],
+        relations: ['user', 'deputyUser', 'customer'],
       });
     } catch (err) {
       throw err;
@@ -111,7 +111,7 @@ export class DepartmentService {
       await this.departmentRepository.update(id, updateDepartmentDto);
       return this.departmentRepository.findOneOrFail({
         where: { id },
-        relations: ['user', 'deputyUser'],
+        relations: ['user', 'deputyUser', 'customer'],
       });
     } catch (err) {
       throw err;
