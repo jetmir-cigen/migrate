@@ -51,14 +51,8 @@ export class DepartmentController {
     type: DepartmentDto,
   })
   @Post('/')
-  async create(
-    @Body() createDepartmentDto: CreateDepartmentDto,
-    @AuthUser() user: Express.User,
-  ) {
-    const department = await this.departmentService.create(
-      createDepartmentDto,
-      user.cid,
-    );
+  async create(@Body() createDepartmentDto: CreateDepartmentDto) {
+    const department = await this.departmentService.create(createDepartmentDto);
     return new DepartmentResponseDto({ department });
   }
 

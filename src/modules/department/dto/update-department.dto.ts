@@ -26,6 +26,13 @@ export class UpdateDepartmentDto {
 
   @ApiProperty({
     example: 1,
+    description: 'The ID of the customer who owns the department',
+  })
+  @IsNumber()
+  customerId: number;
+
+  @ApiProperty({
+    example: 1,
     description: 'The ID of the user who created the department',
   })
   @IsNumber()
