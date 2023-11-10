@@ -42,7 +42,7 @@ export class UpdateUserCommandHandler
 
       // If the current user is not the same as the user being updated,
       // then we need to check if the current user has a higher userGroupId than the user being updated
-      if (authUser.id !== user.id && authUser.userGroupId >= user.userGroupId) {
+      if (authUser.id !== user.id && authUser.userGroupId > user.userGroupId) {
         throw new ForbiddenException('You are not allowed to update this user');
       }
 
