@@ -11,6 +11,7 @@ import { DrillDownService } from '@/modules/drilldown/drilldown.service';
 type QueryFilters = {
   year: number;
   period: number;
+  user: Express.User;
 };
 
 type List = {
@@ -40,9 +41,12 @@ export class GetTotalQueryHandler
     readonly viewCustomerRepository: Repository<CustomerViewEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
-  execute({ filters }: GetTotalQuery) {
-    const { year, period } = filters;
-    return this.viewCustomerRepository.query(`
+  async execute({ filters }: GetTotalQuery) {
+    const { year, period, user } = filters;
+    const customersAccessList =
+      await this.drillDownService.getCustomerAccessList(user.uid);
+    return this.viewCustomerRepository.query(
+      `
       SELECT SUM(ir.amount) AS amount,
                         SUM(ir.salary_deduction_amount) AS salaryDeductionAmount,
                         c.id AS customerId,
@@ -59,8 +63,10 @@ export class GetTotalQueryHandler
             )}
             AND         ir.vendor_id != 1
             AND         ir.cost_object_type != 'C'
+            WHERE       c.id IN(${customersAccessList})
             GROUP BY    c.id
             ORDER BY    SUM(ir.amount) DESC
-    `);
+    `,
+    );
   }
 }

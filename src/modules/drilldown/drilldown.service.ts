@@ -8,15 +8,15 @@ import { DrillDownServiceType } from '@/modules/drilldown/dto/product-categories
 export class DrillDownService {
   constructor(
     @InjectRepository(ManagerAccessFrameAgreementViewEntity)
-    readonly mafRepository: Repository<ManagerAccessFrameAgreementViewEntity>,
+    readonly macFrameAgreementRepository: Repository<ManagerAccessFrameAgreementViewEntity>,
   ) {}
 
   async getCustomerAccessList(userId: number): Promise<string> {
-    const maf = await this.mafRepository.find({
+    const macFrameAgreement = await this.macFrameAgreementRepository.find({
       where: { userId: userId },
       select: ['customerId'],
     });
-    return maf.map((item) => item.customerId).join(',');
+    return macFrameAgreement.map((item) => item.customerId).join(',');
   }
 
   getPeriodFilter(year: number, period: number): string {

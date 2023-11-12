@@ -22,8 +22,11 @@ import { GetProductGroupsCategoriesQuery } from '@/modules/drilldown/queries/get
 export class DrillDownController {
   constructor(readonly queryService: QueryService) {}
   @Get('/total/:year/:period')
-  async getTotal(@Param() { year, period }): Promise<ListTotalDto[]> {
-    return this.queryService.execute(new GetTotalQuery({ year, period }));
+  async getTotal(
+    @Param() { year, period },
+    @AuthUser() user: Express.User,
+  ): Promise<ListTotalDto[]> {
+    return this.queryService.execute(new GetTotalQuery({ year, period, user }));
   }
 
   @Get('/:type/:typeId/:year/:period')
