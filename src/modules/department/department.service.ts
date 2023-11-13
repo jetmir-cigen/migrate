@@ -22,6 +22,8 @@ const selectedFields = [
   'department.customerId',
   'department.userId',
   'department.deputyUserId',
+  'customer.id',
+  'customer.name',
 ];
 
 @Injectable()
@@ -33,17 +35,15 @@ export class DepartmentService {
 
   async create(
     createDepartmentDto: CreateDepartmentDto,
-    customerId: number,
   ): Promise<DepartmentEntity> {
     try {
       const department = await this.departmentRepository.save({
         ...createDepartmentDto,
-        customerId,
       });
 
       return this.departmentRepository.findOneOrFail({
         where: { id: department.id },
-        relations: ['user', 'deputyUser'],
+        relations: ['user', 'deputyUser', 'customer'],
       });
     } catch (err) {
       throw err;
@@ -55,6 +55,7 @@ export class DepartmentService {
       .createQueryBuilder('department')
       .leftJoinAndSelect('department.user', 'user')
       .leftJoinAndSelect('department.deputyUser', 'deputyUser')
+      .leftJoinAndSelect('department.customer', 'customer')
       .where((qb) => {
         const subQuery = qb
           .subQuery()
@@ -76,6 +77,7 @@ export class DepartmentService {
         .createQueryBuilder('department')
         .leftJoinAndSelect('department.user', 'user')
         .leftJoinAndSelect('department.deputyUser', 'deputyUser')
+        .leftJoinAndSelect('department.customer', 'customer')
         .where({ id })
         .andWhere((qb) => {
           const subQuery = qb
@@ -109,7 +111,7 @@ export class DepartmentService {
       await this.departmentRepository.update(id, updateDepartmentDto);
       return this.departmentRepository.findOneOrFail({
         where: { id },
-        relations: ['user', 'deputyUser'],
+        relations: ['user', 'deputyUser', 'customer'],
       });
     } catch (err) {
       throw err;

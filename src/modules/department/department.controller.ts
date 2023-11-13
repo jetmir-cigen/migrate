@@ -51,14 +51,8 @@ export class DepartmentController {
     type: DepartmentDto,
   })
   @Post('/')
-  async create(
-    @Body() createDepartmentDto: CreateDepartmentDto,
-    @AuthUser() user: Express.User,
-  ) {
-    const department = await this.departmentService.create(
-      createDepartmentDto,
-      user.cid,
-    );
+  async create(@Body() createDepartmentDto: CreateDepartmentDto) {
+    const department = await this.departmentService.create(createDepartmentDto);
     return new DepartmentResponseDto({ department });
   }
 
@@ -94,6 +88,7 @@ export class DepartmentController {
   @Get(':id(\\d+)')
   async findOne(@Param('id') id: number, @AuthUser() user: Express.User) {
     const department = await this.departmentService.findOne(id, user.uid);
+
     return new DepartmentResponseDto({ department });
   }
 
