@@ -66,9 +66,8 @@ export class CreateAssetCommandHandler
         coverAmount: payload.cost,
         status: 10, // migration status
       });
-      const ecomOrder = await this.ecomOrderEntityRepository.save(
-        ecomOrderCreate,
-      );
+      const ecomOrder =
+        await this.ecomOrderEntityRepository.save(ecomOrderCreate);
       assetCreateData.ecomOrderId = ecomOrder.id;
     }
 
