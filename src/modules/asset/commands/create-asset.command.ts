@@ -22,6 +22,7 @@ export class CreateAssetCommand implements ICommand {
       typeId: number;
       comment: string;
       cost: number;
+      received: Date;
       user: Express.User;
     },
   ) {}
@@ -72,6 +73,7 @@ export class CreateAssetCommandHandler
         createdUserId: payload.user.uid,
         leasingVendorId,
         ...(payload.ownershipTypeId > 1 && { isLeased: true }),
+        received: payload.received,
       };
       await queryRunner.startTransaction();
       // there is no active ecom policy
