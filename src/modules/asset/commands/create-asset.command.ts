@@ -69,17 +69,17 @@ export class CreateAssetCommandHandler
         imeiSnr: payload.imeiSnr,
         customerId: payload.customerId,
         ownershipId: 1,
-        createdDate: new Date(),
         createdUserId: payload.user.uid,
         leasingVendorId,
         ...(payload.ownershipTypeId > 1 && { isLeased: true }),
         received: payload.received,
+        createdDate: payload.received,
       };
       await queryRunner.startTransaction();
       // there is no active ecom policy
       if (ecomPolicy && payload.ecomPolicyId) {
         const ecomOrderCreate = queryRunner.manager.create(EcomOrderEntity, {
-          orderDate: new Date(),
+          orderDate: payload.received,
           policyId: payload.ecomPolicyId,
           costObjectId: payload.costObjectId,
           customerId: payload.customerId,
