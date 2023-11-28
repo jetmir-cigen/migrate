@@ -56,5 +56,5 @@ export class CreateAssetDto {
   comment: string;
 
   @IsDateString()
-  received: Date;
+  received: string;
 }
