@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsDateString,
+} from 'class-validator';
 
 export class CreateAssetDto {
   @IsNotEmpty()
@@ -48,4 +54,7 @@ export class CreateAssetDto {
 
   @IsString()
   comment: string;
+
+  @IsDateString()
+  received: string;
 }
