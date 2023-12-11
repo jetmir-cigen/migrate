@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DrillDownService } from '@/modules/drilldown/drilldown.service';
 import { InvoiceRowViewEntity } from '@/common/views/invoice-row-view.entity';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { InvoiceRowEntity } from '@/modules/invoice/entities/invoice-row.entity';
 
 type List = {
   amount: number;
@@ -33,7 +35,7 @@ type ResponseType = {
   group: any;
 };
 
-export class GetProductGroupsCategoriesQuery implements QueryInterface {
+export class GetProductCostObjectsQuery implements QueryInterface {
   $$resolveType: ResponseType;
   constructor(
     readonly filters: QueryFilters,
@@ -41,19 +43,21 @@ export class GetProductGroupsCategoriesQuery implements QueryInterface {
   ) {}
 }
 
-@QueryHandler(GetProductGroupsCategoriesQuery)
-export class GetProductGroupsCategoriesQueryHandler
-  implements QueryHandlerInterface<GetProductGroupsCategoriesQuery>
+@QueryHandler(GetProductCostObjectsQuery)
+export class GetProductCostObjectsQueryHandler
+  implements QueryHandlerInterface<GetProductCostObjectsQuery>
 {
   constructor(
     @InjectRepository(InvoiceRowViewEntity)
     readonly invoiceRowViewRepository: Repository<InvoiceRowViewEntity>,
+    @InjectRepository(CostObjectEntity)
+    readonly costObjectRepository: Repository<CostObjectEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
   async execute({
     filters,
     user,
-  }: GetProductGroupsCategoriesQuery): Promise<ResponseType> {
+  }: GetProductCostObjectsQuery): Promise<ResponseType> {
     const { year, period, type, typeId, productCategoryId, productGroupId } =
       filters;
 
@@ -62,6 +66,32 @@ export class GetProductGroupsCategoriesQueryHandler
 
     const customersAccessList =
       await this.drillDownService.getCustomerAccessList(user.uid);
+
+    const costObjects = await this.costObjectRepository
+      .createQueryBuilder('costObject')
+      .innerJoin(
+        InvoiceRowEntity,
+        'invoiceRow',
+        'invoiceRow.costObjectId = costObject.id',
+      )
+      .where('invoiceRow.vendorId != 1')
+      .andWhere('invoiceRow.costObjectType != :costObjectType', {
+        costObjectType: 'C',
+      })
+      .andWhere('invoiceRow.productCategoryId = :productCategoryId', {
+        productCategoryId,
+      })
+      .andWhere('invoiceRow.productGroupId = :productGroupId', {
+        productGroupId,
+      })
+      .andWhere('invoiceRow.customerId IN (:...customersAccessList)', {
+        customersAccessList,
+      })
+      .andWhere('invoiceRow.year = :year', { year })
+      .andWhere('invoiceRow.period = :period', { period })
+      .getMany();
+
+
 
     const rowsPromise = this.invoiceRowViewRepository.query(
       ` SELECT * FROM (

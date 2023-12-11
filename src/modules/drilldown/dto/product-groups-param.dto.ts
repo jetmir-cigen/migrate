@@ -1,7 +1,7 @@
 import { ProductCategoriesParamDto } from './product-categories-param.dto';
-import { IsNumber } from 'class-validator';
+import { IsNumberString } from 'class-validator';
 
 export class ProductGroupsParamDto extends ProductCategoriesParamDto {
-  @IsNumber()
+  @IsNumberString()
   productCategoryId: number;
 }

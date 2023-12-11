@@ -5,7 +5,7 @@ import {
 } from '@/common/query.interface';
 import { QueryHandler } from '@nestjs/cqrs';
 import { Repository } from 'typeorm';
-import { InvoiceRowViewEntity } from '@/common/entities/invoice-row-view.entity';
+import { InvoiceRowViewEntity } from '@/common/views/invoice-row-view.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DrillDownService } from '../drilldown.service';
 
@@ -24,8 +24,14 @@ type QueryFilters = {
   productCategoryId: number;
 };
 
+type ResponseType = {
+  rows: List[];
+  entity: any;
+  category: any;
+};
+
 export class GetProductGroupsQuery implements QueryInterface {
-  $$resolveType: List[];
+  $$resolveType: ResponseType;
   constructor(
     public readonly filters: QueryFilters,
     public readonly user: Express.User,
@@ -41,7 +47,10 @@ export class GetProductGroupsQueryHandler
     readonly invoiceRowViewRepository: Repository<InvoiceRowViewEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
-  async execute({ filters, user }: GetProductGroupsQuery): Promise<List[]> {
+  async execute({
+    filters,
+    user,
+  }: GetProductGroupsQuery): Promise<ResponseType> {
     const { year, period, type, typeId, productCategoryId } = filters;
 
     const { frameAgreementId, customerHeadId, customerId } =
@@ -50,7 +59,7 @@ export class GetProductGroupsQueryHandler
     const customersAccessList =
       await this.drillDownService.getCustomerAccessList(user.uid);
 
-    return this.invoiceRowViewRepository.query(
+    const rowsPromise = this.invoiceRowViewRepository.query(
       `
       SELECT      SUM(ir.amount) AS amount,
                   SUM(ir.salary_deduction_amount) AS salaryDeductionAmount,
@@ -66,10 +75,31 @@ export class GetProductGroupsQueryHandler
         customerHeadId,
         customerId,
       )}
-      AND         ir.product_category_id = :productCategoryId
+      AND         ir.product_category_id = ?
       GROUP BY    ir.product_group_id
       ORDER BY    SUM(ir.amount) DESC`,
       [productCategoryId],
     );
+
+    const entityPromise = this.drillDownService.getEntity(
+      user.uid,
+      type,
+      typeId,
+    );
+
+    const categoryPromise =
+      this.drillDownService.getCategory(productCategoryId);
+
+    const [rows, entity, category] = await Promise.all([
+      rowsPromise,
+      entityPromise,
+      categoryPromise,
+    ]);
+
+    return {
+      rows,
+      entity,
+      category,
+    };
   }
 }

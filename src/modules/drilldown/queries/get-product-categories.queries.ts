@@ -23,9 +23,17 @@ type List = {
   productCategoryName: string;
 };
 
+type ResultType = {
+  rows: List[];
+  entity: any;
+};
+
 export class GetProductCategoriesQuery implements QueryInterface {
-  $$resolveType: List[];
-  constructor(readonly filters: QueryFilters, readonly user: Express.User) {}
+  $$resolveType: ResultType;
+  constructor(
+    readonly filters: QueryFilters,
+    readonly user: Express.User,
+  ) {}
 }
 
 @QueryHandler(GetProductCategoriesQuery)
@@ -37,7 +45,10 @@ export class GetProductCategoriesQueryHandler
     readonly customerViewRepository: Repository<CustomerViewEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
-  async execute({ filters, user }: GetProductCategoriesQuery): Promise<List[]> {
+  async execute({
+    filters,
+    user,
+  }: GetProductCategoriesQuery): Promise<ResultType> {
     const { year, period, type, typeId } = filters;
 
     const { frameAgreementId, customerHeadId, customerId } =
@@ -46,14 +57,14 @@ export class GetProductCategoriesQueryHandler
     const customersAccessList =
       await this.drillDownService.getCustomerAccessList(user.uid);
 
-    return this.customerViewRepository.query(`
+    const rows = await this.customerViewRepository.query(`
             SELECT      SUM(ir.amount) AS amount,
                         SUM(ir.salary_deduction_amount) AS salaryDeductionAmount,
                         ir.product_category_id as productCategoryId,
                         ir.product_category_name as productCategoryName
             FROM        view.invoice_row ir
             JOIN        view.customer c ON ir.customer_id = c.id
-            WHERE       c.id IN(${customersAccessList}})
+            WHERE       c.id IN(${customersAccessList})
             AND         ir.vendor_id != 1
             AND         ir.cost_object_type != 'C'
             ${this.drillDownService.getPeriodFilter(year, period)}
@@ -64,5 +75,16 @@ export class GetProductCategoriesQueryHandler
             )}
             GROUP BY    ir.product_category_id
             ORDER BY    SUM(ir.amount) DESC`);
+
+    const entity = await this.drillDownService.getEntity(
+      user.uid,
+      type,
+      typeId,
+    );
+
+    return {
+      rows,
+      entity,
+    };
   }
 }

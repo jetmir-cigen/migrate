@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GroupsListDto {
+export class ProductListDto {
   rows: ProductGroupsList[];
   entity: any;
   category: any;
+  group: any;
 }
 
 class ProductGroupsList {

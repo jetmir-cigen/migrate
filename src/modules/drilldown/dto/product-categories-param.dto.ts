@@ -1,4 +1,4 @@
-import { IsNumber, IsEnum } from 'class-validator';
+import { IsEnum, IsNumberString } from 'class-validator';
 
 export enum DrillDownServiceType {
   FRAME_AGREEMENT = 'frame-agreement',
@@ -10,12 +10,12 @@ export class ProductCategoriesParamDto {
   @IsEnum(DrillDownServiceType)
   type: DrillDownServiceType;
 
-  @IsNumber()
+  @IsNumberString()
   typeId: number;
 
-  @IsNumber()
+  @IsNumberString()
   year: number;
 
-  @IsNumber()
+  @IsNumberString()
   period: number;
 }

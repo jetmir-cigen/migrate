@@ -8,34 +8,26 @@ import { GetProductCategoriesQuery } from '@/modules/drilldown/queries/get-produ
 import { AuthUser } from '@/modules/auth/auth-user.decorator';
 import { ProductGroupsParamDto } from '@/modules/drilldown/dto/product-groups-param.dto';
 import { GetProductGroupsQuery } from '@/modules/drilldown/queries/get-product-groups.query';
-import {
-  ListTotalDto,
-  ListProductCategoriesDto,
-  ProductGroupsListDto,
-} from './dto';
+import { ListTotalDto, ListProductCategoriesDto, GroupsListDto } from './dto';
 import { QueryService } from '@/modules/query/query.service';
 import { ProductGroupsCategoriesParamDto } from '@/modules/drilldown/dto/product-groups-categories-param.dto';
 import { GetProductGroupsCategoriesQuery } from '@/modules/drilldown/queries/get-product-groups-categories.query';
+import { ProductListDto } from './dto/product-list.dto';
 
-@Controller('drilldown')
+@Controller('drill-down')
 @UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
 export class DrillDownController {
   constructor(readonly queryService: QueryService) {}
-  @Get('/total/:year/:period')
-  async getTotal(
-    @Param() { year, period },
-    @AuthUser() user: Express.User,
-  ): Promise<ListTotalDto[]> {
-    return this.queryService.execute(new GetTotalQuery({ year, period, user }));
-  }
 
-  @Get('/:type/:typeId/:year/:period')
-  async getProductCategories(
-    @Param() params: ProductCategoriesParamDto,
+  @Get(
+    '/:type/:typeId/:year/:period/categories/:productCategoryId/groups/:productGroupId',
+  )
+  async getProducts(
+    @Param() params: ProductGroupsCategoriesParamDto,
     @AuthUser() user: Express.User,
-  ): Promise<ListProductCategoriesDto[]> {
+  ): Promise<ProductListDto> {
     return this.queryService.execute(
-      new GetProductCategoriesQuery(params, user),
+      new GetProductGroupsCategoriesQuery(params, user),
     );
   }
 
@@ -44,19 +36,25 @@ export class DrillDownController {
     @Param()
     params: ProductGroupsParamDto,
     @AuthUser() user: Express.User,
-  ): Promise<ProductGroupsListDto[]> {
+  ): Promise<GroupsListDto> {
     return this.queryService.execute(new GetProductGroupsQuery(params, user));
   }
 
-  @Get(
-    '/:type/:typeId/:year/:period/categories/:productCategoryId/groups/:productGroupId',
-  )
-  async getCostObjects(
-    @Param() params: ProductGroupsCategoriesParamDto,
+  @Get('/:type/:typeId/:year/:period')
+  async getProductCategories(
+    @Param() params: ProductCategoriesParamDto,
     @AuthUser() user: Express.User,
-  ): Promise<ProductGroupsListDto[]> {
-    return this.queryService.execute(
-      new GetProductGroupsCategoriesQuery(params, user),
+  ): Promise<ListProductCategoriesDto> {
+    return await this.queryService.execute(
+      new GetProductCategoriesQuery(params, user),
     );
+  }
+
+  @Get('/total/:year/:period')
+  async getTotal(
+    @Param() { year, period },
+    @AuthUser() user: Express.User,
+  ): Promise<ListTotalDto[]> {
+    return this.queryService.execute(new GetTotalQuery({ year, period, user }));
   }
 }

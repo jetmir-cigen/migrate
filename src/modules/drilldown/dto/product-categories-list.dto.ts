@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ListProductCategoriesDto {
+  rows: ListDto[];
+  entity: any;
+}
+
+class ListDto {
   @ApiProperty({
     description: 'Amount.',
     type: 'number',
