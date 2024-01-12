@@ -65,6 +65,9 @@ export class InvoiceRowViewEntity {
   @ViewColumn({ name: 'vendor_id' })
   vendorId: number;
 
+  @ViewColumn({ name: 'department_id' })
+  departmentId: number;
+
   @ViewColumn({ name: 'customer_id' })
   customerId: number;
 
