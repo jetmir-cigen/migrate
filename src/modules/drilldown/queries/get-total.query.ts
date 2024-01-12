@@ -7,6 +7,7 @@ import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DrillDownService } from '@/modules/drilldown/drilldown.service';
+import { InvoiceRowViewEntity } from '@/common/views/invoice-row-view.entity';
 
 type QueryFilters = {
   year: number;
@@ -44,29 +45,46 @@ export class GetTotalQueryHandler
   async execute({ filters }: GetTotalQuery) {
     const { year, period, user } = filters;
     const customersAccessList =
-      await this.drillDownService.getCustomerAccessList(user.uid);
-    return this.viewCustomerRepository.query(
-      `
-      SELECT SUM(ir.amount) AS amount,
-                        SUM(ir.salary_deduction_amount) AS salaryDeductionAmount,
-                        c.id AS customerId,
-                        c.name AS customerName,
-                        c.org_no AS customerOrgNo,
-                        c.customer_head_id AS customerHeadId,
-                        c.customer_head_name AS customerHeadName,
-                        c.customer_head_frame_agreement_id AS customerHeadFrameAgreementId,
-                        c.customer_head_frame_agreement_name AS customerHeadFrameAgreementName
-            FROM        view.customer c
-            LEFT JOIN   view.invoice_row ir ON ir.customer_id = c.id ${this.drillDownService.getPeriodFilter(
-              year,
-              period,
-            )}
-            AND         ir.vendor_id != 1
-            AND         ir.cost_object_type != 'C'
-            WHERE       c.id IN(${customersAccessList})
-            GROUP BY    c.id
-            ORDER BY    SUM(ir.amount) DESC
-    `,
-    );
+      await this.drillDownService.getCustomerAccessListArr(user.uid);
+
+    const query = this.viewCustomerRepository.createQueryBuilder('c');
+
+    if (period > 0) {
+      query.leftJoinAndSelect(
+        InvoiceRowViewEntity,
+        'ir',
+        `ir.customer_id = c.id AND YEAR(ir.date) = :year AND MONTH(ir.date) = :period AND ir.vendor_id != 1 AND ir.cost_object_type != 'C'`,
+        { year, period },
+      );
+    } else {
+      query.leftJoinAndSelect(
+        InvoiceRowViewEntity,
+        'ir',
+        `ir.customer_id = c.id AND YEAR(ir.date) = :year AND ir.vendor_id != 1 AND ir.cost_object_type != 'C'`,
+        { year },
+      );
+    }
+
+    query
+      .select('SUM(ir.amount)', 'amount')
+      .addSelect('SUM(ir.salary_deduction_amount)', 'salaryDeductionAmount')
+      .addSelect('c.id', 'customerId')
+      .addSelect('c.name', 'customerName')
+      .addSelect('c.org_no', 'customerOrgNo')
+      .addSelect('c.customer_head_id', 'customerHeadId')
+      .addSelect('c.customer_head_name', 'customerHeadName')
+      .addSelect(
+        'c.customer_head_frame_agreement_id',
+        'customerHeadFrameAgreementId',
+      )
+      .addSelect(
+        'c.customer_head_frame_agreement_name',
+        'customerHeadFrameAgreementName',
+      )
+      .where(`c.id IN (:...customersAccessList)`, { customersAccessList })
+      .groupBy('c.id')
+      .orderBy('SUM(ir.amount)', 'DESC');
+
+    return query.getRawMany();
   }
 }
