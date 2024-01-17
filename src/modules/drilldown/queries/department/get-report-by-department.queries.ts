@@ -4,12 +4,14 @@ import {
   QueryInterface,
 } from '@/common/query.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
 import { Repository } from 'typeorm';
 import { DrillDownServiceType } from '@/modules/drilldown/dto';
 import { DrillDownService } from '../../drilldown.service';
-import { InvoiceRowViewEntity } from '@/common/views/invoice-row-view.entity';
 import { DepartmentEntity } from '@/modules/department/entities/department.entity';
+import { InvoiceRowEntity } from '@/modules/invoice/entities/invoice-row.entity';
+import { InvoiceEntity } from '@/modules/invoice/entities/invoice.entity';
+import { VendorEntity } from '@/common/entities/vendor.entity';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 
 type QueryFilters = {
   year: number;
@@ -43,12 +45,8 @@ export class GetReportByDepartmentQueryHandler
   implements QueryHandlerInterface<GetReportByDepartmentQuery>
 {
   constructor(
-    @InjectRepository(CustomerViewEntity)
-    readonly customerViewRepository: Repository<CustomerViewEntity>,
-    @InjectRepository(InvoiceRowViewEntity)
-    readonly invoiceRowRepository: Repository<InvoiceRowViewEntity>,
-    @InjectRepository(DepartmentEntity)
-    readonly departmentRepository: Repository<DepartmentEntity>,
+    @InjectRepository(InvoiceRowEntity)
+    readonly repository: Repository<InvoiceRowEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
   async execute({
@@ -63,39 +61,37 @@ export class GetReportByDepartmentQueryHandler
     const customersAccessList =
       await this.drillDownService.getCustomerAccessListArr(user.uid);
 
-    const query = this.invoiceRowRepository
+    const query = this.repository
       .createQueryBuilder('ir')
       .select('SUM(ir.amount)', 'amount')
       .addSelect('SUM(ir.salary_deduction_amount)', 'salaryDeductionAmount')
       .addSelect('d.id', 'departmentId')
       .addSelect('d.name', 'departmentName')
       .addSelect('d.code', 'departmentCode')
-      .leftJoin(DepartmentEntity, 'd', 'd.id = ir.departmentId')
-      .innerJoin(CustomerViewEntity, 'c', 'c.id = ir.customer_id')
-      .where(`c.id IN (:...customersAccessList)`, { customersAccessList })
-      .andWhere(`ir.vendor_id != 1`)
-      .andWhere(`ir.cost_object_type != 'C'`)
-      .andWhere(`YEAR(ir.date) = :year`, { year });
+      .innerJoin(
+        InvoiceEntity,
+        'i',
+        `i.id = ir.invoice_id ${this.drillDownService.getPeriodFilter(
+          year,
+          period,
+        )}`,
+      )
+      .innerJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
+      .innerJoin(
+        CostObjectEntity,
+        'co',
+        'co.id = ir.cost_object_id AND co.type != "C"',
+      )
+      .innerJoin(DepartmentEntity, 'd', 'd.id = co.department_id');
 
-    if (period > 0) {
-      query.andWhere(`MONTH(ir.date) = :period`, { period });
-    }
+    this.drillDownService.getOrgFilterJoin(
+      query,
+      frameAgreementId,
+      customerHeadId,
+      customerId,
+    );
 
-    if (frameAgreementId) {
-      query.andWhere(`c.customer_head_frame_agreement_id = :frameAgreementId`, {
-        frameAgreementId,
-      });
-    }
-
-    if (customerHeadId) {
-      query.andWhere(`c.customer_head_id = :customerHeadId`, {
-        customerHeadId,
-      });
-    }
-
-    if (customerId) {
-      query.andWhere(`c.id = :customerId`, { customerId });
-    }
+    query.where(`c.id IN (:...customersAccessList)`, { customersAccessList });
 
     query.groupBy('d.id').orderBy('SUM(ir.amount)', 'DESC');
 
