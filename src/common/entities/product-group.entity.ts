@@ -8,7 +8,7 @@ import {
 import { ProductCategoryEntity } from './product-category.entity';
 import { CountryEntity } from './country.entity';
 
-@Entity({ name: 'product_group' })
+@Entity({ name: 'control.product_group' })
 export class ProductGroupEntity {
   @PrimaryGeneratedColumn()
   id: number;

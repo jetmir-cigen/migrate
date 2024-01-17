@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { InvoiceRowEntity } from './invoice-row.entity';
 
-@Entity({ name: 'invoice', schema: 'control' })
+@Entity({ name: 'control.invoice', schema: 'control' })
 @Index('uk_invoices_vendor_id_invoice_no', ['vendorId', 'invoiceNo'], {
   unique: true,
 })
