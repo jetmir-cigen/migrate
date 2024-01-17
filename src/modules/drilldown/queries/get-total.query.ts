@@ -3,11 +3,16 @@ import {
   QueryInterface,
 } from '@/common/query.interface';
 import { QueryHandler } from '@nestjs/cqrs';
-import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DrillDownService } from '@/modules/drilldown/drilldown.service';
-import { InvoiceRowViewEntity } from '@/common/views/invoice-row-view.entity';
+import { InvoiceRowEntity } from '@/modules/invoice/entities/invoice-row.entity';
+import { InvoiceEntity } from '@/modules/invoice/entities/invoice.entity';
+import { VendorEntity } from '@/common/entities/vendor.entity';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
+import { CustomerHeadFrameAgreementEntity } from '@/common/entities/customer-head-frame-agreement.entity';
 
 type QueryFilters = {
   year: number;
@@ -38,8 +43,8 @@ export class GetTotalQueryHandler
   implements QueryHandlerInterface<GetTotalQuery>
 {
   constructor(
-    @InjectRepository(CustomerViewEntity)
-    readonly viewCustomerRepository: Repository<CustomerViewEntity>,
+    @InjectRepository(CustomerEntity)
+    readonly repository: Repository<CustomerEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
   async execute({ filters }: GetTotalQuery) {
@@ -47,44 +52,49 @@ export class GetTotalQueryHandler
     const customersAccessList =
       await this.drillDownService.getCustomerAccessListArr(user.uid);
 
-    const query = this.viewCustomerRepository.createQueryBuilder('c');
-
-    if (period > 0) {
-      query.leftJoinAndSelect(
-        InvoiceRowViewEntity,
-        'ir',
-        `ir.customer_id = c.id AND YEAR(ir.date) = :year AND MONTH(ir.date) = :period AND ir.vendor_id != 1 AND ir.cost_object_type != 'C'`,
-        { year, period },
-      );
-    } else {
-      query.leftJoinAndSelect(
-        InvoiceRowViewEntity,
-        'ir',
-        `ir.customer_id = c.id AND YEAR(ir.date) = :year AND ir.vendor_id != 1 AND ir.cost_object_type != 'C'`,
-        { year },
-      );
-    }
-
-    query
-      .select('SUM(ir.amount)', 'amount')
-      .addSelect('SUM(ir.salary_deduction_amount)', 'salaryDeductionAmount')
+    const query = this.repository
+      .createQueryBuilder('c')
+      .select('SUM(IFNULL(ir.amount, 0))', 'amount')
+      .addSelect(
+        'SUM(IFNULL(ir.salary_deduction_amount, 0))',
+        'salaryDeductionAmount',
+      )
       .addSelect('c.id', 'customerId')
       .addSelect('c.name', 'customerName')
       .addSelect('c.org_no', 'customerOrgNo')
-      .addSelect('c.customer_head_id', 'customerHeadId')
-      .addSelect('c.customer_head_name', 'customerHeadName')
-      .addSelect(
-        'c.customer_head_frame_agreement_id',
-        'customerHeadFrameAgreementId',
+      .addSelect('ch.id', 'customerHeadId')
+      .addSelect('ch.name', 'customerHeadName')
+      .addSelect('chfa.id', 'customerHeadFrameAgreementId')
+      .addSelect('chfa.name', 'customerHeadFrameAgreementName')
+      .innerJoin(CustomerHeadEntity, 'ch', 'c.customer_head_id = ch.id')
+      .innerJoin(
+        CustomerHeadFrameAgreementEntity,
+        'chfa',
+        'ch.customer_head_frame_agreement_id = chfa.id',
       )
-      .addSelect(
-        'c.customer_head_frame_agreement_name',
-        'customerHeadFrameAgreementName',
+      .leftJoin(
+        InvoiceEntity,
+        'i',
+        `i.customer_id = c.id ${this.drillDownService.getPeriodFilter(
+          year,
+          period,
+        )}`,
       )
-      .where(`c.id IN (:...customersAccessList)`, { customersAccessList })
-      .groupBy('c.id')
-      .orderBy('SUM(ir.amount)', 'DESC');
+      .leftJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
+      .leftJoin(InvoiceRowEntity, 'ir', `ir.invoice_id = i.id`)
+      .leftJoin(
+        CostObjectEntity,
+        'co',
+        'co.id = ir.cost_object_id AND co.type != "C"',
+      )
+      .where(`c.id IN (:...customersAccessList)`, { customersAccessList });
 
-    return query.getRawMany();
+    query.groupBy('c.id').orderBy('SUM(ir.amount)', 'DESC');
+
+    const result = await query.getRawMany();
+
+    console.log(result.reduce((acc, item) => acc + Number(item.amount), 0));
+
+    return result;
   }
 }
