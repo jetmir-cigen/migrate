@@ -4,11 +4,16 @@ import {
   QueryInterface,
 } from '@/common/query.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
 import { Repository } from 'typeorm';
 import { DrillDownServiceType } from '@/modules/drilldown/dto';
 import { DrillDownService } from '../../drilldown.service';
-import { InvoiceRowViewEntity } from '@/common/views/invoice-row-view.entity';
+import { InvoiceRowEntity } from '@/modules/invoice/entities/invoice-row.entity';
+import { ProductCategoryEntity } from '@/common/entities/product-category.entity';
+import { ProductGroupEntity } from '@/common/entities/product-group.entity';
+import { InvoiceEntity } from '@/modules/invoice/entities/invoice.entity';
+import { VendorEntity } from '@/common/entities/vendor.entity';
+import { ProductEntity } from '@/common/entities/product.entity';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 
 type QueryFilters = {
   year: number;
@@ -32,6 +37,7 @@ type ResultType = {
   entity: any;
   category: any;
   group: any;
+  product: any;
 };
 
 export class CostObjectsServiceCategoryAndGroupReportQuery
@@ -50,10 +56,14 @@ export class CostObjectsServiceCategoryAndGroupReportQueryHandler
     QueryHandlerInterface<CostObjectsServiceCategoryAndGroupReportQuery>
 {
   constructor(
-    @InjectRepository(CustomerViewEntity)
-    readonly customerViewRepository: Repository<CustomerViewEntity>,
-    @InjectRepository(InvoiceRowViewEntity)
-    readonly invoiceRowRepository: Repository<InvoiceRowViewEntity>,
+    @InjectRepository(InvoiceRowEntity)
+    readonly repository: Repository<InvoiceRowEntity>,
+    @InjectRepository(ProductCategoryEntity)
+    readonly categoryRepository: Repository<ProductCategoryEntity>,
+    @InjectRepository(ProductGroupEntity)
+    readonly groupRepository: Repository<ProductGroupEntity>,
+    @InjectRepository(ProductEntity)
+    readonly productRepository: Repository<ProductEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
   async execute({
@@ -76,44 +86,64 @@ export class CostObjectsServiceCategoryAndGroupReportQueryHandler
     const customersAccessList =
       await this.drillDownService.getCustomerAccessListArr(user.uid);
 
-    const query = this.invoiceRowRepository
+    const query = this.repository
       .createQueryBuilder('ir')
       .select('SUM(ir.amount)', 'amount')
       .addSelect('SUM(ir.salary_deduction_amount)', 'salaryDeductionAmount')
-      .addSelect('ir.cost_object_id', 'costObjectId')
-      .addSelect('ir.cost_object_name', 'costObjectName')
+      .addSelect('co.id', 'costObjectId')
+      .addSelect('co.name', 'costObjectName')
       .addSelect('ir.from_period', 'fromPeriod')
       .addSelect('ir.to_period', 'toPeriod')
       .addSelect('ir.quantity', 'quantity')
-      .innerJoin(CustomerViewEntity, 'c', 'c.id = ir.customer_id')
-      .where(`c.id IN (:...customersAccessList)`, { customersAccessList })
-      .andWhere(`ir.vendor_id != 1`)
-      .andWhere(`ir.cost_object_type != 'C'`)
-      .andWhere('ir.product_id = :productId', { productId })
+      .innerJoin(
+        InvoiceEntity,
+        'i',
+        `i.id = ir.invoice_id ${this.drillDownService.getPeriodFilter(
+          year,
+          period,
+        )}`,
+      )
+      .innerJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
+      .innerJoin(
+        ProductEntity,
+        'p',
+        'p.id = ir.product_id AND p.id = :productId',
+        {
+          productId,
+        },
+      )
+      .innerJoin(
+        ProductGroupEntity,
+        'pg',
+        'pg.id = p.product_group_id AND pg.id = :productGroupId',
+        {
+          productGroupId,
+        },
+      )
+      .innerJoin(
+        ProductCategoryEntity,
+        'pc',
+        'pc.id = pg.product_category_id AND pc.id = :productCategoryId',
+        {
+          productCategoryId,
+        },
+      )
+      .innerJoin(
+        CostObjectEntity,
+        'co',
+        'co.id = ir.cost_object_id AND co.type != "C"',
+      );
 
-      .andWhere(`YEAR(ir.date) = :year`, { year });
+    this.drillDownService.getOrgFilterJoin(
+      query,
+      frameAgreementId,
+      customerHeadId,
+      customerId,
+    );
 
-    if (period > 0) {
-      query.andWhere(`MONTH(ir.date) = :period`, {
-        period,
-      });
-    }
+    query.where('c.id IN (:...customersAccessList)', { customersAccessList });
 
-    if (frameAgreementId) {
-      query.andWhere(`c.customer_head_frame_agreement_id = :frameAgreementId`, {
-        frameAgreementId,
-      });
-    }
-    if (customerHeadId) {
-      query.andWhere(`c.customer_head_id = :customerHeadId`, {
-        customerHeadId,
-      });
-    }
-    if (customerId) {
-      query.andWhere(`c.id = :customerId`, { customerId });
-    }
-
-    query.groupBy('ir.cost_object_id').orderBy('SUM(ir.amount)', 'DESC');
+    query.groupBy('co.id').orderBy('SUM(ir.amount)', 'DESC');
 
     const rowsPromise = query.getRawMany();
 
@@ -123,16 +153,27 @@ export class CostObjectsServiceCategoryAndGroupReportQueryHandler
       typeId,
     );
 
-    const categoryPromise =
-      this.drillDownService.getCategory(productCategoryId);
+    const categoryPromise = this.categoryRepository.findOne({
+      where: { id: productCategoryId },
+      select: ['id', 'name'],
+    });
 
-    const groupPromise = this.drillDownService.getGroup(productGroupId);
+    const groupPromise = this.groupRepository.findOne({
+      where: { id: productGroupId },
+      select: ['id', 'name'],
+    });
 
-    const [rows, entity, category, group] = await Promise.all([
+    const productPromise = this.productRepository.findOne({
+      where: { id: productId },
+      select: ['id', 'name'],
+    });
+
+    const [rows, entity, category, group, product] = await Promise.all([
       rowsPromise,
       entityPromise,
       categoryPromise,
       groupPromise,
+      productPromise,
     ]);
 
     return {
@@ -140,6 +181,7 @@ export class CostObjectsServiceCategoryAndGroupReportQueryHandler
       entity,
       category,
       group,
+      product,
     };
   }
 }

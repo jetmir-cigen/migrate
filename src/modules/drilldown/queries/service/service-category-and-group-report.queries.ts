@@ -4,11 +4,16 @@ import {
   QueryInterface,
 } from '@/common/query.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
 import { Repository } from 'typeorm';
 import { DrillDownServiceType } from '@/modules/drilldown/dto';
 import { DrillDownService } from '../../drilldown.service';
-import { InvoiceRowViewEntity } from '@/common/views/invoice-row-view.entity';
+import { InvoiceRowEntity } from '@/modules/invoice/entities/invoice-row.entity';
+import { InvoiceEntity } from '@/modules/invoice/entities/invoice.entity';
+import { VendorEntity } from '@/common/entities/vendor.entity';
+import { ProductEntity } from '@/common/entities/product.entity';
+import { ProductGroupEntity } from '@/common/entities/product-group.entity';
+import { ProductCategoryEntity } from '@/common/entities/product-category.entity';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 
 type QueryFilters = {
   year: number;
@@ -30,6 +35,7 @@ type ResultType = {
   rows: List[];
   entity: any;
   category: any;
+  group: any;
 };
 
 export class ServiceCategoryAndGroupReportQuery implements QueryInterface {
@@ -45,10 +51,12 @@ export class ServiceCategoryAndGroupReportQueryHandler
   implements QueryHandlerInterface<ServiceCategoryAndGroupReportQuery>
 {
   constructor(
-    @InjectRepository(CustomerViewEntity)
-    readonly customerViewRepository: Repository<CustomerViewEntity>,
-    @InjectRepository(InvoiceRowViewEntity)
-    readonly invoiceRowRepository: Repository<InvoiceRowViewEntity>,
+    @InjectRepository(InvoiceRowEntity)
+    readonly repository: Repository<InvoiceRowEntity>,
+    @InjectRepository(ProductCategoryEntity)
+    readonly categoryRepository: Repository<ProductCategoryEntity>,
+    @InjectRepository(ProductGroupEntity)
+    readonly groupRepository: Repository<ProductGroupEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
   async execute({
@@ -64,44 +72,54 @@ export class ServiceCategoryAndGroupReportQueryHandler
     const customersAccessList =
       await this.drillDownService.getCustomerAccessListArr(user.uid);
 
-    const query = this.invoiceRowRepository
+    const query = this.repository
       .createQueryBuilder('ir')
       .select('SUM(ir.amount)', 'amount')
       .addSelect('SUM(ir.salary_deduction_amount)', 'salaryDeductionAmount')
-      .addSelect('ir.product_id', 'productId')
-      .addSelect('ir.product_name', 'productName')
-      .addSelect('ir.product_group_id', 'productGroupId')
-      .innerJoin(CustomerViewEntity, 'c', 'c.id = ir.customer_id')
-      .where(`c.id IN (:...customersAccessList)`, { customersAccessList })
-      .andWhere(`ir.vendor_id != 1`)
-      .andWhere(`ir.cost_object_type != 'C'`)
-      .andWhere(`ir.product_category_id = :productCategoryId`, {
-        productCategoryId,
-      })
-      .andWhere('ir.product_group_id = :productGroupId', { productGroupId })
-      .andWhere(`YEAR(ir.date) = :year`, { year });
+      .addSelect('p.id', 'productId')
+      .addSelect('p.name', 'productName')
+      .innerJoin(
+        InvoiceEntity,
+        'i',
+        `i.id = ir.invoice_id ${this.drillDownService.getPeriodFilter(
+          year,
+          period,
+        )}`,
+      )
+      .innerJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
+      .innerJoin(ProductEntity, 'p', 'p.id = ir.product_id')
+      .innerJoin(
+        ProductGroupEntity,
+        'pg',
+        'pg.id = p.product_group_id AND pg.id = :productGroupId',
+        {
+          productGroupId,
+        },
+      )
+      .innerJoin(
+        ProductCategoryEntity,
+        'pc',
+        'pc.id = pg.product_category_id AND pc.id = :productCategoryId',
+        {
+          productCategoryId,
+        },
+      )
+      .innerJoin(
+        CostObjectEntity,
+        'co',
+        'co.id = ir.cost_object_id AND co.type != "C"',
+      );
 
-    if (period > 0) {
-      query.andWhere(`MONTH(ir.date) = :period`, {
-        period,
-      });
-    }
+    this.drillDownService.getOrgFilterJoin(
+      query,
+      frameAgreementId,
+      customerHeadId,
+      customerId,
+    );
 
-    if (frameAgreementId) {
-      query.andWhere(`c.customer_head_frame_agreement_id = :frameAgreementId`, {
-        frameAgreementId,
-      });
-    }
-    if (customerHeadId) {
-      query.andWhere(`c.customer_head_id = :customerHeadId`, {
-        customerHeadId,
-      });
-    }
-    if (customerId) {
-      query.andWhere(`c.id = :customerId`, { customerId });
-    }
+    query.where('c.id IN (:...customersAccessList)', { customersAccessList });
 
-    query.groupBy('ir.product_id').orderBy('SUM(ir.amount)', 'DESC');
+    query.groupBy('p.id').orderBy('SUM(ir.amount)', 'DESC');
 
     const rowsPromise = query.getRawMany();
 
@@ -111,19 +129,28 @@ export class ServiceCategoryAndGroupReportQueryHandler
       typeId,
     );
 
-    const categoryPromise =
-      this.drillDownService.getCategory(productCategoryId);
+    const categoryPromise = this.categoryRepository.findOne({
+      where: { id: productCategoryId },
+      select: ['id', 'name'],
+    });
 
-    const [rows, entity, category] = await Promise.all([
+    const groupPromise = this.groupRepository.findOne({
+      where: { id: productGroupId },
+      select: ['id', 'name'],
+    });
+
+    const [rows, entity, category, group] = await Promise.all([
       rowsPromise,
       entityPromise,
       categoryPromise,
+      groupPromise,
     ]);
 
     return {
       rows,
       entity,
       category,
+      group,
     };
   }
 }
