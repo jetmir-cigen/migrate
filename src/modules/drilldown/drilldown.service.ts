@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { DrillDownServiceType } from '@/modules/drilldown/dto/product-categories-param.dto';
 import { ManagerAccessFrameAgreementViewEntity } from '@/common/views';
+import { CustomerEntity } from '../customer/entities/customer.entity';
+import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
+import { CustomerHeadFrameAgreementEntity } from '@/common/entities/customer-head-frame-agreement.entity';
 
 @Injectable()
 export class DrillDownService {
@@ -31,8 +34,8 @@ export class DrillDownService {
 
   getPeriodFilter(year: number, period: number): string {
     return period <= 0
-      ? `AND YEAR(ir.date) = ${year}`
-      : `AND (YEAR(ir.date) = ${year} AND MONTH(ir.date) = ${period})`;
+      ? `AND YEAR(i.date) = ${year}`
+      : `AND (YEAR(i.date) = ${year} AND MONTH(i.date) = ${period})`;
   }
 
   getOrgFilter(
@@ -47,6 +50,70 @@ export class DrillDownService {
       return ` AND c.customer_head_id = ${customerHeadId} `;
     }
     return ` AND c.id = ${customerId} `;
+  }
+
+  joinCustomer = (
+    query: SelectQueryBuilder<any>,
+
+    condition: string,
+    parameters?: Record<string, any>,
+  ) => {
+    query.innerJoin(CustomerEntity, 'c', condition, parameters);
+  };
+
+  joinCustomerHead = (
+    query: SelectQueryBuilder<any>,
+    condition: string,
+    parameters?: Record<string, any>,
+  ) => {
+    query.innerJoin(CustomerHeadEntity, 'ch', condition, parameters);
+  };
+
+  joinCustomerHeadFrameAgreement = (
+    query: SelectQueryBuilder<any>,
+    condition: string,
+    parameters?: Record<string, any>,
+  ) => {
+    query.innerJoin(
+      CustomerHeadFrameAgreementEntity,
+      'chfa',
+      condition,
+      parameters,
+    );
+  };
+
+  getOrgFilterJoin(
+    query: SelectQueryBuilder<any>,
+    frameAgreementId: number,
+    customerHeadId: number,
+    customerId: number,
+  ) {
+    customerId
+      ? this.joinCustomer(
+          query,
+          'c.id = i.customer_id AND c.id = :customerId',
+          { customerId },
+        )
+      : this.joinCustomer(query, 'c.id = i.customer_id');
+
+    customerHeadId
+      ? this.joinCustomerHead(
+          query,
+          'c.customer_head_id = ch.id AND ch.id = :customerHeadId',
+          { customerHeadId },
+        )
+      : this.joinCustomerHead(query, 'c.customer_head_id = ch.id');
+
+    frameAgreementId
+      ? this.joinCustomerHeadFrameAgreement(
+          query,
+          'ch.customer_head_frame_agreement_id = chfa.id AND chfa.id = :frameAgreementId',
+          { frameAgreementId },
+        )
+      : this.joinCustomerHeadFrameAgreement(
+          query,
+          'ch.customer_head_frame_agreement_id = chfa.id',
+        );
   }
 
   getTypes(type: DrillDownServiceType, typeId: number) {
