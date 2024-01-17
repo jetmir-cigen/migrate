@@ -4,12 +4,14 @@ import {
   QueryInterface,
 } from '@/common/query.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CustomerViewEntity } from '@/common/entities/customer-view.entity';
 import { Repository } from 'typeorm';
 import { DrillDownServiceType } from '@/modules/drilldown/dto';
 import { DrillDownService } from '../../drilldown.service';
-import { InvoiceRowViewEntity } from '@/common/views/invoice-row-view.entity';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { InvoiceRowEntity } from '@/modules/invoice/entities/invoice-row.entity';
+import { InvoiceEntity } from '@/modules/invoice/entities/invoice.entity';
+import { VendorEntity } from '@/common/entities/vendor.entity';
+import { ProductEntity } from '@/common/entities/product.entity';
 
 type QueryFilters = {
   year: number;
@@ -46,9 +48,9 @@ export class GetProductReportByCostObjectQueryHandler
 {
   constructor(
     @InjectRepository(CostObjectEntity)
-    readonly repository: Repository<CostObjectEntity>,
-    @InjectRepository(InvoiceRowViewEntity)
-    readonly invoiceRowRepository: Repository<InvoiceRowViewEntity>,
+    readonly coRepository: Repository<CostObjectEntity>,
+    @InjectRepository(InvoiceRowEntity)
+    readonly repository: Repository<InvoiceRowEntity>,
     readonly drillDownService: DrillDownService,
   ) {}
   async execute({
@@ -63,47 +65,42 @@ export class GetProductReportByCostObjectQueryHandler
     const customersAccessList =
       await this.drillDownService.getCustomerAccessListArr(user.uid);
 
-    const query = this.invoiceRowRepository
+    const query = this.repository
       .createQueryBuilder('ir')
       .select('SUM(ir.amount)', 'amount')
       .addSelect('SUM(ir.salary_deduction_amount)', 'salaryDeductionAmount')
       .addSelect('ir.from_period', 'fromPeriod')
       .addSelect('ir.to_period', 'toPeriod')
       .addSelect('ir.quantity', 'quantity')
-      .addSelect('ir.product_category_id', 'productCategoryId')
-      .addSelect('ir.product_category_name', 'productCategoryName')
-      .addSelect('ir.product_group_id', 'productGroupId')
-      .addSelect('ir.product_group_name', 'productGroupName')
-      .addSelect('ir.product_id', 'productId')
-      .addSelect('ir.product_name', 'productName')
-      .innerJoin(CustomerViewEntity, 'c', 'c.id = ir.customer_id')
-      .where(`c.id IN (:...customersAccessList)`, { customersAccessList })
-      .andWhere(`ir.vendor_id != 1`)
-      .andWhere(`ir.cost_object_type != 'C'`)
-      .andWhere(`ir.cost_object_id = :costObjectId`, { costObjectId })
-      .andWhere(`YEAR(ir.date) = :year`, { year });
+      .addSelect('p.id', 'productId')
+      .addSelect('p.name', 'productName')
+      .innerJoin(
+        InvoiceEntity,
+        'i',
+        `i.id = ir.invoice_id ${this.drillDownService.getPeriodFilter(
+          year,
+          period,
+        )}`,
+      )
+      .innerJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
+      .innerJoin(
+        CostObjectEntity,
+        'co',
+        'co.id = ir.cost_object_id AND co.type != "C" and co.id = :costObjectId',
+        { costObjectId },
+      )
+      .innerJoin(ProductEntity, 'p', 'p.id = ir.product_id');
 
-    if (period > 0) {
-      query.andWhere(`MONTH(ir.date) = :period`, { period });
-    }
+    this.drillDownService.getOrgFilterJoin(
+      query,
+      frameAgreementId,
+      customerHeadId,
+      customerId,
+    );
 
-    if (frameAgreementId) {
-      query.andWhere(`c.customer_head_frame_agreement_id = :frameAgreementId`, {
-        frameAgreementId,
-      });
-    }
+    query.where(`c.id IN (:...customersAccessList)`, { customersAccessList });
 
-    if (customerHeadId) {
-      query.andWhere(`c.customer_head_id = :customerHeadId`, {
-        customerHeadId,
-      });
-    }
-
-    if (customerId) {
-      query.andWhere(`c.id = :customerId`, { customerId });
-    }
-
-    query.groupBy('ir.product_id').orderBy('SUM(ir.amount)', 'DESC');
+    query.groupBy('p.id').orderBy('SUM(ir.amount)', 'DESC');
 
     const rowsPromise = query.getRawMany();
 
@@ -113,9 +110,9 @@ export class GetProductReportByCostObjectQueryHandler
       typeId,
     );
 
-    const costObjectPromise = this.repository.findOne({
+    const costObjectPromise = this.coRepository.findOne({
       where: { id: costObjectId },
-      select: ['id', 'name'],
+      select: ['id', 'name', 'code'],
     });
 
     const [rows, entity, costObject] = await Promise.all([
