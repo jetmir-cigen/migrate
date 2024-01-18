@@ -1,10 +1,5 @@
 import { IsEnum, IsNumberString } from 'class-validator';
-
-export enum DrillDownServiceType {
-  FRAME_AGREEMENT = 'frame-agreement',
-  CUSTOMER_HEAD = 'customer-head',
-  CUSTOMER = 'customer',
-}
+import { DrillDownServiceType } from '../../types';
 
 export class GetReportByServiceQueryDto {
   @IsEnum(DrillDownServiceType)
