@@ -16,7 +16,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-@Entity('customer')
+@Entity({ name: 'control.customer' })
 export class CustomerEntity {
   @PrimaryGeneratedColumn()
   id: number;

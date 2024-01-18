@@ -15,7 +15,7 @@ import {
 import { TextTemplateEntity } from '@/modules/text-template/entities';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 
-@Entity({ name: 'cost_object', schema: 'control' })
+@Entity({ name: 'control.cost_object', schema: 'control' })
 export class CostObjectEntity {
   @PrimaryGeneratedColumn()
   id: number;

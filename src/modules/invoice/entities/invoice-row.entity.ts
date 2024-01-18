@@ -9,7 +9,7 @@ import {
 import { InvoiceEntity } from './invoice.entity';
 import { ProductEntity } from '@/common/entities/product.entity';
 
-@Entity('invoice_row')
+@Entity({ name: 'control.invoice_row' })
 export class InvoiceRowEntity {
   @PrimaryGeneratedColumn()
   id: number;

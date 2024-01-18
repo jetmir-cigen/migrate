@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { ProductGroupEntity } from './product-group.entity';
 
-@Entity({ name: 'product' })
+@Entity({ name: 'control.product' })
 export class ProductEntity {
   @PrimaryGeneratedColumn()
   id: number;
