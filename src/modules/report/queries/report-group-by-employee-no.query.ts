@@ -27,7 +27,7 @@ export class ReportGroupByEmployeeNoQueryHandler
   async execute(params: ReportGroupByEmployeeNoQuery): Promise<any> {
     const { customerHeadId, customerId, fromDate, toDate } = params;
 
-    return this.dataSource.query(groupByEmployeeNo, [
+    const result = await this.dataSource.query(groupByEmployeeNo, [
       customerId,
       customerHeadId,
       fromDate,
@@ -37,5 +37,10 @@ export class ReportGroupByEmployeeNoQueryHandler
       fromDate,
       toDate,
     ]);
+
+    return result.map((item) => ({
+      ...item,
+      amount: Number(item.amount),
+    }));
   }
 }

@@ -10,7 +10,7 @@ import { AuthGuard } from '@/modules/auth/auth.guard';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { QueryBus } from '@nestjs/cqrs';
 import { AuthUser } from '../auth/auth-user.decorator';
-import { ReportQueryDto } from './dto/get-report.dto';
+import { ReportQueryDto, TaxAdvantageQueryDto } from './dto/get-report.dto';
 import {
   ConsumptionReportQuery,
   ReportGroupByEmployeeNoQuery,
@@ -137,6 +137,9 @@ export class ReportController {
     @Query() query: ReportQueryDto,
   ) {
     const { fromDate, toDate } = query;
+
+    console.log('AccountingReportQuery', { fromDate, toDate });
+
     return this.queryBus.execute(
       new AccountingReportQuery({
         customerId: user.cid,
@@ -158,7 +161,7 @@ export class ReportController {
   @ApiResponse({ status: 200, description: 'Success' })
   getTaxAdvantageReports(
     @AuthUser() user: Express.User,
-    @Query() query: ReportQueryDto,
+    @Query() query: TaxAdvantageQueryDto,
   ) {
     const { year } = query;
     if (!year) {

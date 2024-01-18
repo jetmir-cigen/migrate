@@ -24,11 +24,25 @@ export class AccountingReportQueryHandler
     const { customerHeadId, customerId, fromDate, toDate } = filters;
 
     // Parameters should be in the order of the query string
-    return this.dataSource.query(accountQueryString, [
+    const result = await this.dataSource.query(accountQueryString, [
       customerId,
       customerHeadId,
       fromDate,
       toDate,
     ]);
+
+    return result.map((item) => ({
+      ...item,
+      gross_debit: Number(item.gross_debit),
+      gross_credit: Number(item.gross_credit),
+      net_amount: Number(item.net_amount),
+      vat_amount: Number(item.vat_amount),
+      total_amount: Number(item.total_amount),
+      vendor_net_amount: Number(item.vendor_net_amount),
+      vendor_vat_amount: Number(item.vendor_vat_amount),
+      vendor_gross_amount: Number(item.vendor_gross_amount),
+      netVat: Number(item.netVat),
+      netNoVat: Number(item.netNoVat),
+    }));
   }
 }

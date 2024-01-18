@@ -5,12 +5,12 @@ SELECT name,
         phone_no,
         co_accounting_code,
         down_payments,
-        total_amount,
         currency,
         cover_amount,
         SUM(amount) AS amount,
         is_buyout,
         customer_name,
+        org_no,
         content_service_amount,
         down_payment.customer_id,
         department_code,
@@ -49,6 +49,7 @@ FROM (
                         dpod.amount as amount,
                         dpod.is_buyout as is_buyout,
                         c.name AS customer_name,
+                        c.org_no AS org_no,
                        SUM(IF(p.tax_report = 1,(ir.amount - ir.salary_deduction_amount) + CAST(p.vat = 1 AS SIGNED INTEGER) * (ir.amount - ir.salary_deduction_amount) * p.vat_rate,0)) AS content_service_amount,
                         c.id AS customer_id,
                        d.code AS department_code,
@@ -88,6 +89,7 @@ FROM (
                         odp.amount AS amount,
                         odp.is_buyout AS is_buyout,
                         c.name AS customer_name,
+                        c.org_no AS org_no,
                         SUM(IF(p.tax_report = 1,(ir.amount - ir.salary_deduction_amount) + CAST(p.vat = 1 AS SIGNED INTEGER) * (ir.amount - ir.salary_deduction_amount) * p.vat_rate,0)) AS content_service_amount,
                         c.id AS customer_id,
                         d.code AS department_code,
@@ -333,11 +335,14 @@ GROUP BY co.code
 export const salaryDeductionUsageQueryString = `
  SELECT co.name
      , co.employee_no
+     , co.accounting_code as accounting_code_cost_object
      , co.benefit_mobile
      , co.benefit_mobile_ceiling
      , d.code AS department_code
      , d.name AS department_name
      , c.customer_head_id
+     , c.name AS customer_name
+     , c.org_no
      , cse.project_usage
      , co.dim_1                       AS DIM1
      , co.dim_2                       AS DIM2

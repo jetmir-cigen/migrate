@@ -24,11 +24,19 @@ export class SalaryDeductionUsageReportQueryHandler
     const { customerHeadId, customerId, fromDate, toDate } = filters;
 
     // Parameters should be in the order of the query string
-    return this.dataSource.query(salaryDeductionUsageQueryString, [
-      customerId,
-      customerHeadId,
-      fromDate,
-      toDate,
-    ]);
+    const result = await this.dataSource.query(
+      salaryDeductionUsageQueryString,
+      [customerId, customerHeadId, fromDate, toDate],
+    );
+
+    return result.map((item) => ({
+      ...item,
+      fixed_salary_deduction_amount: Number(item.fixed_salary_deduction_amount),
+      amount: Number(item.amount),
+      vat: Number(item.vat),
+      netVat: Number(item.netVat),
+      netNoVat: Number(item.netNoVat),
+      posts: Number(item.posts),
+    }));
   }
 }

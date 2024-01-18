@@ -23,11 +23,16 @@ export class OffBoardingReportQueryHandler
   async execute({ filters }: OffBoardingReportQuery): Promise<any> {
     const { customerHeadId, customerId, fromDate, toDate } = filters;
     // Parameters should be in the order of the query string
-    return this.dataSource.query(offBoardingQueryString, [
+    const result = await this.dataSource.query(offBoardingQueryString, [
       customerId,
       customerHeadId,
       fromDate,
       toDate,
     ]);
+
+    return result.map((item) => ({
+      ...item,
+      buyout_price: Number(item.buyout_price),
+    }));
   }
 }

@@ -29,10 +29,20 @@ export class TaxAdvantageReportQueryHandler
     const { customerHeadId, customerId, year } = filters;
 
     // Parameters should be in the order of the query string
-    return this.dataSource.query(taxAdvantageQueryString, [
+    const result = await this.dataSource.query(taxAdvantageQueryString, [
       customerId,
       customerHeadId,
       year,
     ]);
+
+    return result.map((item) => ({
+      ...item,
+      amount: Number(item.amount),
+      amount_ex_mva: Number(item.amount_ex_mva),
+      salary_deduction_amount: Number(item.salary_deduction_amount),
+      salary_deduction_amount_vat: Number(item.salary_deduction_amount_vat),
+      content_service_amount: Number(item.content_service_amount),
+      cost_elements: Number(item.cost_elements),
+    }));
   }
 }

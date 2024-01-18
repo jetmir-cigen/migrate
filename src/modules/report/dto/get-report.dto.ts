@@ -15,3 +15,9 @@ export class ReportQueryDto {
   @Type(() => Number)
   year?: number;
 }
+
+export class TaxAdvantageQueryDto {
+  @IsInt()
+  @Type(() => Number)
+  year: number;
+}

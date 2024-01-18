@@ -23,7 +23,7 @@ export class ReportGroupByOrderQueryHandler
   async execute({ filters }: ReportGroupByOrderQuery): Promise<any> {
     const { customerHeadId, customerId, fromDate, toDate } = filters;
 
-    return this.dataSource.query(groupByOrder, [
+    const data = await this.dataSource.query(groupByOrder, [
       customerId,
       customerHeadId,
       fromDate,
@@ -33,5 +33,17 @@ export class ReportGroupByOrderQueryHandler
       fromDate,
       toDate,
     ]);
+
+    return data.map((item) => ({
+      ...item,
+      down_payments: Number(item.down_payments),
+      total_amount: Number(item.total_amount),
+      cover_amount: Number(item.cover_amount),
+      amount: Number(item.amount),
+      content_service_amount: Number(item.content_service_amount),
+      netVat: Number(item.netVat),
+      remainder_amount: Number(item.remainder_amount),
+      fixed_salary_deduction_amount: Number(item.fixed_salary_deduction_amount),
+    }));
   }
 }
