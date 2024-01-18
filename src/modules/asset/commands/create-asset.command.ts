@@ -22,6 +22,7 @@ export class CreateAssetCommand implements ICommand {
       typeId: number;
       comment: string;
       cost: number;
+      received: string;
       user: Express.User;
     },
   ) {}
@@ -68,16 +69,17 @@ export class CreateAssetCommandHandler
         imeiSnr: payload.imeiSnr,
         customerId: payload.customerId,
         ownershipId: 1,
-        createdDate: new Date(),
         createdUserId: payload.user.uid,
         leasingVendorId,
         ...(payload.ownershipTypeId > 1 && { isLeased: true }),
+        received: new Date(payload.received),
       };
+
       await queryRunner.startTransaction();
       // there is no active ecom policy
       if (ecomPolicy && payload.ecomPolicyId) {
         const ecomOrderCreate = queryRunner.manager.create(EcomOrderEntity, {
-          orderDate: new Date(),
+          orderDate: payload.received,
           policyId: payload.ecomPolicyId,
           costObjectId: payload.costObjectId,
           customerId: payload.customerId,
@@ -87,15 +89,57 @@ export class CreateAssetCommandHandler
         const ecomOrder = await queryRunner.manager.save(ecomOrderCreate);
         assetCreateData.ecomOrderId = ecomOrder.id;
       }
-      const newAsset = queryRunner.manager.create(AssetEntity, assetCreateData);
-      const savedAsset = await queryRunner.manager.save(newAsset);
+
+      // const newAsset = queryRunner.manager.create(AssetEntity, assetCreateData);
+      // const savedAsset = await queryRunner.manager.save(newAsset);
+
+      const savedAsset = await queryRunner.manager
+        .createQueryBuilder()
+        .insert()
+        .into(AssetEntity)
+        .values([
+          {
+            ...assetCreateData,
+            createdDate: () => `CONCAT('${payload.received}', ' ', CURTIME())`,
+          },
+        ])
+        .execute();
+
+      const asset = await queryRunner.manager
+        .createQueryBuilder(AssetEntity, 'asset')
+        .where('asset.id = :id', { id: savedAsset.identifiers[0].id })
+        .getOne();
+
       await queryRunner.commitTransaction();
-      return savedAsset;
+      return asset;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {
       await queryRunner.release();
     }
+  }
+
+  prepareCreateDate(date: string) {
+    const currentDate = new Date();
+
+    // Parse the input date string to get the year, month, and day
+    const inputDateParts = date.split('-');
+    const inputYear = parseInt(inputDateParts[0]);
+    const inputMonth = parseInt(inputDateParts[1]) - 1; // Month is zero-based in JavaScript Date object
+    const inputDay = parseInt(inputDateParts[2]);
+
+    // Create a new date with the input date's year, month, and day but with the time from the current date
+    const outputDate = new Date(
+      inputYear,
+      inputMonth,
+      inputDay,
+      currentDate.getUTCHours(),
+      currentDate.getUTCMinutes(),
+      currentDate.getUTCSeconds(),
+    );
+
+    // Format the output date as an ISO 8601 string
+    return outputDate;
   }
 }

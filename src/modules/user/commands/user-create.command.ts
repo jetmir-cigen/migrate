@@ -47,7 +47,6 @@ export class CreateUserCommandHandler
       const userCreate: Partial<UserEntity> = this.userRepository.create({
         ...data,
         password: hashedPassword,
-        isPasswordChangeRequired: true,
       });
 
       const user = await this.userRepository.save(userCreate);

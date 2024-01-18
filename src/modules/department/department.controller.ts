@@ -88,6 +88,7 @@ export class DepartmentController {
   @Get(':id(\\d+)')
   async findOne(@Param('id') id: number, @AuthUser() user: Express.User) {
     const department = await this.departmentService.findOne(id, user.uid);
+
     return new DepartmentResponseDto({ department });
   }
 
