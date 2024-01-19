@@ -54,9 +54,12 @@ export class GetTotalQueryHandler
 
     const query = this.repository
       .createQueryBuilder('c')
-      .select('SUM(IFNULL(ir.amount, 0))', 'amount')
+      .select(
+        'SUM(CASE WHEN co.id IS NOT NULL THEN ir.amount ELSE 0 END)',
+        'amount',
+      )
       .addSelect(
-        'SUM(IFNULL(ir.salary_deduction_amount, 0))',
+        'SUM(CASE WHEN co.id IS NOT NULL THEN ir.salary_deduction_amount ELSE 0 END)',
         'salaryDeductionAmount',
       )
       .addSelect('c.id', 'customerId')
@@ -80,12 +83,12 @@ export class GetTotalQueryHandler
           period,
         )}`,
       )
-      .leftJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
       .leftJoin(InvoiceRowEntity, 'ir', `ir.invoice_id = i.id`)
+      .leftJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
       .leftJoin(
         CostObjectEntity,
         'co',
-        'co.id = ir.cost_object_id AND co.type != "C"',
+        `co.id = ir.cost_object_id AND co.type != 'C'`,
       )
       .where(`c.id IN (:...customersAccessList)`, { customersAccessList });
 
