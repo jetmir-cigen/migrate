@@ -29,6 +29,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { AssetModule } from './modules/asset/asset.module';
 import { DrillDownModule } from '@/modules/drilldown/drilldown.module';
 import { QueryModule } from './modules/query/query.module';
+import { CustomerAddressModule } from './modules/customer-address/customer-address.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { QueryModule } from './modules/query/query.module';
     AssetModule,
     DrillDownModule,
     QueryModule,
+    CustomerAddressModule,
   ],
   controllers: [AppController],
   providers: [AppService],
