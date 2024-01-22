@@ -10,7 +10,7 @@ import { AuthGuard } from '@/modules/auth/auth.guard';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { QueryBus } from '@nestjs/cqrs';
 import { AuthUser } from '../auth/auth-user.decorator';
-import { ReportQueryDto } from './dto/get-report.dto';
+import { ReportQueryDto, TaxAdvantageQueryDto } from './dto/get-report.dto';
 import {
   ConsumptionReportQuery,
   ReportGroupByEmployeeNoQuery,
@@ -47,13 +47,14 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
-    const { fromDate, toDate } = query;
+    const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
       new ReportGroupByOrderQuery({
         customerId: user.cid,
         customerHeadId: user.chid,
         fromDate,
         toDate,
+        isGlobal,
       }),
     );
   }
@@ -77,13 +78,15 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
+    const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
-      new ReportGroupByEmployeeNoQuery(
-        user.cid,
-        user.chid,
-        query.fromDate,
-        query.toDate,
-      ),
+      new ReportGroupByEmployeeNoQuery({
+        customerId: user.cid,
+        customerHeadId: user.chid,
+        fromDate,
+        toDate,
+        isGlobal,
+      }),
     );
   }
 
@@ -106,13 +109,14 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
-    const { fromDate, toDate } = query;
+    const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
       new SalaryDeductionUsageReportQuery({
         customerId: user.cid,
         customerHeadId: user.chid,
         fromDate,
         toDate,
+        isGlobal,
       }),
     );
   }
@@ -136,13 +140,15 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
-    const { fromDate, toDate } = query;
+    const { fromDate, toDate, isGlobal } = query;
+
     return this.queryBus.execute(
       new AccountingReportQuery({
         customerId: user.cid,
         customerHeadId: user.chid,
         fromDate,
         toDate,
+        isGlobal,
       }),
     );
   }
@@ -158,9 +164,9 @@ export class ReportController {
   @ApiResponse({ status: 200, description: 'Success' })
   getTaxAdvantageReports(
     @AuthUser() user: Express.User,
-    @Query() query: ReportQueryDto,
+    @Query() query: TaxAdvantageQueryDto,
   ) {
-    const { year } = query;
+    const { year, isGlobal } = query;
     if (!year) {
       throw new NotFoundException('Missing year');
     }
@@ -169,6 +175,7 @@ export class ReportController {
         customerId: user.cid,
         customerHeadId: user.chid,
         year,
+        isGlobal,
       }),
     );
   }
@@ -192,13 +199,14 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
-    const { fromDate, toDate } = query;
+    const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
       new ConsumptionReportQuery({
         customerId: user.cid,
         customerHeadId: user.chid,
         fromDate,
         toDate,
+        isGlobal,
       }),
     );
   }
@@ -222,13 +230,14 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
-    const { fromDate, toDate } = query;
+    const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
       new OffBoardingReportQuery({
         customerId: user.cid,
         customerHeadId: user.chid,
         fromDate,
         toDate,
+        isGlobal,
       }),
     );
   }

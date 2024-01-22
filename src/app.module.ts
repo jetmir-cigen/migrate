@@ -27,6 +27,9 @@ import { ReportModule } from './modules/report/report.module';
 import { PhoneModule } from './modules/phone/phone.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { AssetModule } from './modules/asset/asset.module';
+import { DrillDownModule } from '@/modules/drilldown/drilldown.module';
+import { QueryModule } from './modules/query/query.module';
+import { CustomerAddressModule } from './modules/customer-address/customer-address.module';
 
 @Module({
   imports: [
@@ -52,6 +55,9 @@ import { AssetModule } from './modules/asset/asset.module';
     PhoneModule,
     NotificationsModule,
     AssetModule,
+    DrillDownModule,
+    QueryModule,
+    CustomerAddressModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -12,4 +12,5 @@ export type QueryFilter = {
   customerHeadId: number;
   fromDate: string;
   toDate: string;
+  isGlobal?: boolean;
 };

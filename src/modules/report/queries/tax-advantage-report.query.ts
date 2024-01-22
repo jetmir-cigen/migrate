@@ -5,7 +5,7 @@ import {
 import { DataSource } from 'typeorm';
 import { QueryHandler } from '@nestjs/cqrs';
 
-import { taxAdvantageQueryString } from './query';
+import { taxAdvantageGlobal, taxAdvantageLocal } from './query';
 
 export class TaxAdvantageReportQuery implements QueryInterface {
   $$resolveType: any;
@@ -15,6 +15,7 @@ export class TaxAdvantageReportQuery implements QueryInterface {
       customerHeadId: number;
       customerId: number;
       year: number;
+      isGlobal?: boolean;
     },
   ) {}
 }
@@ -26,13 +27,30 @@ export class TaxAdvantageReportQueryHandler
   constructor(private dataSource: DataSource) {}
 
   async execute({ filters }: TaxAdvantageReportQuery): Promise<any> {
-    const { customerHeadId, customerId, year } = filters;
+    const { customerHeadId, customerId, year, isGlobal } = filters;
 
-    // Parameters should be in the order of the query string
-    return this.dataSource.query(taxAdvantageQueryString, [
-      customerId,
-      customerHeadId,
-      year,
-    ]);
+    let result;
+
+    if (isGlobal) {
+      result = await this.dataSource.query(taxAdvantageGlobal, [
+        customerHeadId,
+        year,
+      ]);
+    } else {
+      result = await this.dataSource.query(taxAdvantageLocal, [
+        customerId,
+        year,
+      ]);
+    }
+
+    return result.map((item) => ({
+      ...item,
+      amount: Number(item.amount),
+      amount_ex_mva: Number(item.amount_ex_mva),
+      salary_deduction_amount: Number(item.salary_deduction_amount),
+      salary_deduction_amount_vat: Number(item.salary_deduction_amount_vat),
+      content_service_amount: Number(item.content_service_amount),
+      cost_elements: Number(item.cost_elements),
+    }));
   }
 }

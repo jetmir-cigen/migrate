@@ -5,7 +5,7 @@ import {
 import { DataSource } from 'typeorm';
 import { QueryHandler } from '@nestjs/cqrs';
 
-import { salaryDeductionUsageQueryString } from './query';
+import { salaryDeductionUsageGlobal, salaryDeductionUsageLocal } from './query';
 import { QueryFilter } from '.';
 
 export class SalaryDeductionUsageReportQuery implements QueryInterface {
@@ -21,14 +21,32 @@ export class SalaryDeductionUsageReportQueryHandler
   constructor(private dataSource: DataSource) {}
 
   async execute({ filters }: SalaryDeductionUsageReportQuery): Promise<any> {
-    const { customerHeadId, customerId, fromDate, toDate } = filters;
+    const { customerHeadId, customerId, fromDate, toDate, isGlobal } = filters;
 
-    // Parameters should be in the order of the query string
-    return this.dataSource.query(salaryDeductionUsageQueryString, [
-      customerId,
-      customerHeadId,
-      fromDate,
-      toDate,
-    ]);
+    let result;
+
+    if (isGlobal) {
+      result = await this.dataSource.query(salaryDeductionUsageGlobal, [
+        customerHeadId,
+        fromDate,
+        toDate,
+      ]);
+    } else {
+      result = await this.dataSource.query(salaryDeductionUsageLocal, [
+        customerId,
+        fromDate,
+        toDate,
+      ]);
+    }
+
+    return result.map((item) => ({
+      ...item,
+      fixed_salary_deduction_amount: Number(item.fixed_salary_deduction_amount),
+      amount: Number(item.amount),
+      vat: Number(item.vat),
+      netVat: Number(item.netVat),
+      netNoVat: Number(item.netNoVat),
+      posts: Number(item.posts),
+    }));
   }
 }

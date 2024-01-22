@@ -13,7 +13,7 @@ import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 
-@Entity({ schema: 'control', name: 'department' })
+@Entity({ schema: 'control', name: 'control.department' })
 @Unique(['customer', 'code'])
 export class DepartmentEntity {
   @PrimaryGeneratedColumn()
