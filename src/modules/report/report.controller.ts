@@ -47,13 +47,14 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
-    const { fromDate, toDate } = query;
+    const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
       new ReportGroupByOrderQuery({
         customerId: user.cid,
         customerHeadId: user.chid,
         fromDate,
         toDate,
+        isGlobal,
       }),
     );
   }
@@ -77,13 +78,15 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
+    const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
-      new ReportGroupByEmployeeNoQuery(
-        user.cid,
-        user.chid,
-        query.fromDate,
-        query.toDate,
-      ),
+      new ReportGroupByEmployeeNoQuery({
+        customerId: user.cid,
+        customerHeadId: user.chid,
+        fromDate,
+        toDate,
+        isGlobal,
+      }),
     );
   }
 
@@ -106,13 +109,14 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
-    const { fromDate, toDate } = query;
+    const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
       new SalaryDeductionUsageReportQuery({
         customerId: user.cid,
         customerHeadId: user.chid,
         fromDate,
         toDate,
+        isGlobal,
       }),
     );
   }
@@ -136,9 +140,7 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
-    const { fromDate, toDate } = query;
-
-    console.log('AccountingReportQuery', { fromDate, toDate });
+    const { fromDate, toDate, isGlobal } = query;
 
     return this.queryBus.execute(
       new AccountingReportQuery({
@@ -146,6 +148,7 @@ export class ReportController {
         customerHeadId: user.chid,
         fromDate,
         toDate,
+        isGlobal,
       }),
     );
   }
@@ -163,7 +166,7 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: TaxAdvantageQueryDto,
   ) {
-    const { year } = query;
+    const { year, isGlobal } = query;
     if (!year) {
       throw new NotFoundException('Missing year');
     }
@@ -172,6 +175,7 @@ export class ReportController {
         customerId: user.cid,
         customerHeadId: user.chid,
         year,
+        isGlobal,
       }),
     );
   }
@@ -195,13 +199,14 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
-    const { fromDate, toDate } = query;
+    const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
       new ConsumptionReportQuery({
         customerId: user.cid,
         customerHeadId: user.chid,
         fromDate,
         toDate,
+        isGlobal,
       }),
     );
   }
@@ -225,13 +230,14 @@ export class ReportController {
     @AuthUser() user: Express.User,
     @Query() query: ReportQueryDto,
   ) {
-    const { fromDate, toDate } = query;
+    const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
       new OffBoardingReportQuery({
         customerId: user.cid,
         customerHeadId: user.chid,
         fromDate,
         toDate,
+        isGlobal,
       }),
     );
   }

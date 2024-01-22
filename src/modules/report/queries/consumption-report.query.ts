@@ -5,7 +5,7 @@ import {
 import { DataSource } from 'typeorm';
 import { QueryHandler } from '@nestjs/cqrs';
 
-import { consumptionQueryString } from './query';
+import { consumptionGlobal, consumptionLocal } from './query';
 import { QueryFilter } from '.';
 
 export class ConsumptionReportQuery implements QueryInterface {
@@ -21,16 +21,25 @@ export class ConsumptionReportQueryHandler
   constructor(private dataSource: DataSource) {}
 
   async execute({ filters }: ConsumptionReportQuery): Promise<any> {
-    const { customerHeadId, customerId, fromDate, toDate } = filters;
-    // Parameters should be in the order of the query string
-    const response = await this.dataSource.query(consumptionQueryString, [
-      customerId,
-      customerHeadId,
-      fromDate,
-      toDate,
-    ]);
+    const { customerHeadId, customerId, fromDate, toDate, isGlobal } = filters;
 
-    return response.map((item) => ({
+    let result;
+
+    if (isGlobal) {
+      result = await this.dataSource.query(consumptionGlobal, [
+        customerHeadId,
+        fromDate,
+        toDate,
+      ]);
+    } else {
+      result = await this.dataSource.query(consumptionLocal, [
+        customerId,
+        fromDate,
+        toDate,
+      ]);
+    }
+
+    return result.map((item) => ({
       ...item,
       tax_report_amount: Number(item.tax_report_amount),
       subscription_amount: Number(item.subscription_amount),

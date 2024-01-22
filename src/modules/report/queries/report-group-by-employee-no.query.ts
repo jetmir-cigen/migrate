@@ -5,17 +5,13 @@ import {
 import { DataSource } from 'typeorm';
 import { QueryHandler } from '@nestjs/cqrs';
 
-import { groupByEmployeeNo } from './query';
+import { groupByEmployeeNoLocal, groupByEmployeeNoGlobal } from './query';
+import { QueryFilter } from '.';
 
 export class ReportGroupByEmployeeNoQuery implements QueryInterface {
   $$resolveType: any;
 
-  constructor(
-    public readonly customerId: number,
-    public readonly customerHeadId: number,
-    public readonly fromDate: string,
-    public readonly toDate: string,
-  ) {}
+  constructor(public readonly filters: QueryFilter) {}
 }
 
 @QueryHandler(ReportGroupByEmployeeNoQuery)
@@ -24,19 +20,30 @@ export class ReportGroupByEmployeeNoQueryHandler
 {
   constructor(private dataSource: DataSource) {}
 
-  async execute(params: ReportGroupByEmployeeNoQuery): Promise<any> {
-    const { customerHeadId, customerId, fromDate, toDate } = params;
+  async execute({ filters }: ReportGroupByEmployeeNoQuery): Promise<any> {
+    const { customerHeadId, customerId, fromDate, toDate, isGlobal } = filters;
 
-    const result = await this.dataSource.query(groupByEmployeeNo, [
-      customerId,
-      customerHeadId,
-      fromDate,
-      toDate,
-      customerId,
-      customerHeadId,
-      fromDate,
-      toDate,
-    ]);
+    let result;
+
+    if (isGlobal) {
+      result = await this.dataSource.query(groupByEmployeeNoGlobal, [
+        customerHeadId,
+        fromDate,
+        toDate,
+        customerHeadId,
+        fromDate,
+        toDate,
+      ]);
+    } else {
+      result = await this.dataSource.query(groupByEmployeeNoLocal, [
+        customerId,
+        fromDate,
+        toDate,
+        customerId,
+        fromDate,
+        toDate,
+      ]);
+    }
 
     return result.map((item) => ({
       ...item,

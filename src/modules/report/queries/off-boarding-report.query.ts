@@ -5,7 +5,7 @@ import {
 import { DataSource } from 'typeorm';
 import { QueryHandler } from '@nestjs/cqrs';
 
-import { offBoardingQueryString } from './query';
+import { offBoardingGlobal, offBoardingLocal } from './query';
 import { QueryFilter } from './';
 
 export class OffBoardingReportQuery implements QueryInterface {
@@ -21,15 +21,23 @@ export class OffBoardingReportQueryHandler
   constructor(private dataSource: DataSource) {}
 
   async execute({ filters }: OffBoardingReportQuery): Promise<any> {
-    const { customerHeadId, customerId, fromDate, toDate } = filters;
-    // Parameters should be in the order of the query string
-    const result = await this.dataSource.query(offBoardingQueryString, [
-      customerId,
-      customerHeadId,
-      fromDate,
-      toDate,
-    ]);
+    const { customerHeadId, customerId, fromDate, toDate, isGlobal } = filters;
 
+    let result;
+
+    if (isGlobal) {
+      result = await this.dataSource.query(offBoardingGlobal, [
+        customerHeadId,
+        fromDate,
+        toDate,
+      ]);
+    } else {
+      result = await this.dataSource.query(offBoardingLocal, [
+        customerId,
+        fromDate,
+        toDate,
+      ]);
+    }
     return result.map((item) => ({
       ...item,
       buyout_price: Number(item.buyout_price),

@@ -5,7 +5,7 @@ import {
 import { DataSource } from 'typeorm';
 import { QueryHandler } from '@nestjs/cqrs';
 
-import { taxAdvantageQueryString } from './query';
+import { taxAdvantageGlobal, taxAdvantageLocal } from './query';
 
 export class TaxAdvantageReportQuery implements QueryInterface {
   $$resolveType: any;
@@ -15,6 +15,7 @@ export class TaxAdvantageReportQuery implements QueryInterface {
       customerHeadId: number;
       customerId: number;
       year: number;
+      isGlobal?: boolean;
     },
   ) {}
 }
@@ -26,14 +27,21 @@ export class TaxAdvantageReportQueryHandler
   constructor(private dataSource: DataSource) {}
 
   async execute({ filters }: TaxAdvantageReportQuery): Promise<any> {
-    const { customerHeadId, customerId, year } = filters;
+    const { customerHeadId, customerId, year, isGlobal } = filters;
 
-    // Parameters should be in the order of the query string
-    const result = await this.dataSource.query(taxAdvantageQueryString, [
-      customerId,
-      customerHeadId,
-      year,
-    ]);
+    let result;
+
+    if (isGlobal) {
+      result = await this.dataSource.query(taxAdvantageGlobal, [
+        customerHeadId,
+        year,
+      ]);
+    } else {
+      result = await this.dataSource.query(taxAdvantageLocal, [
+        customerId,
+        year,
+      ]);
+    }
 
     return result.map((item) => ({
       ...item,
