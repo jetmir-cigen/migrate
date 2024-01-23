@@ -1,21 +1,12 @@
 export const groupByOrderLocal = `
-SELECT name,
+SELECT
+        name,
         employee_no,
-        dim_1 as DIM1,
         phone_no,
+        dim_1,
         co_accounting_code,
-        down_payments,
-        currency,
-        cover_amount,
-        SUM(amount) AS amount,
-        is_buyout,
-        customer_name,
-        org_no,
-        content_service_amount,
-        down_payment.customer_id,
         department_code,
         department_name,
-        netVat,
         model,
         IF(
                 is_buyout = 1,
@@ -24,10 +15,15 @@ SELECT name,
         ) AS order_date,
         DATE_FORMAT(order_update, '%Y-%m-%d') AS order_update,
         delivery_date,
+        down_payments,
+        cover_amount,
         AVG(total_amount - cover_amount) AS remainder_amount,
         AVG(total_amount) AS total_amount,
+        SUM(amount) AS amount,
+        is_buyout,
+        down_payment.customer_id,
+        customer_name,
         customer_head_id,
-        fixed_salary_deduction_amount,
         IF(
                 is_buyout = 1
                 AND cse.salary_deduction_code_buyout IS NOT NULL,
@@ -36,89 +32,84 @@ SELECT name,
         ) AS accounting_code,
         cse.project_device,
         cse.department_override_device
-FROM (
-                SELECT co.name as name,
-                        co.employee_no as employee_no,
-                        co.dim_1 as dim_1,
+FROM
+        (
+                SELECT
+                        co.name,
+                        co.employee_no,
+                        co.dim_1,
                         co.code AS phone_no,
                         co.accounting_code AS co_accounting_code,
-                        dpo.down_payments AS down_payments,
-                        dpo.total_amount as total_amount,
-                        dpod.currency as currency,
+                        d.code AS department_code,
+                        d.name AS department_name,
+                        product.model,
+                        dpod.payment_date,
+                        dpo.order_date,
+                        dpo.order_update,
+                        dpo.delivery_date,
+                        dpo.down_payments,
+                        dpo.total_amount,
                         dpo.total_amount - dpo.remainder_amount AS cover_amount,
-                        dpod.amount as amount,
-                        dpod.is_buyout as is_buyout,
+                        dpod.amount,
+                        dpod.is_buyout,
                         c.name AS customer_name,
-                        c.org_no AS org_no,
-                       SUM(IF(p.tax_report = 1,(ir.amount - ir.salary_deduction_amount) + CAST(p.vat = 1 AS SIGNED INTEGER) * (ir.amount - ir.salary_deduction_amount) * p.vat_rate,0)) AS content_service_amount,
                         c.id AS customer_id,
-                       d.code AS department_code,
-                       d.name AS department_name,
-                       SUM(IF(ir.vat_amount != 0, ir.amount, 0)) AS netVat,
-                       product.model AS model,
-                    dpod.payment_date AS payment_date,
-                        dpo.order_date AS order_date,
-                       dpo.order_update AS order_update,
-                       dpo.delivery_date AS delivery_date,
-                        c.customer_head_id AS customer_head_id,
-                        co.fixed_salary_deduction_amount AS fixed_salary_deduction_amount
-                FROM device_policy.order_downpayment dpod
+                        c.customer_head_id
+                FROM
+                        device_policy.order_downpayment dpod
                         LEFT JOIN control.cost_object co ON dpod.cost_object_id = co.id
                         JOIN control.customer c ON c.id = co.customer_id
                         LEFT JOIN device_policy.order dpo ON dpod.order_id = dpo.id
                         LEFT JOIN device_policy.product product ON dpo.product_id = product.id
                         LEFT JOIN department d ON d.id = co.department_id
-                        LEFT JOIN control.invoice_row ir ON ir.cost_object_id = co.id
-                        LEFT JOIN control.product p ON ir.product_id = p.id
-                WHERE (
+                WHERE
+                        (
                                 c.id = ?
                         )
                         AND DATE(dpod.payment_date) >= ?
                         AND DATE(dpod.payment_date) <= ?
                 UNION
-                SELECT co.name AS name,
-                        co.employee_no AS employee_no,
-                        co.dim_1 AS dim_1,
+                SELECT
+                        co.name,
+                        co.employee_no,
+                        co.dim_1,
                         co.code AS phone_no,
                         co.accounting_code AS co_accounting_code,
-                        o.down_payments AS down_payments,
-                        o.cover_amount + o.remainder_amount AS total_amount,
-                        odp.currency AS currency,
-                        o.cover_amount AS cover_amount,
-                        odp.amount AS amount,
-                        odp.is_buyout AS is_buyout,
-                        c.name AS customer_name,
-                        c.org_no AS org_no,
-                        SUM(IF(p.tax_report = 1,(ir.amount - ir.salary_deduction_amount) + CAST(p.vat = 1 AS SIGNED INTEGER) * (ir.amount - ir.salary_deduction_amount) * p.vat_rate,0)) AS content_service_amount,
-                        c.id AS customer_id,
-                        d.code AS department_code,
+                        d.code,
                         d.name AS department_name,
-                        SUM(IF(ir.vat_amount != 0, ir.amount, 0)) AS netVat,
                         a.asset_description AS model,
                         odp.date AS payment_date,
-                        o.order_date AS order_date,
+                        o.order_date,
                         o.updated AS order_update,
                         o.DeliveredDate AS delivery_date,
-                        c.customer_head_id,
-                        co.fixed_salary_deduction_amount AS fixed_salary_deduction_amount
-                FROM ecom.order_down_payment odp
+                        o.down_payments,
+                        o.cover_amount + o.remainder_amount AS total_amount,
+                        o.cover_amount,
+                        odp.amount,
+                        odp.is_buyout,
+                        c.name AS customer_name,
+                        c.id AS customer_id,
+                        c.customer_head_id
+                FROM
+                        ecom.order_down_payment odp
                         LEFT JOIN control.cost_object co ON odp.cost_object_id = co.id
                         JOIN control.customer c ON c.id = co.customer_id
                         LEFT JOIN control.department d ON d.id = co.department_id
                         LEFT JOIN ecom.orders o ON odp.order_id = o.id
                         LEFT JOIN assets.asset a ON a.id = odp.asset_id
-                        LEFT JOIN control.invoice_row ir ON ir.cost_object_id = co.id
-                        LEFT JOIN control.product p ON ir.product_id = p.id
-                WHERE (
+                WHERE
+                        (
                                 c.id = ?
                         )
                         AND odp.is_active = 1
                         AND DATE(odp.date) >= ?
                         AND DATE(odp.date) <= ?
-                GROUP BY odp.id
+                GROUP BY
+                        odp.id
         ) AS down_payment
         LEFT JOIN control.customer_setup_export cse ON down_payment.customer_id = cse.customer_id
-GROUP BY name,
+GROUP BY
+        name,
         employee_no,
         department_code,
         department_name,
@@ -129,30 +120,20 @@ GROUP BY name,
         cover_amount,
         down_payments,
         is_buyout,
-        fixed_salary_deduction_amount,
-        currency,
         model
-ORDER BY name
+ORDER BY
+        name
 `;
 
 export const groupByOrderGlobal = `
-SELECT name,
+SELECT
+        name,
         employee_no,
-        dim_1 as DIM1,
         phone_no,
+        dim_1,
         co_accounting_code,
-        down_payments,
-        currency,
-        cover_amount,
-        SUM(amount) AS amount,
-        is_buyout,
-        customer_name,
-        org_no,
-        content_service_amount,
-        down_payment.customer_id,
         department_code,
         department_name,
-        netVat,
         model,
         IF(
                 is_buyout = 1,
@@ -161,10 +142,15 @@ SELECT name,
         ) AS order_date,
         DATE_FORMAT(order_update, '%Y-%m-%d') AS order_update,
         delivery_date,
+        down_payments,
+        cover_amount,
         AVG(total_amount - cover_amount) AS remainder_amount,
         AVG(total_amount) AS total_amount,
+        SUM(amount) AS amount,
+        is_buyout,
+        down_payment.customer_id,
+        customer_name,
         customer_head_id,
-        fixed_salary_deduction_amount,
         IF(
                 is_buyout = 1
                 AND cse.salary_deduction_code_buyout IS NOT NULL,
@@ -173,89 +159,84 @@ SELECT name,
         ) AS accounting_code,
         cse.project_device,
         cse.department_override_device
-FROM (
-                SELECT co.name as name,
-                        co.employee_no as employee_no,
-                        co.dim_1 as dim_1,
+FROM
+        (
+                SELECT
+                        co.name,
+                        co.employee_no,
+                        co.dim_1,
                         co.code AS phone_no,
                         co.accounting_code AS co_accounting_code,
-                        dpo.down_payments AS down_payments,
-                        dpo.total_amount as total_amount,
-                        dpod.currency as currency,
+                        d.code AS department_code,
+                        d.name AS department_name,
+                        product.model,
+                        dpod.payment_date,
+                        dpo.order_date,
+                        dpo.order_update,
+                        dpo.delivery_date,
+                        dpo.down_payments,
+                        dpo.total_amount,
                         dpo.total_amount - dpo.remainder_amount AS cover_amount,
-                        dpod.amount as amount,
-                        dpod.is_buyout as is_buyout,
+                        dpod.amount,
+                        dpod.is_buyout,
                         c.name AS customer_name,
-                        c.org_no AS org_no,
-                       SUM(IF(p.tax_report = 1,(ir.amount - ir.salary_deduction_amount) + CAST(p.vat = 1 AS SIGNED INTEGER) * (ir.amount - ir.salary_deduction_amount) * p.vat_rate,0)) AS content_service_amount,
                         c.id AS customer_id,
-                       d.code AS department_code,
-                       d.name AS department_name,
-                       SUM(IF(ir.vat_amount != 0, ir.amount, 0)) AS netVat,
-                       product.model AS model,
-                    dpod.payment_date AS payment_date,
-                        dpo.order_date AS order_date,
-                       dpo.order_update AS order_update,
-                       dpo.delivery_date AS delivery_date,
-                        c.customer_head_id AS customer_head_id,
-                        co.fixed_salary_deduction_amount AS fixed_salary_deduction_amount
-                FROM device_policy.order_downpayment dpod
+                        c.customer_head_id
+                FROM
+                        device_policy.order_downpayment dpod
                         LEFT JOIN control.cost_object co ON dpod.cost_object_id = co.id
                         JOIN control.customer c ON c.id = co.customer_id
                         LEFT JOIN device_policy.order dpo ON dpod.order_id = dpo.id
                         LEFT JOIN device_policy.product product ON dpo.product_id = product.id
                         LEFT JOIN department d ON d.id = co.department_id
-                        LEFT JOIN control.invoice_row ir ON ir.cost_object_id = co.id
-                        LEFT JOIN control.product p ON ir.product_id = p.id
-                WHERE (
-                               c.customer_head_id = ?
+                WHERE
+                        (
+                                c.customer_head_id = ?
                         )
                         AND DATE(dpod.payment_date) >= ?
                         AND DATE(dpod.payment_date) <= ?
                 UNION
-                SELECT co.name AS name,
-                        co.employee_no AS employee_no,
-                        co.dim_1 AS dim_1,
+                SELECT
+                        co.name,
+                        co.employee_no,
+                        co.dim_1,
                         co.code AS phone_no,
                         co.accounting_code AS co_accounting_code,
-                        o.down_payments AS down_payments,
-                        o.cover_amount + o.remainder_amount AS total_amount,
-                        odp.currency AS currency,
-                        o.cover_amount AS cover_amount,
-                        odp.amount AS amount,
-                        odp.is_buyout AS is_buyout,
-                        c.name AS customer_name,
-                        c.org_no AS org_no,
-                        SUM(IF(p.tax_report = 1,(ir.amount - ir.salary_deduction_amount) + CAST(p.vat = 1 AS SIGNED INTEGER) * (ir.amount - ir.salary_deduction_amount) * p.vat_rate,0)) AS content_service_amount,
-                        c.id AS customer_id,
-                        d.code AS department_code,
+                        d.code,
                         d.name AS department_name,
-                        SUM(IF(ir.vat_amount != 0, ir.amount, 0)) AS netVat,
                         a.asset_description AS model,
                         odp.date AS payment_date,
-                        o.order_date AS order_date,
+                        o.order_date,
                         o.updated AS order_update,
                         o.DeliveredDate AS delivery_date,
-                        c.customer_head_id,
-                        co.fixed_salary_deduction_amount AS fixed_salary_deduction_amount
-                FROM ecom.order_down_payment odp
+                        o.down_payments,
+                        o.cover_amount + o.remainder_amount AS total_amount,
+                        o.cover_amount,
+                        odp.amount,
+                        odp.is_buyout,
+                        c.name AS customer_name,
+                        c.id AS customer_id,
+                        c.customer_head_id
+                FROM
+                        ecom.order_down_payment odp
                         LEFT JOIN control.cost_object co ON odp.cost_object_id = co.id
                         JOIN control.customer c ON c.id = co.customer_id
                         LEFT JOIN control.department d ON d.id = co.department_id
                         LEFT JOIN ecom.orders o ON odp.order_id = o.id
                         LEFT JOIN assets.asset a ON a.id = odp.asset_id
-                        LEFT JOIN control.invoice_row ir ON ir.cost_object_id = co.id
-                        LEFT JOIN control.product p ON ir.product_id = p.id
-                WHERE (
+                WHERE
+                        (
                                 c.customer_head_id = ?
                         )
                         AND odp.is_active = 1
                         AND DATE(odp.date) >= ?
                         AND DATE(odp.date) <= ?
-                GROUP BY odp.id
+                GROUP BY
+                        odp.id
         ) AS down_payment
         LEFT JOIN control.customer_setup_export cse ON down_payment.customer_id = cse.customer_id
-GROUP BY name,
+GROUP BY
+        name,
         employee_no,
         department_code,
         department_name,
@@ -266,10 +247,9 @@ GROUP BY name,
         cover_amount,
         down_payments,
         is_buyout,
-        fixed_salary_deduction_amount,
-        currency,
         model
-ORDER BY name
+ORDER BY
+        name
 `;
 
 export const groupByEmployeeNoLocal = `
