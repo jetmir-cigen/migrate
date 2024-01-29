@@ -92,9 +92,17 @@ export class CostObjectsServiceCategoryAndGroupReportQueryHandler
       .addSelect('SUM(ir.salary_deduction_amount)', 'salaryDeductionAmount')
       .addSelect('co.id', 'costObjectId')
       .addSelect('co.name', 'costObjectName')
-      .addSelect('ir.from_period', 'fromPeriod')
-      .addSelect('ir.to_period', 'toPeriod')
-      .addSelect('ir.quantity', 'quantity')
+      .addSelect(
+        'SUM(CASE WHEN ir.amount = 0 THEN 0 ELSE ir.quantity END)',
+        'quantity',
+      )
+      .addSelect(
+        'SUM(CASE WHEN ir.amount = 0 THEN 0 ELSE ir.peak_volume + ir.off_peak_volume END)',
+        'peak_volume_diff',
+      )
+      .addSelect(`DATE_FORMAT(MIN(ir.from_period), '%Y-%m-%d')`, 'fromPeriod')
+      .addSelect(`DATE_FORMAT(MAX(ir.to_period), '%Y-%m-%d')`, 'toPeriod')
+      .addSelect('p.price_type', 'priceType')
       .innerJoin(
         InvoiceEntity,
         'i',
@@ -103,7 +111,11 @@ export class CostObjectsServiceCategoryAndGroupReportQueryHandler
           period,
         )}`,
       )
-      .innerJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
+      .innerJoin(
+        VendorEntity,
+        'v',
+        'v.id = i.vendor_id AND v.is_internal_vendor != 1',
+      )
       .innerJoin(
         ProductEntity,
         'p',
@@ -177,7 +189,10 @@ export class CostObjectsServiceCategoryAndGroupReportQueryHandler
     ]);
 
     return {
-      rows,
+      rows: rows.map((row) => ({
+        ...row,
+        quantity: this.drillDownService.calculateQuantity(row),
+      })),
       entity,
       category,
       group,

@@ -79,7 +79,11 @@ export class GetReportByCostObjectQueryHandler
           period,
         )}`,
       )
-      .innerJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
+      .innerJoin(
+        VendorEntity,
+        'v',
+        'v.id = i.vendor_id AND v.is_internal_vendor != 1',
+      )
       .innerJoin(
         CostObjectEntity,
         'co',
