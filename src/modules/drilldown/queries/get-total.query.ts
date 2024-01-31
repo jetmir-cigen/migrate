@@ -50,7 +50,7 @@ export class GetTotalQueryHandler
   async execute({ filters }: GetTotalQuery) {
     const { year, period, user } = filters;
     const customersAccessList =
-      await this.drillDownService.getCustomerAccessListArr(user.uid);
+      await this.drillDownService.getCustomerAccessListArr(user);
 
     const query = this.repository
       .createQueryBuilder('c')
@@ -84,7 +84,11 @@ export class GetTotalQueryHandler
         )}`,
       )
       .leftJoin(InvoiceRowEntity, 'ir', `ir.invoice_id = i.id`)
-      .leftJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
+      .leftJoin(
+        VendorEntity,
+        'v',
+        'v.id = i.vendor_id AND v.is_internal_vendor != 1',
+      )
       .leftJoin(
         CostObjectEntity,
         'co',

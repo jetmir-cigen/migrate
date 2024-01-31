@@ -38,10 +38,7 @@ type ResultType = {
 
 export class ServiceProductCategoryReportQuery implements QueryInterface {
   $$resolveType: ResultType;
-  constructor(
-    readonly filters: QueryFilters,
-    readonly user: Express.User,
-  ) {}
+  constructor(readonly filters: QueryFilters, readonly user: Express.User) {}
 }
 
 @QueryHandler(ServiceProductCategoryReportQuery)
@@ -67,7 +64,7 @@ export class ServiceProductCategoryReportQueryHandler
       this.drillDownService.getTypes(type, typeId);
 
     const customersAccessList =
-      await this.drillDownService.getCustomerAccessListArr(user.uid);
+      await this.drillDownService.getCustomerAccessListArr(user);
 
     const query = this.repository
       .createQueryBuilder('ir')
@@ -75,6 +72,17 @@ export class ServiceProductCategoryReportQueryHandler
       .addSelect('SUM(ir.salary_deduction_amount)', 'salaryDeductionAmount')
       .addSelect('pg.id', 'productGroupId')
       .addSelect('pg.name', 'productGroupName')
+      .addSelect(
+        'SUM(CASE WHEN ir.amount = 0 THEN 0 ELSE ir.quantity END)',
+        'quantity',
+      )
+      .addSelect(
+        'SUM(CASE WHEN ir.amount = 0 THEN 0 ELSE ir.peak_volume + ir.off_peak_volume END)',
+        'peakVolumeDiff',
+      )
+      .addSelect(`DATE_FORMAT(MIN(ir.from_period), '%Y-%m-%d')`, 'fromPeriod')
+      .addSelect(`DATE_FORMAT(MAX(ir.to_period), '%Y-%m-%d')`, 'toPeriod')
+      .addSelect('p.price_type', 'priceType')
       .innerJoin(
         InvoiceEntity,
         'i',
@@ -83,7 +91,11 @@ export class ServiceProductCategoryReportQueryHandler
           period,
         )}`,
       )
-      .innerJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
+      .innerJoin(
+        VendorEntity,
+        'v',
+        'v.id = i.vendor_id AND v.is_internal_vendor != 1',
+      )
       .innerJoin(ProductEntity, 'p', 'p.id = ir.product_id')
       .innerJoin(ProductGroupEntity, 'pg', 'pg.id = p.product_group_id')
       .innerJoin(
@@ -113,11 +125,7 @@ export class ServiceProductCategoryReportQueryHandler
 
     const rowsPromise = query.getRawMany();
 
-    const entityPromise = this.drillDownService.getEntity(
-      user.uid,
-      type,
-      typeId,
-    );
+    const entityPromise = this.drillDownService.getEntity(user, type, typeId);
 
     const categoryPromise = this.categoryRepository.findOne({
       where: { id: productCategoryId },
@@ -131,7 +139,10 @@ export class ServiceProductCategoryReportQueryHandler
     ]);
 
     return {
-      rows,
+      rows: rows.map((row) => ({
+        ...row,
+        peakVolumeDiff: Number(row.peakVolumeDiff),
+      })),
       entity,
       category,
     };

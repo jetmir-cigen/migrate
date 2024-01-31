@@ -23,13 +23,19 @@ export class DrillDownService {
     return macFrameAgreement.map((item) => item.customerId).join(',');
   }
 
-  async getCustomerAccessListArr(userId: number): Promise<number[]> {
-    const macFrameAgreement = await this.macFrameAgreementRepository.find({
-      where: { userId },
-      select: ['customerId'],
-    });
+  async getCustomerAccessListArr(user: Express.GenericUser): Promise<number[]> {
+    const { role, uid: userId, cid } = user;
 
-    return macFrameAgreement.map((item) => item.customerId);
+    if (['admin', 'customer_head_admin'].includes(role)) {
+      const macFrameAgreement = await this.macFrameAgreementRepository.find({
+        where: { userId },
+        select: ['customerId'],
+      });
+
+      return macFrameAgreement.map((item) => item.customerId);
+    } else {
+      return [cid];
+    }
   }
 
   getPeriodFilter(year: number, period: number): string {
@@ -126,31 +132,39 @@ export class DrillDownService {
   }
 
   getEntity = async (
-    userId: number,
+    user: Express.GenericUser,
     type: DrillDownServiceType,
     typeId: number,
   ) => {
-    const customerAccessList = await this.getCustomerAccessList(userId);
+    const customerAccessListArr = await this.getCustomerAccessListArr(user);
+
+    const customerAccessList = customerAccessListArr.join(',');
 
     if (type === DrillDownServiceType.FRAME_AGREEMENT) {
-      return await this.macFrameAgreementRepository.query(
-        `SELECT customer_head_frame_agreement_id AS id, customer_head_frame_agreement_name AS name FROM view.customer WHERE id IN(${customerAccessList}) AND customer_head_frame_agreement_id = ? LIMIT 1`,
-        [typeId],
-      );
+      return (
+        await this.macFrameAgreementRepository.query(
+          `SELECT customer_head_frame_agreement_id AS id, customer_head_frame_agreement_name AS name FROM view.customer WHERE id IN(${customerAccessList}) AND customer_head_frame_agreement_id = ? LIMIT 1`,
+          [typeId],
+        )
+      )[0];
     }
 
     if (type === DrillDownServiceType.CUSTOMER_HEAD) {
-      return await this.macFrameAgreementRepository.query(
-        `SELECT customer_head_id AS id, customer_head_name AS name FROM view.customer WHERE id IN(${customerAccessList}) AND customer_head_id = ? LIMIT 1`,
-        [typeId],
-      );
+      return (
+        await this.macFrameAgreementRepository.query(
+          `SELECT customer_head_id AS id, customer_head_name AS name FROM view.customer WHERE id IN(${customerAccessList}) AND customer_head_id = ? LIMIT 1`,
+          [typeId],
+        )
+      )[0];
     }
 
     if (type === DrillDownServiceType.CUSTOMER) {
-      return await this.macFrameAgreementRepository.query(
-        `SELECT id, name FROM control.customer WHERE id IN(${customerAccessList}) AND id = ? LIMIT 1`,
-        [typeId],
-      );
+      return (
+        await this.macFrameAgreementRepository.query(
+          `SELECT id, name FROM control.customer WHERE id IN(${customerAccessList}) AND id = ? LIMIT 1`,
+          [typeId],
+        )
+      )[0];
     }
   };
 
@@ -167,4 +181,32 @@ export class DrillDownService {
       [groupId],
     );
   };
+
+  timeFormat(seconds: number): string {
+    const hours: number = Math.floor(seconds / 3600);
+    const minutes: number = Math.floor((seconds / 60) % 60);
+    const remainingSeconds: number = Math.floor(seconds % 60);
+
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
+      2,
+      '0',
+    )}:${String(remainingSeconds).padStart(2, '0')}`;
+  }
+
+  calculateQuantity(item: any) {
+    switch (item.priceType) {
+      case 'T':
+        return `${Math.round(item.quantity)} stk - ${this.timeFormat(
+          item.peak_volume_diff,
+        )}`;
+      case 'D':
+        return `${item.peak_volume_diff / 1024 / 1024}`;
+      case 'Q':
+      case 'O':
+      case 'S':
+        return `${Math.round(item.quantity)}`;
+      default:
+        return `${item.quantity}`;
+    }
+  }
 }

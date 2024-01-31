@@ -61,4 +61,7 @@ export class VendorEntity {
 
   @Column({ name: 'XsltMaxLineNumPerPage', nullable: true })
   xsltMaxLineNumPerPage: number | null;
+
+  @Column({ name: 'is_internal_vendor', nullable: false, default: false })
+  isInternalVendor: boolean;
 }

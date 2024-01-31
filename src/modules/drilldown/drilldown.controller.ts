@@ -1,7 +1,10 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { GetTotalQuery } from '@/modules/drilldown/queries/get-total.query';
 import { AuthGuard } from '@/modules/auth/auth.guard';
-import { ADMIN_USERS_GROUP } from '@/modules/user/user-role.groups';
+import {
+  ADMIN_USERS_GROUP,
+  DEPARTMENT_USERS_GROUP,
+} from '@/modules/user/user-role.groups';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { ServiceReportQuery } from '@/modules/drilldown/queries/service/service-report.queries';
 import { AuthUser } from '@/modules/auth/auth-user.decorator';
@@ -27,7 +30,10 @@ import { GetProductReportByCostObjectQuery } from './queries/cost-object/product
 import { GetProductReportByCostObjectQueryDto } from './dto/request/product-report-by-cost-object.dto';
 
 @Controller('drill-down')
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(
+  AuthGuard,
+  UserRoleGuard([...ADMIN_USERS_GROUP, ...DEPARTMENT_USERS_GROUP]),
+)
 export class DrillDownController {
   constructor(readonly queryService: QueryService) {}
 

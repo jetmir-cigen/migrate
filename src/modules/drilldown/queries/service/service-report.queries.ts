@@ -36,10 +36,7 @@ type ResultType = {
 
 export class ServiceReportQuery implements QueryInterface {
   $$resolveType: ResultType;
-  constructor(
-    readonly filters: QueryFilters,
-    readonly user: Express.User,
-  ) {}
+  constructor(readonly filters: QueryFilters, readonly user: Express.User) {}
 }
 
 @QueryHandler(ServiceReportQuery)
@@ -58,7 +55,9 @@ export class ServiceReportQueryHandler
       this.drillDownService.getTypes(type, typeId);
 
     const customersAccessList =
-      await this.drillDownService.getCustomerAccessListArr(user.uid);
+      await this.drillDownService.getCustomerAccessListArr(user);
+
+    console.log('customersAccessList', customersAccessList);
 
     const query = this.repository
       .createQueryBuilder('ir')
@@ -74,7 +73,11 @@ export class ServiceReportQueryHandler
           period,
         )}`,
       )
-      .innerJoin(VendorEntity, 'v', 'v.id = i.vendor_id AND v.id != 1')
+      .innerJoin(
+        VendorEntity,
+        'v',
+        'v.id = i.vendor_id AND v.is_internal_vendor != 1',
+      )
       .innerJoin(ProductEntity, 'p', 'p.id = ir.product_id')
       .innerJoin(ProductGroupEntity, 'pg', 'pg.id = p.product_group_id')
       .innerJoin(ProductCategoryEntity, 'pc', 'pc.id = pg.product_category_id')
@@ -97,11 +100,7 @@ export class ServiceReportQueryHandler
 
     const rowsPromise = query.getRawMany();
 
-    const entityPromise = this.drillDownService.getEntity(
-      user.uid,
-      type,
-      typeId,
-    );
+    const entityPromise = this.drillDownService.getEntity(user, type, typeId);
 
     const [rows, entity] = await Promise.all([rowsPromise, entityPromise]);
 
