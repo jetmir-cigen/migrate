@@ -50,7 +50,7 @@ export class GetTotalQueryHandler
   async execute({ filters }: GetTotalQuery) {
     const { year, period, user } = filters;
     const customersAccessList =
-      await this.drillDownService.getCustomerAccessListArr(user.uid);
+      await this.drillDownService.getCustomerAccessListArr(user);
 
     const query = this.repository
       .createQueryBuilder('c')

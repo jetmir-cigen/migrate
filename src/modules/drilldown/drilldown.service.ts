@@ -23,13 +23,19 @@ export class DrillDownService {
     return macFrameAgreement.map((item) => item.customerId).join(',');
   }
 
-  async getCustomerAccessListArr(userId: number): Promise<number[]> {
-    const macFrameAgreement = await this.macFrameAgreementRepository.find({
-      where: { userId },
-      select: ['customerId'],
-    });
+  async getCustomerAccessListArr(user: Express.GenericUser): Promise<number[]> {
+    const { role, uid: userId, cid } = user;
 
-    return macFrameAgreement.map((item) => item.customerId);
+    if (['admin', 'customer_head_admin'].includes(role)) {
+      const macFrameAgreement = await this.macFrameAgreementRepository.find({
+        where: { userId },
+        select: ['customerId'],
+      });
+
+      return macFrameAgreement.map((item) => item.customerId);
+    } else {
+      return [cid];
+    }
   }
 
   getPeriodFilter(year: number, period: number): string {
@@ -126,11 +132,13 @@ export class DrillDownService {
   }
 
   getEntity = async (
-    userId: number,
+    user: Express.GenericUser,
     type: DrillDownServiceType,
     typeId: number,
   ) => {
-    const customerAccessList = await this.getCustomerAccessList(userId);
+    const customerAccessListArr = await this.getCustomerAccessListArr(user);
+
+    const customerAccessList = customerAccessListArr.join(',');
 
     if (type === DrillDownServiceType.FRAME_AGREEMENT) {
       return (

@@ -73,7 +73,7 @@ export class GetProductReportByDepartmentAndCostObjectQueryHandler
       this.drillDownService.getTypes(type, typeId);
 
     const customersAccessList =
-      await this.drillDownService.getCustomerAccessListArr(user.uid);
+      await this.drillDownService.getCustomerAccessListArr(user);
 
     const query = this.repository
       .createQueryBuilder('ir')
@@ -92,7 +92,7 @@ export class GetProductReportByDepartmentAndCostObjectQueryHandler
       )
       .addSelect(
         'SUM(CASE WHEN ir.amount = 0 THEN 0 ELSE ir.peak_volume + ir.off_peak_volume END)',
-        'peak_volume_diff',
+        'peakVolumeDiff',
       )
       .addSelect(`DATE_FORMAT(MIN(ir.from_period), '%Y-%m-%d')`, 'fromPeriod')
       .addSelect(`DATE_FORMAT(MAX(ir.to_period), '%Y-%m-%d')`, 'toPeriod')
@@ -139,11 +139,7 @@ export class GetProductReportByDepartmentAndCostObjectQueryHandler
 
     const rowsPromise = query.getRawMany();
 
-    const entityPromise = this.drillDownService.getEntity(
-      user.uid,
-      type,
-      typeId,
-    );
+    const entityPromise = this.drillDownService.getEntity(user, type, typeId);
 
     const departmentPromise = this.departmentRepository.findOneOrFail({
       where: { id: departmentId },
@@ -164,7 +160,7 @@ export class GetProductReportByDepartmentAndCostObjectQueryHandler
     return {
       rows: rows.map((row) => ({
         ...row,
-        quantity: this.drillDownService.calculateQuantity(row),
+        peakVolumeDiff: Number(row.peakVolumeDiff),
       })),
       entity,
       department,

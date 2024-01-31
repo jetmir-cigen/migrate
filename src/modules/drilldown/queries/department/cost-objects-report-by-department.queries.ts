@@ -63,7 +63,7 @@ export class GetCostObjectReportByDepartmentQueryHandler
       this.drillDownService.getTypes(type, typeId);
 
     const customersAccessList =
-      await this.drillDownService.getCustomerAccessListArr(user.uid);
+      await this.drillDownService.getCustomerAccessListArr(user);
 
     const query = this.repository
       .createQueryBuilder('ir')
@@ -110,11 +110,7 @@ export class GetCostObjectReportByDepartmentQueryHandler
 
     const rowsPromise = query.getRawMany();
 
-    const entityPromise = this.drillDownService.getEntity(
-      user.uid,
-      type,
-      typeId,
-    );
+    const entityPromise = this.drillDownService.getEntity(user, type, typeId);
 
     const departmentPromise = this.departmentRepository.findOneOrFail({
       where: { id: departmentId },

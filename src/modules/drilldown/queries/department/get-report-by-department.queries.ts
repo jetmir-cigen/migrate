@@ -59,7 +59,7 @@ export class GetReportByDepartmentQueryHandler
       this.drillDownService.getTypes(type, typeId);
 
     const customersAccessList =
-      await this.drillDownService.getCustomerAccessListArr(user.uid);
+      await this.drillDownService.getCustomerAccessListArr(user);
 
     const query = this.repository
       .createQueryBuilder('ir')
@@ -101,11 +101,7 @@ export class GetReportByDepartmentQueryHandler
 
     const rowsPromise = query.getRawMany();
 
-    const entityPromise = this.drillDownService.getEntity(
-      user.uid,
-      type,
-      typeId,
-    );
+    const entityPromise = this.drillDownService.getEntity(user, type, typeId);
 
     const [rows, entity] = await Promise.all([rowsPromise, entityPromise]);
 
