@@ -54,6 +54,37 @@ export class FindInvoicesByFilterQueryHandler
           'invoice.',
         ),
       )
+      .andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('vi.id')
+          .from('view.invoice', 'vi')
+          .addFrom('view.manager_access_customer', 'mac')
+          .where('mac.user_id = :userId', { userId })
+          .andWhere('mac.customer_id = vi.customer_id')
+          .andWhere('invoice.id = vi.id')
+          // .andWhere('vi.vendor_id = :customerId', { customerId })
+          .getQuery();
+        return 'invoice.id IN ' + subQuery;
+      })
+      .leftJoin('invoice.vendor', 'vendor')
+      .addSelect(
+        nameof<VendorEntity>(
+          [
+            'address1',
+            'address2',
+            'city',
+            'countryId',
+            'id',
+            'name',
+            'orgNo',
+            'zip',
+            'isInternalVendor',
+          ],
+          'vendor.',
+        ),
+      )
+      .leftJoin('invoice.customer', 'customer')
       .addSelect(
         nameof<CustomerEntity>(
           [
@@ -80,36 +111,6 @@ export class FindInvoicesByFilterQueryHandler
           'customer.',
         ),
       )
-      .addSelect(
-        nameof<VendorEntity>(
-          [
-            'address1',
-            'address2',
-            'city',
-            'countryId',
-            'id',
-            'name',
-            'orgNo',
-            'zip',
-          ],
-          'vendor.',
-        ),
-      )
-      .andWhere((qb) => {
-        const subQuery = qb
-          .subQuery()
-          .select('vi.id')
-          .from('view.invoice', 'vi')
-          .addFrom('view.manager_access_customer', 'mac')
-          .where('mac.user_id = :userId', { userId })
-          .andWhere('mac.customer_id = vi.customer_id')
-          .andWhere('invoice.id = vi.id')
-          // .andWhere('vi.vendor_id = :customerId', { customerId })
-          .getQuery();
-        return 'invoice.id IN ' + subQuery;
-      })
-      .leftJoinAndSelect('invoice.vendor', 'vendor')
-      .leftJoinAndSelect('invoice.customer', 'customer')
       .leftJoinAndSelect('invoice.elementLabel', 'elementLabel')
       .orderBy('invoice.date', 'DESC')
       .getMany();
