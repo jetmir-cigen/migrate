@@ -2,6 +2,9 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InvoiceEntity } from '../entities/invoice.entity';
+import { nameof } from '@/utils/nameof';
+import { VendorEntity } from '@/common/entities/vendor.entity';
+import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 
 type QueryFilters = {
   userId: number;
@@ -25,6 +28,73 @@ export class FindInvoicesByFilterQueryHandler
 
     const invoices = await this.invoiceRepository
       .createQueryBuilder('invoice')
+      .select(
+        nameof<InvoiceEntity>(
+          [
+            'customer',
+            'customerId',
+            'date',
+            'dueDate',
+            'ehfStatus',
+            'elementLabel',
+            'elementLabelId',
+            'id',
+            'invoiceAmount',
+            'invoiceClassificationId',
+            'invoiceControlAmount',
+            'invoiceNo',
+            'invoiceRecipient',
+            'kidnumber',
+            'lastUpdate',
+            'sent',
+            'vendor',
+            'vendorGrossAmount',
+            'vendorId',
+          ],
+          'invoice.',
+        ),
+      )
+      .addSelect(
+        nameof<CustomerEntity>(
+          [
+            'address1',
+            'address2',
+            'billingAddress1',
+            'billingAddress2',
+            'billingCity',
+            'billingCycleMonths',
+            'billingZip',
+            'city',
+            'countryId',
+            'customerHeadId',
+            'customerNo',
+            'customerStatus',
+            'id',
+            'locale',
+            'name',
+            'orgNo',
+            'vatNo',
+            'whitelabelId',
+            'zip',
+          ],
+          'customer.',
+        ),
+      )
+      .addSelect(
+        nameof<VendorEntity>(
+          [
+            'address1',
+            'address2',
+            'city',
+            'countryId',
+            'id',
+            'name',
+            'orgNo',
+            'zip',
+          ],
+          'vendor.',
+        ),
+      )
       .andWhere((qb) => {
         const subQuery = qb
           .subQuery()
