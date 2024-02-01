@@ -14,6 +14,8 @@ import { ProductEntity } from '@/common/entities/product.entity';
 import { ProductGroupEntity } from '@/common/entities/product-group.entity';
 import { ProductCategoryEntity } from '@/common/entities/product-category.entity';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { isDepartmentAdmin } from '@/utils/access';
+import { DepartmentEntity } from '@/modules/department/entities/department.entity';
 
 type QueryFilters = {
   year: number;
@@ -68,9 +70,6 @@ export class ServiceCategoryAndGroupReportQueryHandler
 
     const { frameAgreementId, customerHeadId, customerId } =
       this.drillDownService.getTypes(type, typeId);
-
-    const customersAccessList =
-      await this.drillDownService.getCustomerAccessListArr(user);
 
     const query = this.repository
       .createQueryBuilder('ir')
@@ -132,7 +131,22 @@ export class ServiceCategoryAndGroupReportQueryHandler
       customerId,
     );
 
-    query.where('c.id IN (:...customersAccessList)', { customersAccessList });
+    const isUserDepartmentAdmin = isDepartmentAdmin(user);
+
+    if (!isUserDepartmentAdmin) {
+      const customersAccessList =
+        await this.drillDownService.getCustomerAccessListArr(user);
+      query.where(`c.id IN (:...customersAccessList)`, { customersAccessList });
+    } else {
+      const departmentsAccessList =
+        await this.drillDownService.getDepartmentAccessList(user.uid);
+
+      query.innerJoin(DepartmentEntity, 'd', 'd.id = co.department_id');
+
+      query.where(`d.id IN (:...departmentsAccessList)`, {
+        departmentsAccessList,
+      });
+    }
 
     query.groupBy('p.id').orderBy('SUM(ir.amount)', 'DESC');
 

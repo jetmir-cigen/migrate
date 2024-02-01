@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { DrillDownServiceType } from '@/modules/drilldown/dto/product-categories-param.dto';
-import { ManagerAccessFrameAgreementViewEntity } from '@/common/views';
+import {
+  ManagerAccessDepartmentView,
+  ManagerAccessFrameAgreementViewEntity,
+} from '@/common/views';
 import { CustomerEntity } from '../customer/entities/customer.entity';
 import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
 import { CustomerHeadFrameAgreementEntity } from '@/common/entities/customer-head-frame-agreement.entity';
@@ -12,6 +15,8 @@ export class DrillDownService {
   constructor(
     @InjectRepository(ManagerAccessFrameAgreementViewEntity)
     readonly macFrameAgreementRepository: Repository<ManagerAccessFrameAgreementViewEntity>,
+    @InjectRepository(ManagerAccessDepartmentView)
+    readonly madRepository: Repository<ManagerAccessDepartmentView>,
   ) {}
 
   async getCustomerAccessList(userId: number): Promise<string> {
@@ -36,6 +41,15 @@ export class DrillDownService {
     } else {
       return [cid];
     }
+  }
+
+  async getDepartmentAccessList(userId: number): Promise<number[]> {
+    const mad = await this.madRepository.find({
+      where: { userId },
+      select: ['departmentId'],
+    });
+
+    return mad.map((item) => item.departmentId);
   }
 
   getPeriodFilter(year: number, period: number): string {

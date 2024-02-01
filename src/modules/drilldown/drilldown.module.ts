@@ -7,7 +7,10 @@ import { GetTotalQueryHandler } from '@/modules/drilldown/queries/get-total.quer
 import { InvoiceRowViewEntity } from '@/common/views/invoice-row-view.entity';
 import { ServiceReportQueryHandler } from '@/modules/drilldown/queries/service/service-report.queries';
 import { QueryModule } from '@/modules/query/query.module';
-import { ManagerAccessFrameAgreementViewEntity } from '@/common/views';
+import {
+  ManagerAccessDepartmentView,
+  ManagerAccessFrameAgreementViewEntity,
+} from '@/common/views';
 import { GetReportByDepartmentQueryHandler } from './queries/department/get-report-by-department.queries';
 import { DepartmentEntity } from '../department/entities/department.entity';
 import { InvoiceRowEntity } from '../invoice/entities/invoice-row.entity';
@@ -34,6 +37,7 @@ import { ProductEntity } from '@/common/entities/product.entity';
       CustomerViewEntity,
       InvoiceRowViewEntity,
       ManagerAccessFrameAgreementViewEntity,
+      ManagerAccessDepartmentView,
       DepartmentEntity,
       InvoiceRowEntity,
       CostObjectEntity,

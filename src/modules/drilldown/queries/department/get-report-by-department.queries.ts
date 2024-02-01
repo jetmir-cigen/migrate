@@ -12,6 +12,7 @@ import { InvoiceRowEntity } from '@/modules/invoice/entities/invoice-row.entity'
 import { InvoiceEntity } from '@/modules/invoice/entities/invoice.entity';
 import { VendorEntity } from '@/common/entities/vendor.entity';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { isDepartmentAdmin } from '@/utils/access';
 
 type QueryFilters = {
   year: number;
@@ -58,9 +59,6 @@ export class GetReportByDepartmentQueryHandler
     const { frameAgreementId, customerHeadId, customerId } =
       this.drillDownService.getTypes(type, typeId);
 
-    const customersAccessList =
-      await this.drillDownService.getCustomerAccessListArr(user);
-
     const query = this.repository
       .createQueryBuilder('ir')
       .select('SUM(ir.amount)', 'amount')
@@ -95,7 +93,20 @@ export class GetReportByDepartmentQueryHandler
       customerId,
     );
 
-    query.where(`c.id IN (:...customersAccessList)`, { customersAccessList });
+    const isUserDepartmentAdmin = isDepartmentAdmin(user);
+
+    if (!isUserDepartmentAdmin) {
+      const customersAccessList =
+        await this.drillDownService.getCustomerAccessListArr(user);
+      query.where(`c.id IN (:...customersAccessList)`, { customersAccessList });
+    } else {
+      const departmentsAccessList =
+        await this.drillDownService.getDepartmentAccessList(user.uid);
+
+      query.where(`d.id IN (:...departmentsAccessList)`, {
+        departmentsAccessList,
+      });
+    }
 
     query.groupBy('d.id').orderBy('SUM(ir.amount)', 'DESC');
 
