@@ -119,8 +119,7 @@ GROUP BY
         total_amount,
         cover_amount,
         down_payments,
-        is_buyout,
-        model
+        is_buyout
 ORDER BY
         name
 `;
@@ -246,8 +245,7 @@ GROUP BY
         total_amount,
         cover_amount,
         down_payments,
-        is_buyout,
-        model
+        is_buyout
 ORDER BY
         name
 `;
