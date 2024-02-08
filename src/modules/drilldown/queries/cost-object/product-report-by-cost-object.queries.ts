@@ -12,6 +12,8 @@ import { InvoiceRowEntity } from '@/modules/invoice/entities/invoice-row.entity'
 import { InvoiceEntity } from '@/modules/invoice/entities/invoice.entity';
 import { VendorEntity } from '@/common/entities/vendor.entity';
 import { ProductEntity } from '@/common/entities/product.entity';
+import { isDepartmentAdmin } from '@/utils/access';
+import { DepartmentEntity } from '@/modules/department/entities/department.entity';
 
 type QueryFilters = {
   year: number;
@@ -36,7 +38,10 @@ type ResultType = {
 
 export class GetProductReportByCostObjectQuery implements QueryInterface {
   $$resolveType: ResultType;
-  constructor(readonly filters: QueryFilters, readonly user: Express.User) {}
+  constructor(
+    readonly filters: QueryFilters,
+    readonly user: Express.User,
+  ) {}
 }
 
 @QueryHandler(GetProductReportByCostObjectQuery)
@@ -58,9 +63,6 @@ export class GetProductReportByCostObjectQueryHandler
 
     const { frameAgreementId, customerHeadId, customerId } =
       this.drillDownService.getTypes(type, typeId);
-
-    const customersAccessList =
-      await this.drillDownService.getCustomerAccessListArr(user);
 
     const query = this.repository
       .createQueryBuilder('ir')
@@ -110,7 +112,22 @@ export class GetProductReportByCostObjectQueryHandler
       customerId,
     );
 
-    query.where(`c.id IN (:...customersAccessList)`, { customersAccessList });
+    const isUserDepartmentAdmin = isDepartmentAdmin(user);
+
+    if (!isUserDepartmentAdmin) {
+      const customersAccessList =
+        await this.drillDownService.getCustomerAccessListArr(user);
+      query.where(`c.id IN (:...customersAccessList)`, { customersAccessList });
+    } else {
+      const departmentsAccessList =
+        await this.drillDownService.getDepartmentAccessList(user.uid);
+
+      query.innerJoin(DepartmentEntity, 'd', 'd.id = co.department_id');
+
+      query.where(`d.id IN (:...departmentsAccessList)`, {
+        departmentsAccessList,
+      });
+    }
 
     query.groupBy('p.id').orderBy('SUM(ir.amount)', 'DESC');
 

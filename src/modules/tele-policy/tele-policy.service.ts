@@ -50,7 +50,7 @@ export class TelePolicyService {
       `INSERT INTO control.customer_product (product_id, private, salary_deduction_profile_id)
         SELECT p.id, TRUE, ?
         FROM control.tele_policy_template_product_group tptpg
-        LEFT JOIN control.product p ON tptpg.product_group_id = p.product_group_id
+        JOIN control.product p ON tptpg.product_group_id = p.product_group_id
         WHERE tptpg.tele_policy_template_id = ?`,
       [salaryDeductionProfileId, telePolicyTemplateId],
     );

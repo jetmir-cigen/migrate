@@ -7,7 +7,7 @@ SELECT
         co_accounting_code,
         department_code,
         department_name,
-        model,
+        GROUP_CONCAT(DISTINCT(model) SEPARATOR ', ') AS model,
         IF(
                 is_buyout = 1,
                 DATE_FORMAT(payment_date, '%Y-%m-%d'),
@@ -119,8 +119,7 @@ GROUP BY
         total_amount,
         cover_amount,
         down_payments,
-        is_buyout,
-        model
+        is_buyout
 ORDER BY
         name
 `;
@@ -134,7 +133,7 @@ SELECT
         co_accounting_code,
         department_code,
         department_name,
-        model,
+        GROUP_CONCAT(DISTINCT(model) SEPARATOR ', ') AS model,
         IF(
                 is_buyout = 1,
                 DATE_FORMAT(payment_date, '%Y-%m-%d'),
@@ -246,8 +245,7 @@ GROUP BY
         total_amount,
         cover_amount,
         down_payments,
-        is_buyout,
-        model
+        is_buyout
 ORDER BY
         name
 `;
