@@ -7,7 +7,7 @@ SELECT
         co_accounting_code,
         department_code,
         department_name,
-        model,
+        GROUP_CONCAT(DISTINCT(model) SEPARATOR ', ') AS model,
         IF(
                 is_buyout = 1,
                 DATE_FORMAT(payment_date, '%Y-%m-%d'),
@@ -133,7 +133,7 @@ SELECT
         co_accounting_code,
         department_code,
         department_name,
-        model,
+        GROUP_CONCAT(DISTINCT(model) SEPARATOR ', ') AS model,
         IF(
                 is_buyout = 1,
                 DATE_FORMAT(payment_date, '%Y-%m-%d'),
