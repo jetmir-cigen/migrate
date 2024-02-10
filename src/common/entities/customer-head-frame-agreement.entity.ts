@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { CustomerHeadEntity } from './customer-head.entity';
 
-@Entity({ schema: 'control', name: 'customer_head_frame_agreement' })
+@Entity({ schema: 'control', name: 'control.customer_head_frame_agreement' })
 export class CustomerHeadFrameAgreementEntity {
   @PrimaryGeneratedColumn()
   id: number;

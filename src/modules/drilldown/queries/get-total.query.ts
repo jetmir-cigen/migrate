@@ -70,7 +70,7 @@ export class GetTotalQueryHandler
       .addSelect('chfa.id', 'customerHeadFrameAgreementId')
       .addSelect('chfa.name', 'customerHeadFrameAgreementName')
       .innerJoin(CustomerHeadEntity, 'ch', 'c.customer_head_id = ch.id')
-      .innerJoin(
+      .leftJoin(
         CustomerHeadFrameAgreementEntity,
         'chfa',
         'ch.customer_head_frame_agreement_id = chfa.id',
