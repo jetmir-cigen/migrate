@@ -94,7 +94,7 @@ export class DrillDownService {
     condition: string,
     parameters?: Record<string, any>,
   ) => {
-    query.innerJoin(
+    query.leftJoin(
       CustomerHeadFrameAgreementEntity,
       'chfa',
       condition,

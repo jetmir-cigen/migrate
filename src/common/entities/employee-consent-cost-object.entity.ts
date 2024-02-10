@@ -1,7 +1,7 @@
 import { Entity, Column, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 import { EmployeeConsentEntity } from '@/modules/employee-consent/entities/employee-consent.entity';
 
-@Entity({ name: 'employee_consent_cost_object' })
+@Entity({ name: 'control.employee_consent_cost_object' })
 export class EmployeeConsentCostObjectEntity {
   @ManyToOne(() => EmployeeConsentEntity)
   @JoinColumn({ name: 'employee_consent_id' })

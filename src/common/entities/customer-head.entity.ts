@@ -9,7 +9,7 @@ import {
 import { CustomerHeadFrameAgreementEntity } from './customer-head-frame-agreement.entity';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 
-@Entity({ schema: 'control', name: 'customer_head' })
+@Entity({ schema: 'control', name: 'control.customer_head' })
 export class CustomerHeadEntity {
   @PrimaryGeneratedColumn()
   id: number;
