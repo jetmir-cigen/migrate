@@ -149,19 +149,22 @@ export class ServiceProductCategoryReportQueryHandler
       select: ['id', 'name'],
     });
 
-    const [rows, entity, category] = await Promise.all([
+    const [rows, entity, category] = await Promise.allSettled([
       rowsPromise,
       entityPromise,
       categoryPromise,
     ]);
 
     return {
-      rows: rows.map((row) => ({
-        ...row,
-        peakVolumeDiff: Number(row.peakVolumeDiff),
-      })),
-      entity,
-      category,
+      rows:
+        rows.status === 'fulfilled'
+          ? rows.value.map((row) => ({
+              ...row,
+              peakVolumeDiff: Number(row.peakVolumeDiff),
+            }))
+          : [],
+      entity: entity.status === 'fulfilled' ? entity.value : {},
+      category: category.status === 'fulfilled' ? category.value : {},
     };
   }
 }

@@ -114,11 +114,14 @@ export class GetReportByDepartmentQueryHandler
 
     const entityPromise = this.drillDownService.getEntity(user, type, typeId);
 
-    const [rows, entity] = await Promise.all([rowsPromise, entityPromise]);
+    const [rows, entity] = await Promise.allSettled([
+      rowsPromise,
+      entityPromise,
+    ]);
 
     return {
-      rows,
-      entity,
+      rows: rows.status === 'fulfilled' ? rows.value : [],
+      entity: entity.status === 'fulfilled' ? entity.value : {},
     };
   }
 }
