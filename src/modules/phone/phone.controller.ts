@@ -38,10 +38,14 @@ import { UpdatePhoneBookNumberCommand } from './commands/phone-book-update-numbe
 import { UpdatePhoneGroupNumberCommand } from './commands/phone-groups-update-numbers.command';
 import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
 import { FindUserAliasesByFilterQuery } from './queries/get-user-aliases.query';
+import { UserRolesENUM } from '../user/user-roles.enum';
 
 @ApiTags('Phone')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(
+  AuthGuard,
+  UserRoleGuard([...ADMIN_USERS_GROUP, UserRolesENUM.IT_USER]),
+)
 @Controller('phone')
 export class PhoneController {
   constructor(
