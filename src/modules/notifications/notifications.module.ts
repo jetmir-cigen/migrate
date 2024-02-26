@@ -34,5 +34,19 @@ import { LogMailEntity } from './entities/log-mail.entity';
     SmsNotificationsService,
     PushNotificationsService,
   ],
+  exports: [
+    TypeOrmModule.forFeature([
+      UserEntity,
+      CostObjectEntity,
+      TextTemplateEntity,
+      CustomerEntity,
+      LogSmsPushEntity,
+      LogMailEntity,
+    ]),
+    NotificationsService,
+    EmailNotificationsService,
+    SmsNotificationsService,
+    PushNotificationsService,
+  ],
 })
 export class NotificationsModule {}

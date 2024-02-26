@@ -5,9 +5,11 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { CustomerHeadEntity } from './customer-head.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
+import { SubscriptionServiceOrderActivationEntity } from '@/modules/subscriptions/entities/subscription-service-order-activation.entity';
 
 @Entity({ name: 'control.device_policy' })
 export class DevicePolicyEntity {
@@ -70,4 +72,11 @@ export class DevicePolicyEntity {
   @ManyToOne((type) => UserEntity)
   @JoinColumn({ name: 'admin_user_id' })
   adminUser: UserEntity;
+
+  @OneToMany(
+    () => SubscriptionServiceOrderActivationEntity,
+    (subscriptionServiceOrderActivation) =>
+      subscriptionServiceOrderActivation.devicePolicy,
+  )
+  subscriptionServiceOrderActivations: SubscriptionServiceOrderActivationEntity[];
 }
