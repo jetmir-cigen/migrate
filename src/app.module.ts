@@ -30,6 +30,8 @@ import { AssetModule } from './modules/asset/asset.module';
 import { DrillDownModule } from '@/modules/drilldown/drilldown.module';
 import { QueryModule } from './modules/query/query.module';
 import { CustomerAddressModule } from './modules/customer-address/customer-address.module';
+import { PolicyModule } from './modules/policy/policy.module';
+import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
 
 @Module({
   imports: [
@@ -58,6 +60,8 @@ import { CustomerAddressModule } from './modules/customer-address/customer-addre
     DrillDownModule,
     QueryModule,
     CustomerAddressModule,
+    PolicyModule,
+    SubscriptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

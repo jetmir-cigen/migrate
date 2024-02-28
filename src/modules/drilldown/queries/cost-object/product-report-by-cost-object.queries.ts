@@ -38,10 +38,7 @@ type ResultType = {
 
 export class GetProductReportByCostObjectQuery implements QueryInterface {
   $$resolveType: ResultType;
-  constructor(
-    readonly filters: QueryFilters,
-    readonly user: Express.User,
-  ) {}
+  constructor(readonly filters: QueryFilters, readonly user: Express.User) {}
 }
 
 @QueryHandler(GetProductReportByCostObjectQuery)
@@ -140,19 +137,22 @@ export class GetProductReportByCostObjectQueryHandler
       select: ['id', 'name', 'code'],
     });
 
-    const [rows, entity, costObject] = await Promise.all([
+    const [rows, entity, costObject] = await Promise.allSettled([
       rowsPromise,
       entityPromise,
       costObjectPromise,
     ]);
 
     return {
-      rows: rows.map((row) => ({
-        ...row,
-        peakVolumeDiff: Number(row.peakVolumeDiff),
-      })),
-      entity,
-      costObject,
+      rows:
+        rows.status === 'fulfilled'
+          ? rows.value.map((row) => ({
+              ...row,
+              peakVolumeDiff: Number(row.peakVolumeDiff),
+            }))
+          : [],
+      entity: entity.status === 'fulfilled' ? entity.value : {},
+      costObject: costObject.status === 'fulfilled' ? costObject.value : {},
     };
   }
 }

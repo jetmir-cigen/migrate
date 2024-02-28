@@ -38,10 +38,7 @@ type ResultType = {
 
 export class ServiceReportQuery implements QueryInterface {
   $$resolveType: ResultType;
-  constructor(
-    readonly filters: QueryFilters,
-    readonly user: Express.User,
-  ) {}
+  constructor(readonly filters: QueryFilters, readonly user: Express.User) {}
 }
 
 @QueryHandler(ServiceReportQuery)
@@ -117,11 +114,14 @@ export class ServiceReportQueryHandler
 
     const entityPromise = this.drillDownService.getEntity(user, type, typeId);
 
-    const [rows, entity] = await Promise.all([rowsPromise, entityPromise]);
+    const [rows, entity] = await Promise.allSettled([
+      rowsPromise,
+      entityPromise,
+    ]);
 
     return {
-      rows,
-      entity,
+      rows: rows.status === 'fulfilled' ? rows.value : [],
+      entity: entity.status === 'fulfilled' ? entity.value : {},
     };
   }
 }

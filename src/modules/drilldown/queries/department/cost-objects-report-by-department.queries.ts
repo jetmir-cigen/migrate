@@ -37,10 +37,7 @@ type ResultType = {
 
 export class GetCostObjectReportByDepartmentQuery implements QueryInterface {
   $$resolveType: ResultType;
-  constructor(
-    readonly filters: QueryFilters,
-    readonly user: Express.User,
-  ) {}
+  constructor(readonly filters: QueryFilters, readonly user: Express.User) {}
 }
 
 @QueryHandler(GetCostObjectReportByDepartmentQuery)
@@ -126,16 +123,16 @@ export class GetCostObjectReportByDepartmentQueryHandler
       where: { id: departmentId },
     });
 
-    const [rows, entity, department] = await Promise.all([
+    const [rows, entity, department] = await Promise.allSettled([
       rowsPromise,
       entityPromise,
       departmentPromise,
     ]);
 
     return {
-      rows,
-      entity,
-      department,
+      rows: rows.status === 'fulfilled' ? rows.value : [],
+      entity: entity.status === 'fulfilled' ? entity.value : {},
+      department: department.status === 'fulfilled' ? department.value : {},
     };
   }
 }

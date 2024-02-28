@@ -4,6 +4,7 @@ import { AuthGuard } from '@/modules/auth/auth.guard';
 import {
   ADMIN_USERS_GROUP,
   DEPARTMENT_USERS_GROUP,
+  SUPER_ADMIN_USERS_GROUP,
 } from '@/modules/user/user-role.groups';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { ServiceReportQuery } from '@/modules/drilldown/queries/service/service-report.queries';
@@ -28,11 +29,16 @@ import { GetProductReportByDepartmentAndCostObjectQuery } from './queries/depart
 import { GetProductsReportByDepartmentAndCostObjectsQueryDto } from './dto/request/product-report-by-department-cost-objects.dto';
 import { GetProductReportByCostObjectQuery } from './queries/cost-object/product-report-by-cost-object.queries';
 import { GetProductReportByCostObjectQueryDto } from './dto/request/product-report-by-cost-object.dto';
+import { UserRolesENUM } from '../user/user-roles.enum';
 
 @Controller('drill-down')
 @UseGuards(
   AuthGuard,
-  UserRoleGuard([...ADMIN_USERS_GROUP, ...DEPARTMENT_USERS_GROUP]),
+  UserRoleGuard([
+    ...ADMIN_USERS_GROUP,
+    ...DEPARTMENT_USERS_GROUP,
+    UserRolesENUM.REPORT_USER,
+  ]),
 )
 export class DrillDownController {
   constructor(readonly queryService: QueryService) {}
@@ -137,6 +143,7 @@ export class DrillDownController {
     );
   }
 
+  @UseGuards(UserRoleGuard([...SUPER_ADMIN_USERS_GROUP]))
   @Get('total')
   async getTotalQuery(
     @Query() params: GetTotalQueryDto,

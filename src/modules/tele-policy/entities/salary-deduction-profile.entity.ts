@@ -10,6 +10,7 @@ import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { TelePolicyTemplateEntity } from './tele-policy-template.entity';
 import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { SubscriptionServiceOrderActivationEntity } from '@/modules/subscriptions/entities/subscription-service-order-activation.entity';
 
 @Entity({ schema: 'control', name: 'salary_deduction_profile' })
 export class SalaryDeductionProfileEntity {
@@ -55,4 +56,11 @@ export class SalaryDeductionProfileEntity {
   @OneToMany(() => CostObjectEntity, (co) => co.salaryDeductionProfile)
   costObjects: CostObjectEntity[];
   public subscribers: number;
+
+  @OneToMany(
+    () => SubscriptionServiceOrderActivationEntity,
+    (subscriptionServiceOrderActivation) =>
+      subscriptionServiceOrderActivation.salaryDeductionProfile,
+  )
+  subscriptionServiceOrderActivations: SubscriptionServiceOrderActivationEntity[];
 }

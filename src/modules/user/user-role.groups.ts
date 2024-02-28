@@ -1,8 +1,12 @@
 import { UserRolesENUM } from './user-roles.enum';
 
-export const ADMIN_USERS_GROUP = [
+export const SUPER_ADMIN_USERS_GROUP = [
   UserRolesENUM.ADMIN,
   UserRolesENUM.CUSTOMER_HEAD_ADMIN,
+];
+
+export const ADMIN_USERS_GROUP = [
+  ...SUPER_ADMIN_USERS_GROUP,
   UserRolesENUM.CUSTOMER_ADMIN,
 ];
 

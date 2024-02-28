@@ -46,10 +46,7 @@ export class CostObjectsServiceCategoryAndGroupReportQuery
   implements QueryInterface
 {
   $$resolveType: ResultType;
-  constructor(
-    readonly filters: QueryFilters,
-    readonly user: Express.User,
-  ) {}
+  constructor(readonly filters: QueryFilters, readonly user: Express.User) {}
 }
 
 @QueryHandler(CostObjectsServiceCategoryAndGroupReportQuery)
@@ -189,7 +186,7 @@ export class CostObjectsServiceCategoryAndGroupReportQueryHandler
       select: ['id', 'name'],
     });
 
-    const [rows, entity, category, group, product] = await Promise.all([
+    const [rows, entity, category, group, product] = await Promise.allSettled([
       rowsPromise,
       entityPromise,
       categoryPromise,
@@ -198,14 +195,17 @@ export class CostObjectsServiceCategoryAndGroupReportQueryHandler
     ]);
 
     return {
-      rows: rows.map((row) => ({
-        ...row,
-        peakVolumeDiff: Number(row.peakVolumeDiff),
-      })),
-      entity,
-      category,
-      group,
-      product,
+      rows:
+        rows.status === 'fulfilled'
+          ? rows.value.map((row) => ({
+              ...row,
+              peakVolumeDiff: Number(row.peakVolumeDiff),
+            }))
+          : [],
+      entity: entity.status === 'fulfilled' ? entity.value : {},
+      category: category.status === 'fulfilled' ? category.value : {},
+      group: group.status === 'fulfilled' ? group.value : {},
+      product: product.status === 'fulfilled' ? product.value : {},
     };
   }
 }

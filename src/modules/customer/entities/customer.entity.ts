@@ -2,6 +2,7 @@ import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 import { CountryEntity } from '@/common/entities/country.entity';
 import { LogMailEntity } from '@/modules/notifications/entities/log-mail.entity';
 import { LogSmsPushEntity } from '@/modules/phone/entities/log-sms-push.entity';
+import { SubscriptionServicesEntity } from '@/modules/subscriptions/entities/subscription-services.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 import {
   Entity,
@@ -291,4 +292,10 @@ export class CustomerEntity {
 
   @OneToMany(() => LogMailEntity, (logMail) => logMail.customer)
   logMails: LogMailEntity[];
+
+  @OneToMany(
+    () => SubscriptionServicesEntity,
+    (subscriptionServices) => subscriptionServices.customer,
+  )
+  subscriptionServices: SubscriptionServicesEntity[];
 }
