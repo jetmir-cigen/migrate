@@ -19,3 +19,23 @@ export const getOauthServerUrl = (env = 'development') => {
     return 'https://auth-dev.skytechcontrol.io';
   }
 };
+
+type ApplicationType = 'manager' | 'stats' | 'form' | 'dealer' | 'app';
+export const getAppLink = (app: ApplicationType, path?: string) => {
+  const baseUrl = `https://${app}`;
+
+  // This var is set in the .env file
+  const env = process.env.ENVIRONMENT;
+  if (env.toLowerCase() === 'production') {
+    return `${baseUrl}.skytechcontrol.io/${path}`;
+  }
+  if (env.toLowerCase() === 'test') {
+    return `${baseUrl}-test.skytechcontrol.io/${path}`;
+  }
+  if (env.toLowerCase() === 'sandbox') {
+    return `${baseUrl}-sandbox.skytechcontrol.io/${path}`;
+  }
+  if (env.toLowerCase() === 'development') {
+    return `${baseUrl}-dev.skytechcontrol.io/${path}`;
+  }
+};

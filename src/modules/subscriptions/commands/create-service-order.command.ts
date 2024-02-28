@@ -6,10 +6,10 @@ import {
   PortationFormFilledTextTemplate,
 } from '@/modules/notifications/types';
 import { UserEntity } from '@/modules/user/entities/user.entity';
+import { getAppLink } from '@/utils/constants';
 import { generateRandomCode } from '@/utils/generateRandomCode';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { env } from 'process';
 import { Repository } from 'typeorm';
 import { CreateSubscriptionDto } from '../dto/create-subscription.dto';
 import { CustomerDealerEntity } from '../entities/customer-dealer.entity';
@@ -57,10 +57,11 @@ export class CreateSubscriptionOrderCommandHandler
         comment: createSubscriptionDto.comment,
       });
 
-    const generatedCode = generateRandomCode(16, {
+    const generatedCode = generateRandomCode(30, {
       useNumbers: true,
       useSpecialChar: false,
       useUpperCaseChar: true,
+      allCaps: true,
     });
 
     const subscriptionOrderActivation =
@@ -102,10 +103,7 @@ export class CreateSubscriptionOrderCommandHandler
   ) {
     const userEntity = await this.userRepository.findOne({
       where: { id: user.id },
-    });
-
-    const company = await this.userRepository.findOne({
-      where: { id: user.chid },
+      relations: ['customer'],
     });
 
     // If new number order: no notifications sent
@@ -119,15 +117,16 @@ export class CreateSubscriptionOrderCommandHandler
     ) {
       this.sendBusinessNotifications(
         user,
-        company,
-        userEntity,
-        subscriptionOrder,
+        createSubscriptionDto.name,
+        userEntity.customer.name,
+        subscriptionOrder.id,
       );
     } else {
       await this.sendUserNotification(
         user,
-        createSubscriptionDto,
-        userEntity,
+        createSubscriptionDto.name,
+        userEntity.customer.name,
+        userEntity.firstName,
         generatedCode,
       );
     }
@@ -135,22 +134,25 @@ export class CreateSubscriptionOrderCommandHandler
 
   sendBusinessNotifications(
     user: Express.User,
-    company: UserEntity,
-    userEntity: UserEntity,
-    subscriptionOrder: SubscriptionServiceOrdersEntity,
+    employeeName: string,
+    companyName: string,
+    subscriptionOrderId: number,
   ) {
     // send mail to dealer (template: portation_form_filled)
     this.notificationService.sendToUser(
       user.uid,
       new PortationFormFilledTextTemplate(
         {
-          companyName: company.username,
-          employeeName: userEntity.username,
+          companyName,
+          employeeName,
         },
         {
-          companyName: company.username,
-          employeeName: userEntity.username,
-          url: `${env['FRONTEND_URL']}/subscriptions/${subscriptionOrder.id}`,
+          companyName,
+          employeeName,
+          url: getAppLink(
+            'dealer',
+            `#/orders/subscriptions/${subscriptionOrderId}`,
+          ),
         },
       ),
       user,
@@ -159,8 +161,9 @@ export class CreateSubscriptionOrderCommandHandler
 
   async sendUserNotification(
     user: Express.User,
-    createSubscriptionDto: CreateSubscriptionDto,
-    userEntity: UserEntity,
+    customerName: string,
+    companyName: string,
+    userName: string,
     generatedCode?: string,
   ) {
     const customerDealer = await this.customerDealerRepository.findOne({
@@ -186,16 +189,16 @@ export class CreateSubscriptionOrderCommandHandler
       user.uid,
       new ActivationTextTemplate(
         {
-          companyName: createSubscriptionDto.name,
+          companyName,
         },
         {
-          userName: userEntity.firstName,
-          customerName: userEntity.firstName,
-          companyName: createSubscriptionDto.name,
+          userName,
+          customerName,
+          companyName,
           dealerEmail: notificationEmail.emailAddresses.split(',')[0],
           dealerLastName: dealer.name,
           dealerPhoneNumber: notificationEmail.phoneNumbers?.[0],
-          formUrl: `https://form.skytechcontrol.io/${generatedCode}`,
+          formUrl: getAppLink('form', generatedCode),
         },
       ),
       user,
