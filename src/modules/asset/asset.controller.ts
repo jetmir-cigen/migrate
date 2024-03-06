@@ -15,9 +15,13 @@ import { AssetEntity } from '@/modules/asset/entities/asset.entity';
 import { GetAssetByIdQuery } from '@/modules/asset/queries/get-asset-by-id.query';
 import { UserRoleGuard } from '@/modules/user/user-role.guard';
 import { ADMIN_USERS_GROUP } from '@/modules/user/user-role.groups';
+import { UserRolesENUM } from '../user/user-roles.enum';
 
 @Controller('assets')
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(
+  AuthGuard,
+  UserRoleGuard([...ADMIN_USERS_GROUP, UserRolesENUM.IT_USER]),
+)
 export class AssetController {
   constructor(
     private readonly commandBus: CommandBus,

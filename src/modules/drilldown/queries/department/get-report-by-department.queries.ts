@@ -35,7 +35,10 @@ type ResultType = {
 
 export class GetReportByDepartmentQuery implements QueryInterface {
   $$resolveType: ResultType;
-  constructor(readonly filters: QueryFilters, readonly user: Express.User) {}
+  constructor(
+    readonly filters: QueryFilters,
+    readonly user: Express.User,
+  ) {}
 }
 
 @QueryHandler(GetReportByDepartmentQuery)
