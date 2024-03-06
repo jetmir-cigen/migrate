@@ -64,30 +64,29 @@ export class CreateSubscriptionOrderCommandHandler
       allCaps: true,
     });
 
-    const subscriptionOrderActivation =
-      await this.subscriptionServiceOrdersActivationRepository.save({
-        id: subscriptionOrder.id,
-        departmentId: createSubscriptionDto.departmentId,
-        nameNew: createSubscriptionDto.name,
-        simName: createSubscriptionDto.name,
-        code: generatedCode,
-        email: createSubscriptionDto.email,
-        type: 'VOICE',
-        activationDate: createSubscriptionDto.activationDate,
-        employeeNumber: createSubscriptionDto.employeeNumber,
-        contactNumber: createSubscriptionDto.contactNumber,
-        contactNumberCountryId: createSubscriptionDto.contactNumberCountryId,
-        businessSub: createSubscriptionDto.isBusinessSub,
-        newNumber: createSubscriptionDto.simNumber ? true : false,
-        newSim: createSubscriptionDto.isNewSim,
-        simNumber: createSubscriptionDto.simNumber,
-        simAdr: createSubscriptionDto.simAddress,
-        simCity: createSubscriptionDto.simCity,
-        simZip: createSubscriptionDto.simZip,
-        devicePolicyId: createSubscriptionDto.devicePolicyId,
-        salaryDeductionProfileId: createSubscriptionDto.telePolicyId,
-        ecomPolicyIdList: createSubscriptionDto.ecomPolicyIds,
-      });
+    await this.subscriptionServiceOrdersActivationRepository.save({
+      id: subscriptionOrder.id,
+      departmentId: createSubscriptionDto.departmentId,
+      nameNew: createSubscriptionDto.name,
+      simName: createSubscriptionDto.name,
+      code: generatedCode,
+      email: createSubscriptionDto.email,
+      type: 'VOICE',
+      activationDate: createSubscriptionDto.activationDate,
+      employeeNumber: createSubscriptionDto.employeeNumber,
+      contactNumber: createSubscriptionDto.contactNumber,
+      contactNumberCountryId: createSubscriptionDto.contactNumberCountryId,
+      businessSub: createSubscriptionDto.isBusinessSub,
+      newNumber: createSubscriptionDto.simNumber ? true : false,
+      newSim: createSubscriptionDto.isNewSim,
+      simNumber: createSubscriptionDto.simNumber,
+      simAdr: createSubscriptionDto.simAddress,
+      simCity: createSubscriptionDto.simCity,
+      simZip: createSubscriptionDto.simZip,
+      devicePolicyId: createSubscriptionDto.devicePolicyId,
+      salaryDeductionProfileId: createSubscriptionDto.telePolicyId,
+      ecomPolicyIdList: createSubscriptionDto.ecomPolicyIds,
+    });
 
     return {
       subscriptionOrder,
