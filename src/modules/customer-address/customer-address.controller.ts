@@ -24,10 +24,14 @@ import {
   UpdateCustomerAddressDto,
 } from './dto/customer-address.dto';
 import { getAllCustomerAddressQuery } from './queries';
+import { UserRolesENUM } from '../user/user-roles.enum';
 
 @ApiTags('addresses')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(
+  AuthGuard,
+  UserRoleGuard([...ADMIN_USERS_GROUP, UserRolesENUM.IT_USER]),
+)
 @Controller('addresses')
 export class CustomerAddressController {
   constructor(
