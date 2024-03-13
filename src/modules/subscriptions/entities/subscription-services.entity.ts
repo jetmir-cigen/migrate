@@ -11,7 +11,7 @@ import {
 import { SubscriptionServiceOrdersEntity } from './subscription-service-orders.entity';
 
 @Index('customer_id', ['customerId'], {})
-@Entity('subscription_services', { schema: 'control' })
+@Entity({ name: 'control.subscription_services', schema: 'control' })
 export class SubscriptionServicesEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

@@ -8,7 +8,7 @@ import {
 import { SmsGroupEntity } from './sms-group.entity';
 import { CountryEntity } from '@/common/entities/country.entity';
 
-@Entity({ schema: 'control', name: 'sms_group_number' })
+@Entity({ schema: 'control', name: 'control.sms_group_number' })
 export class SmsGroupNumberEntity {
   @PrimaryGeneratedColumn()
   id: number;

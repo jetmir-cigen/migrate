@@ -12,7 +12,7 @@ import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 import { SubscriptionServiceOrderActivationEntity } from '@/modules/subscriptions/entities/subscription-service-order-activation.entity';
 
-@Entity({ schema: 'control', name: 'salary_deduction_profile' })
+@Entity({ schema: 'control', name: 'control.salary_deduction_profile' })
 export class SalaryDeductionProfileEntity {
   @PrimaryGeneratedColumn()
   id: number;

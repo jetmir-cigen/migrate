@@ -14,7 +14,7 @@ import {
 })
 @Index('customer_address_customer_id_idx', ['customerId'], {})
 @Index('customer_address_country_id_fk', ['countryId'], {})
-@Entity('customer_address', { schema: 'control' })
+@Entity('control.customer_address', { schema: 'control' })
 export class CustomerAddressEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

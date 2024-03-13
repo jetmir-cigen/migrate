@@ -17,7 +17,7 @@ import { EmployeeConsentCostObjectEntity } from '@/modules/employee-consent/enti
 import { TextTemplateEntity } from '@/modules/text-template/entities';
 import { SubscriptionServiceOrdersEntity } from '@/modules/subscriptions/entities/subscription-service-orders.entity';
 
-@Entity('user')
+@Entity('control.user')
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;

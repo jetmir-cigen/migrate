@@ -61,15 +61,15 @@ export class DevicePolicyEntity {
   @Column()
   isActive: boolean;
 
-  @ManyToOne((type) => CustomerEntity)
+  @ManyToOne(() => CustomerEntity)
   @JoinColumn({ name: 'customer_id' })
   customer: CustomerEntity;
 
-  @ManyToOne((type) => CustomerHeadEntity)
+  @ManyToOne(() => CustomerHeadEntity)
   @JoinColumn({ name: 'customer_head_id' })
   customerHead: CustomerHeadEntity;
 
-  @ManyToOne((type) => UserEntity)
+  @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'admin_user_id' })
   adminUser: UserEntity;
 

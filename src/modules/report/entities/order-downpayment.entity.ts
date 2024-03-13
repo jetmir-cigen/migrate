@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 
-@Entity({ name: 'order_downpayment', schema: 'device_policy' })
+@Entity({ name: 'control.order_downpayment', schema: 'device_policy' })
 export class OrderDownPaymentEntity {
   @PrimaryGeneratedColumn()
   id: number;

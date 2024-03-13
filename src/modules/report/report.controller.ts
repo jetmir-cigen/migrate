@@ -18,6 +18,7 @@ import {
   AccountingReportQuery,
   OffBoardingReportQuery,
   SalaryDeductionUsageReportQuery,
+  NewNumberOrdersReportQuery,
 } from './queries';
 import { TaxAdvantageReportQuery } from '@/modules/report/queries/tax-advantage-report.query';
 import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
@@ -233,6 +234,37 @@ export class ReportController {
     const { fromDate, toDate, isGlobal } = query;
     return this.queryBus.execute(
       new OffBoardingReportQuery({
+        customerId: user.cid,
+        customerHeadId: user.chid,
+        fromDate,
+        toDate,
+        isGlobal,
+      }),
+    );
+  }
+
+  @Get('/new-number-orders')
+  @ApiOperation({ summary: 'Get new number orders reports' })
+  @ApiQuery({
+    name: 'fromDate',
+    type: String,
+    example: '2023-01-01',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'toDate',
+    type: String,
+    example: '2023-06-30',
+    required: true,
+  })
+  @ApiResponse({ status: 200, description: 'Success' })
+  getNewNumberOrdersReports(
+    @AuthUser() user: Express.User,
+    @Query() query: ReportQueryDto,
+  ) {
+    const { fromDate, toDate, isGlobal } = query;
+    return this.queryBus.execute(
+      new NewNumberOrdersReportQuery({
         customerId: user.cid,
         customerHeadId: user.chid,
         fromDate,

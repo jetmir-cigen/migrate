@@ -3,7 +3,7 @@ import { EmployeeConsentEntity } from './employee-consent.entity';
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 
-@Entity({ name: 'employee_consent_cost_object' })
+@Entity({ name: 'control.employee_consent_cost_object' })
 export class EmployeeConsentCostObjectEntity {
   @PrimaryColumn({ name: 'employee_consent_id' })
   employeeConsentId: number;

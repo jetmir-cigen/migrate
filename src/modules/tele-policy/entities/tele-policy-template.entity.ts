@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
   schema: 'control',
-  name: 'tele_policy_template',
+  name: 'control.tele_policy_template',
 })
 export class TelePolicyTemplateEntity {
   @PrimaryGeneratedColumn()

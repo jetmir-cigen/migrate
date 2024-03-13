@@ -9,7 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-@Entity({ schema: 'control', name: 'sms_phone_book' })
+@Entity({ schema: 'control', name: 'control.sms_phone_book' })
 export class SmsPhoneBookEntity {
   @PrimaryGeneratedColumn()
   id: number;

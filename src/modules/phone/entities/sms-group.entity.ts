@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-@Entity({ schema: 'control', name: 'sms_group' })
+@Entity({ schema: 'control', name: 'control.sms_group' })
 export class SmsGroupEntity {
   @PrimaryGeneratedColumn()
   id: number;

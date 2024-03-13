@@ -29,7 +29,7 @@ import { SubscriptionServiceOrdersEntity } from './subscription-service-orders.e
   ['salaryDeductionProfileId'],
   {},
 )
-@Entity('subscription_service_order_activation', { schema: 'control' })
+@Entity('control.subscription_service_order_activation', { schema: 'control' })
 export class SubscriptionServiceOrderActivationEntity {
   @PrimaryColumn('int', { name: 'id' })
   id: number;

@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('element_label')
+@Entity('control.element_label')
 export class ElementLabelEntity {
   @PrimaryGeneratedColumn()
   id: number;

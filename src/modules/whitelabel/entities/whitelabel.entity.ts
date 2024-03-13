@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity({ schema: 'control', name: 'whitelabel' })
+@Entity({ schema: 'control', name: 'control.whitelabel' })
 export class WhiteLabelEntity {
   @PrimaryGeneratedColumn()
   id: number;

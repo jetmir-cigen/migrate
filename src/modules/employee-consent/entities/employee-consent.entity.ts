@@ -11,7 +11,7 @@ import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { UserEntity } from '@/modules/user/entities/user.entity';
 import { EmployeeConsentCostObjectEntity } from './employee-consent-cost-object.entity';
 
-@Entity({ name: 'employee_consent' })
+@Entity({ name: 'control.employee_consent' })
 export class EmployeeConsentEntity {
   @PrimaryGeneratedColumn() id: number;
 
