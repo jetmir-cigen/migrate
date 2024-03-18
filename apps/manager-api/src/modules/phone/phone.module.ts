@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { PhoneService } from './phone.service';
 import { PhoneController } from './phone.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import { CqrsModule } from '@nestjs/cqrs';
 import { DepartmentService } from '../department/department.service';
 import { FindTelePoliciesByFilterQueryHandler } from '../tele-policy/queries';
@@ -34,7 +34,7 @@ import {
   ActiveMobileUserView,
   ManagerAccessCustomerView,
   ManagerAccessDepartmentView,
-} from '@/common/views';
+} from '@skytech/manager/common/views';
 import {
   LogSmsPushEntity,
   SmsGroupEntity,

@@ -1,9 +1,9 @@
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AssetEntity } from '@/modules/asset/entities/asset.entity';
+import { AssetEntity } from '@skytech/manager/modules/asset/entities/asset.entity';
 import { Repository } from 'typeorm';
-import { EcomPolicyEntity } from '@/modules/asset/entities/ecom-policy.entity';
-import { EcomOrderEntity } from '@/modules/asset/entities/ecom-order.entity';
+import { EcomPolicyEntity } from '@skytech/manager/modules/asset/entities/ecom-policy.entity';
+import { EcomOrderEntity } from '@skytech/manager/modules/asset/entities/ecom-order.entity';
 
 export class CreateAssetCommand implements ICommand {
   constructor(

@@ -1,4 +1,4 @@
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import {
   Column,
   Entity,

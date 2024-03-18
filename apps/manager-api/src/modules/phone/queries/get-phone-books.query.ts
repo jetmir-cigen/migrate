@@ -1,10 +1,10 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DepartmentEntity } from '@/modules/department/entities/department.entity';
-import { ManagerAccessDepartmentView } from '@/common/views/manager-access-department.view';
-import { SalaryDeductionProfileEntity } from '@/modules/tele-policy/entities/salary-deduction-profile.entity';
-import { ManagerAccessCustomerView } from '@/common/views/manager-access-customer.view';
+import { DepartmentEntity } from '@skytech/manager/modules/department/entities/department.entity';
+import { ManagerAccessDepartmentView } from '@skytech/manager/common/views/manager-access-department.view';
+import { SalaryDeductionProfileEntity } from '@skytech/manager/modules/tele-policy/entities/salary-deduction-profile.entity';
+import { ManagerAccessCustomerView } from '@skytech/manager/common/views/manager-access-customer.view';
 
 type QueryFilters = {
   user: Express.User;

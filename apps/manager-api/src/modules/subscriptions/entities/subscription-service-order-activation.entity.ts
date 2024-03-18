@@ -7,9 +7,9 @@ import {
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { DepartmentEntity } from '@/modules/department/entities/department.entity';
-import { DevicePolicyEntity } from '@/common/entities/device-policy.entity';
-import { SalaryDeductionProfileEntity } from '@/modules/tele-policy/entities/salary-deduction-profile.entity';
+import { DepartmentEntity } from '@skytech/manager/modules/department/entities/department.entity';
+import { DevicePolicyEntity } from '@skytech/manager/common/entities/device-policy.entity';
+import { SalaryDeductionProfileEntity } from '@skytech/manager/modules/tele-policy/entities/salary-deduction-profile.entity';
 import { SubscriptionServiceOrdersEntity } from './subscription-service-orders.entity';
 
 @Index('id', ['id'], { unique: true })

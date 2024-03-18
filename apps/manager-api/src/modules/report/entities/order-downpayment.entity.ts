@@ -5,7 +5,7 @@ import {
   Index,
   ManyToOne,
 } from 'typeorm';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 
 @Entity({ name: 'control.order_downpayment', schema: 'device_policy' })
 export class OrderDownPaymentEntity {

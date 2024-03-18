@@ -12,10 +12,10 @@ import {
   SalaryDeductionUsageReportQueryHandler,
   TaxAdvantageReportQueryHandler,
   NewNumberOrdersReportQueryHandler,
-} from '@/modules/report/queries';
-import { CustomerSetupExportSettingsEntity } from '@/modules/report/entities/customer-setup-export-settings.entity';
-import { SetupExportSettingsController } from '@/modules/report/setup-export-settings.controller';
-import { UpsertSetupExportSettingsCommandHandler } from '@/modules/report/commands/upsert-setup-export-settings.command';
+} from '@skytech/manager/modules/report/queries';
+import { CustomerSetupExportSettingsEntity } from '@skytech/manager/modules/report/entities/customer-setup-export-settings.entity';
+import { SetupExportSettingsController } from '@skytech/manager/modules/report/setup-export-settings.controller';
+import { UpsertSetupExportSettingsCommandHandler } from '@skytech/manager/modules/report/commands/upsert-setup-export-settings.command';
 import { SubscriptionServiceOrderActivationEntity } from '../subscriptions/entities/subscription-service-order-activation.entity';
 
 @Module({

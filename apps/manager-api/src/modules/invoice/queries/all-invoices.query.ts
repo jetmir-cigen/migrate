@@ -2,9 +2,9 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InvoiceEntity } from '../entities/invoice.entity';
-import { nameof } from '@/utils/nameof';
-import { VendorEntity } from '@/common/entities/vendor.entity';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { nameof } from '@skytech/manager/utils/nameof';
+import { VendorEntity } from '@skytech/manager/common/entities/vendor.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 
 type QueryFilters = {
   userId: number;

@@ -1,13 +1,13 @@
 import {
   QueryHandlerInterface,
   QueryInterface,
-} from '@/common/query.interface';
+} from '@skytech/manager/common/query.interface';
 import { Repository } from 'typeorm';
 import { QueryHandler } from '@nestjs/cqrs';
 
 import { QueryFilter } from '.';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SubscriptionServiceOrderActivationEntity } from '@/modules/subscriptions/entities/subscription-service-order-activation.entity';
+import { SubscriptionServiceOrderActivationEntity } from '@skytech/manager/modules/subscriptions/entities/subscription-service-order-activation.entity';
 
 export class NewNumberOrdersReportQuery implements QueryInterface {
   $$resolveType: any;

@@ -1,6 +1,6 @@
-import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
-import { WhiteLabelEntity } from '@/modules/whitelabel/entities/whitelabel.entity';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { CustomerHeadEntity } from '@skytech/manager/common/entities/customer-head.entity';
+import { WhiteLabelEntity } from '@skytech/manager/modules/whitelabel/entities/whitelabel.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import {
   Entity,
   Column,
@@ -8,7 +8,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { UserEntity } from '@/modules/user/entities/user.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 
 @Entity({ name: 'control.text_template', schema: 'control' })
 export class TextTemplateEntity {

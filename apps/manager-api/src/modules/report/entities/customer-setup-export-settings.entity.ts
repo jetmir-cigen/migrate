@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryColumn, JoinColumn, ManyToOne } from 'typeorm';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 
 @Entity({ name: 'control.customer_setup_export', schema: 'control' })
 export class CustomerSetupExportSettingsEntity {

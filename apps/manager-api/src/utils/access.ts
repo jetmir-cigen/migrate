@@ -1,4 +1,4 @@
-import { UserRolesENUM } from '@/modules/user/user-roles.enum';
+import { UserRolesENUM } from '@skytech/manager/modules/user/user-roles.enum';
 
 export const isDepartmentAdmin = (user: Express.GenericUser) => {
   return [

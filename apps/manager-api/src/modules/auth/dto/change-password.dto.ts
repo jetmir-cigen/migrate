@@ -1,4 +1,4 @@
-import { Match } from '@/common/validators/match.validator';
+import { Match } from '@skytech/manager/common/validators/match.validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MinLength } from 'class-validator';
 

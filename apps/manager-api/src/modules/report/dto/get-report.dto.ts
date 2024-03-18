@@ -1,4 +1,4 @@
-import { IsDateAfter } from '@/common/validators/compare-dates.validator';
+import { IsDateAfter } from '@skytech/manager/common/validators/compare-dates.validator';
 import { IsBoolean, IsDateString, IsInt } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 

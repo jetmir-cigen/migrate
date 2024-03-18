@@ -1,6 +1,6 @@
-import { VendorEntity } from '@/common/entities/vendor.entity';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
-import { ElementLabelEntity } from '@/modules/element-label/element-label.entity';
+import { VendorEntity } from '@skytech/manager/common/entities/vendor.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
+import { ElementLabelEntity } from '@skytech/manager/modules/element-label/element-label.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

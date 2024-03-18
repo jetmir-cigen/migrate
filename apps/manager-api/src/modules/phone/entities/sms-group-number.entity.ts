@@ -6,7 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { SmsGroupEntity } from './sms-group.entity';
-import { CountryEntity } from '@/common/entities/country.entity';
+import { CountryEntity } from '@skytech/manager/common/entities/country.entity';
 
 @Entity({ schema: 'control', name: 'control.sms_group_number' })
 export class SmsGroupNumberEntity {

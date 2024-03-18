@@ -1,8 +1,8 @@
-import { DepartmentEntity } from '@/modules/department/entities/department.entity';
-import { SmsPhoneBookEntity } from '@/modules/phone/entities/sms-phone-book.entity';
-import { EmployeeConsentCostObjectEntity } from '@/modules/employee-consent/entities/employee-consent-cost-object.entity';
-import { SalaryDeductionProfileEntity } from '@/modules/tele-policy/entities/salary-deduction-profile.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
+import { DepartmentEntity } from '@skytech/manager/modules/department/entities/department.entity';
+import { SmsPhoneBookEntity } from '@skytech/manager/modules/phone/entities/sms-phone-book.entity';
+import { EmployeeConsentCostObjectEntity } from '@skytech/manager/modules/employee-consent/entities/employee-consent-cost-object.entity';
+import { SalaryDeductionProfileEntity } from '@skytech/manager/modules/tele-policy/entities/salary-deduction-profile.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -12,8 +12,8 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import { TextTemplateEntity } from '@/modules/text-template/entities';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { TextTemplateEntity } from '@skytech/manager/modules/text-template/entities';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 
 @Entity({ name: 'control.cost_object', schema: 'control' })
 export class CostObjectEntity {

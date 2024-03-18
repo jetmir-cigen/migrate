@@ -16,7 +16,7 @@ import {
   DeleteTelePolicyCommandHandler,
   UpdateTelePolicyCommandHandler,
 } from './commands';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 
 @Module({
   imports: [

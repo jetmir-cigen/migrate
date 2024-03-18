@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./apps/manager-api/src/*"],
+      "@skytech/manager/*": ["./apps/manager-api/src/*"],
       "@skytech/auth": ["libs/auth/src/index.ts"]
     }
   },

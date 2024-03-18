@@ -1,4 +1,4 @@
-import { ManagerAccessCustomerView } from '@/common/views';
+import { ManagerAccessCustomerView } from '@skytech/manager/common/views';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';

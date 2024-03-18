@@ -1,13 +1,13 @@
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
-import { CustomerSetupExportSettingsEntity } from '@/modules/report/entities/customer-setup-export-settings.entity';
+import { CustomerSetupExportSettingsEntity } from '@skytech/manager/modules/report/entities/customer-setup-export-settings.entity';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { AuthUser } from '@/modules/auth/auth-user.decorator';
-import { GetSetupExportSettingsQuery } from '@/modules/report/queries';
-import { AuthGuard } from '@/modules/auth/auth.guard';
-import { UserRoleGuard } from '@/modules/user/user-role.guard';
+import { AuthUser } from '@skytech/manager/modules/auth/auth-user.decorator';
+import { GetSetupExportSettingsQuery } from '@skytech/manager/modules/report/queries';
+import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
+import { UserRoleGuard } from '@skytech/manager/modules/user/user-role.guard';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { UpsertSetupExportSettingsCommand } from '@/modules/report/commands/upsert-setup-export-settings.command';
-import { CreateSetupExportSettingsDto } from '@/modules/report/dto/create-setup-export-settings.dto';
+import { UpsertSetupExportSettingsCommand } from '@skytech/manager/modules/report/commands/upsert-setup-export-settings.command';
+import { CreateSetupExportSettingsDto } from '@skytech/manager/modules/report/dto/create-setup-export-settings.dto';
 import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
 
 @Controller('reports/setup-export-settings')

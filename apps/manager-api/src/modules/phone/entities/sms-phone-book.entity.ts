@@ -1,6 +1,6 @@
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
-import { CountryEntity } from '@/common/entities/country.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
+import { CountryEntity } from '@skytech/manager/common/entities/country.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import {
   Entity,
   Column,

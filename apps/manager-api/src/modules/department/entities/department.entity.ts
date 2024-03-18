@@ -9,10 +9,10 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
-import { SubscriptionServiceOrderActivationEntity } from '@/modules/subscriptions/entities/subscription-service-order-activation.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
+import { SubscriptionServiceOrderActivationEntity } from '@skytech/manager/modules/subscriptions/entities/subscription-service-order-activation.entity';
 
 @Entity({ schema: 'control', name: 'control.department' })
 @Unique(['customer', 'code'])

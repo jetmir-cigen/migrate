@@ -2,7 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserAliasEntity } from '../entities/user-alias.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 
 type QueryFilters = {
   user: Express.User;

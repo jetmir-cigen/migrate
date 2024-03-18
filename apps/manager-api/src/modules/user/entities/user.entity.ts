@@ -9,13 +9,13 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import { UserGroupEntity } from './user-group.entity';
-import { LogSmsPushEntity } from '@/modules/phone/entities/log-sms-push.entity';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
-import { EmployeeConsentCostObjectEntity } from '@/modules/employee-consent/entities/employee-consent-cost-object.entity';
-import { TextTemplateEntity } from '@/modules/text-template/entities';
-import { SubscriptionServiceOrdersEntity } from '@/modules/subscriptions/entities/subscription-service-orders.entity';
+import { LogSmsPushEntity } from '@skytech/manager/modules/phone/entities/log-sms-push.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
+import { EmployeeConsentCostObjectEntity } from '@skytech/manager/modules/employee-consent/entities/employee-consent-cost-object.entity';
+import { TextTemplateEntity } from '@skytech/manager/modules/text-template/entities';
+import { SubscriptionServiceOrdersEntity } from '@skytech/manager/modules/subscriptions/entities/subscription-service-orders.entity';
 
 @Entity('control.user')
 export class UserEntity {

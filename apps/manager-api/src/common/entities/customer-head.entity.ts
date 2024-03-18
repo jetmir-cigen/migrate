@@ -7,7 +7,7 @@ import {
   Index,
 } from 'typeorm';
 import { CustomerHeadFrameAgreementEntity } from './customer-head-frame-agreement.entity';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 
 @Entity({ schema: 'control', name: 'control.customer_head' })
 export class CustomerHeadEntity {

@@ -1,9 +1,9 @@
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
-import { CountryEntity } from '@/common/entities/country.entity';
-import { LogMailEntity } from '@/modules/notifications/entities/log-mail.entity';
-import { LogSmsPushEntity } from '@/modules/phone/entities/log-sms-push.entity';
-import { SubscriptionServicesEntity } from '@/modules/subscriptions/entities/subscription-services.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
+import { CountryEntity } from '@skytech/manager/common/entities/country.entity';
+import { LogMailEntity } from '@skytech/manager/modules/notifications/entities/log-mail.entity';
+import { LogSmsPushEntity } from '@skytech/manager/modules/phone/entities/log-sms-push.entity';
+import { SubscriptionServicesEntity } from '@skytech/manager/modules/subscriptions/entities/subscription-services.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import {
   Entity,
   Column,

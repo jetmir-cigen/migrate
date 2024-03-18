@@ -1,4 +1,4 @@
-import { EcomPolicyEntity } from '@/modules/asset/entities/ecom-policy.entity';
+import { EcomPolicyEntity } from '@skytech/manager/modules/asset/entities/ecom-policy.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 
 @Entity('ecom.policy_category_classification', { schema: 'ecom' })

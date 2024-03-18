@@ -1,4 +1,4 @@
-import { SuccessResponseDto } from '@/common/dto/status-response.dto';
+import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 import { ElementLabelEntity } from '../element-label.entity';
 import { ApiProperty } from '@nestjs/swagger';
 

@@ -1,4 +1,4 @@
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,7 +7,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { InvoiceEntity } from './invoice.entity';
-import { ProductEntity } from '@/common/entities/product.entity';
+import { ProductEntity } from '@skytech/manager/common/entities/product.entity';
 
 @Entity({ name: 'control.invoice_row' })
 export class InvoiceRowEntity {

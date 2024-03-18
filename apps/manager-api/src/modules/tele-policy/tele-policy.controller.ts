@@ -11,7 +11,7 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { SuccessResponseDto } from '@/common/dto/status-response.dto';
+import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 
 import { AuthGuard } from '../auth/auth.guard';
 import { UserRoleGuard } from '../user/user-role.guard';

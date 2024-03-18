@@ -12,16 +12,16 @@ import {
   CreateUserCommandHandler,
   DeleteUserCommandHandler,
   UpdateUserCommandHandler,
-} from '@/modules/user/commands';
+} from '@skytech/manager/modules/user/commands';
 import {
   UserCreatedEventHandler,
   UserUpdatedEventHandler,
   UserDeletedEventHandler,
   UserPasswordGeneratedEventHandler,
-} from '@/modules/user/events';
-import { GetUserByIdQueryHandler } from '@/modules/user/queries/get-user-by-id.query';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
-import { GetCustomerQueryHandler } from '@/modules/user/queries/get-customers.query';
+} from '@skytech/manager/modules/user/events';
+import { GetUserByIdQueryHandler } from '@skytech/manager/modules/user/queries/get-user-by-id.query';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
+import { GetCustomerQueryHandler } from '@skytech/manager/modules/user/queries/get-customers.query';
 import { GenerateUserPasswordCommandHandler } from './commands/user-generate-password.command';
 import {
   EmailNotificationsService,
@@ -30,7 +30,7 @@ import {
 } from '../notifications/services';
 import { LogSmsPushEntity } from '../phone/entities';
 import { LogMailEntity } from '../notifications/entities/log-mail.entity';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import { TextTemplateEntity } from '../text-template/entities';
 
 @Module({

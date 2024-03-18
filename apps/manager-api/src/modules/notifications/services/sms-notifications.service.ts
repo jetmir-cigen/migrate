@@ -7,7 +7,7 @@ import {
   ISendBulkNotification,
   ISendNotification,
 } from '../dto/send-notification.dto';
-import { LogSmsPushEntity } from '@/modules/phone/entities';
+import { LogSmsPushEntity } from '@skytech/manager/modules/phone/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 } from 'uuid';

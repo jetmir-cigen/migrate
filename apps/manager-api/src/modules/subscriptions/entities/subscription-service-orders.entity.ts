@@ -1,4 +1,4 @@
-import { UserEntity } from '@/modules/user/entities/user.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import {
   Column,
   Entity,

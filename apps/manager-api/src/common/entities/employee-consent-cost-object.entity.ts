@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
-import { EmployeeConsentEntity } from '@/modules/employee-consent/entities/employee-consent.entity';
+import { EmployeeConsentEntity } from '@skytech/manager/modules/employee-consent/entities/employee-consent.entity';
 
 @Entity({ name: 'control.employee_consent_cost_object' })
 export class EmployeeConsentCostObjectEntity {

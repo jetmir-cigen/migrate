@@ -1,4 +1,4 @@
-import { ManagerAccessCustomerView } from '@/common/views';
+import { ManagerAccessCustomerView } from '@skytech/manager/common/views';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';

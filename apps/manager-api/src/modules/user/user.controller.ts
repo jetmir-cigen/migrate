@@ -16,7 +16,7 @@ import {
   UserCreateResponseDto,
   UserResponseDto,
 } from './dto/user-response.dto';
-import { AuthGuard } from '@/modules/auth/auth.guard';
+import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
 import { UserRoleGuard } from './user-role.guard';
 import {
   ApiBadRequestResponse,
@@ -29,23 +29,23 @@ import {
   ApiResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UserCreateDto } from '@/modules/user/dto/user-create.dto';
+import { UserCreateDto } from '@skytech/manager/modules/user/dto/user-create.dto';
 import {
   CreateUserCommand,
   DeleteUserCommand,
   UpdateUserCommand,
-} from '@/modules/user/commands';
-import { UserService } from '@/modules/user/user.service';
+} from '@skytech/manager/modules/user/commands';
+import { UserService } from '@skytech/manager/modules/user/user.service';
 import {
   FailResponseDto,
   StatusResponseDTO,
   SuccessResponseDto,
-} from '@/common/dto/status-response.dto';
-import { UserEntity } from '@/modules/user/entities/user.entity';
-import { GetUserByIdQuery } from '@/modules/user/queries/get-user-by-id.query';
-import { AuthUser } from '@/modules/auth/auth-user.decorator';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
-import { GetCustomersQuery } from '@/modules/user/queries/get-customers.query';
+} from '@skytech/manager/common/dto/status-response.dto';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
+import { GetUserByIdQuery } from '@skytech/manager/modules/user/queries/get-user-by-id.query';
+import { AuthUser } from '@skytech/manager/modules/auth/auth-user.decorator';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
+import { GetCustomersQuery } from '@skytech/manager/modules/user/queries/get-customers.query';
 import { UserPasswordUpdateDto } from './dto/user-password-update.dto';
 import { GenerateUserPasswordCommand } from './commands/user-generate-password.command';
 import { ADMIN_USERS_GROUP } from './user-role.groups';

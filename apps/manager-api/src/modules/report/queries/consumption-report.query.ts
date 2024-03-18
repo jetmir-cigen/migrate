@@ -1,7 +1,7 @@
 import {
   QueryHandlerInterface,
   QueryInterface,
-} from '@/common/query.interface';
+} from '@skytech/manager/common/query.interface';
 import { DataSource } from 'typeorm';
 import { QueryHandler } from '@nestjs/cqrs';
 

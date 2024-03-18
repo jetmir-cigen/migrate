@@ -1,4 +1,4 @@
-import { getOauthServerUrl } from '@/utils/constants';
+import { getOauthServerUrl } from '@skytech/manager/utils/constants';
 
 export const config = () => ({
   environment: process.env.ENVIRONMENT || 'development',

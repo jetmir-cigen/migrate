@@ -6,15 +6,15 @@ import {
   ApiParam,
   ApiResponse,
 } from '@nestjs/swagger';
-import { AuthUser } from '@/modules/auth/auth-user.decorator';
+import { AuthUser } from '@skytech/manager/modules/auth/auth-user.decorator';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateAssetDto } from '@/modules/asset/dto/create-asset.dto';
-import { AuthGuard } from '@/modules/auth/auth.guard';
-import { CreateAssetCommand } from '@/modules/asset/commands/create-asset.command';
-import { AssetEntity } from '@/modules/asset/entities/asset.entity';
-import { GetAssetByIdQuery } from '@/modules/asset/queries/get-asset-by-id.query';
-import { UserRoleGuard } from '@/modules/user/user-role.guard';
-import { ADMIN_USERS_GROUP } from '@/modules/user/user-role.groups';
+import { CreateAssetDto } from '@skytech/manager/modules/asset/dto/create-asset.dto';
+import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
+import { CreateAssetCommand } from '@skytech/manager/modules/asset/commands/create-asset.command';
+import { AssetEntity } from '@skytech/manager/modules/asset/entities/asset.entity';
+import { GetAssetByIdQuery } from '@skytech/manager/modules/asset/queries/get-asset-by-id.query';
+import { UserRoleGuard } from '@skytech/manager/modules/user/user-role.guard';
+import { ADMIN_USERS_GROUP } from '@skytech/manager/modules/user/user-role.groups';
 import { UserRolesENUM } from '../user/user-roles.enum';
 
 @Controller('assets')

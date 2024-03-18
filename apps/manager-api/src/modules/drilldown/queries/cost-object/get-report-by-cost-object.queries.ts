@@ -2,20 +2,20 @@ import { QueryHandler } from '@nestjs/cqrs';
 import {
   QueryHandlerInterface,
   QueryInterface,
-} from '@/common/query.interface';
+} from '@skytech/manager/common/query.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DrillDownServiceType } from '@/modules/drilldown/dto';
+import { DrillDownServiceType } from '@skytech/manager/modules/drilldown/dto';
 import { DrillDownService } from '../../drilldown.service';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
-import { InvoiceRowEntity } from '@/modules/invoice/entities/invoice-row.entity';
-import { InvoiceEntity } from '@/modules/invoice/entities/invoice.entity';
-import { VendorEntity } from '@/common/entities/vendor.entity';
-import { ProductEntity } from '@/common/entities/product.entity';
-import { ProductGroupEntity } from '@/common/entities/product-group.entity';
-import { ProductCategoryEntity } from '@/common/entities/product-category.entity';
-import { isDepartmentAdmin } from '@/utils/access';
-import { DepartmentEntity } from '@/modules/department/entities/department.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
+import { InvoiceRowEntity } from '@skytech/manager/modules/invoice/entities/invoice-row.entity';
+import { InvoiceEntity } from '@skytech/manager/modules/invoice/entities/invoice.entity';
+import { VendorEntity } from '@skytech/manager/common/entities/vendor.entity';
+import { ProductEntity } from '@skytech/manager/common/entities/product.entity';
+import { ProductGroupEntity } from '@skytech/manager/common/entities/product-group.entity';
+import { ProductCategoryEntity } from '@skytech/manager/common/entities/product-category.entity';
+import { isDepartmentAdmin } from '@skytech/manager/utils/access';
+import { DepartmentEntity } from '@skytech/manager/modules/department/entities/department.entity';
 
 type QueryFilters = {
   year: number;

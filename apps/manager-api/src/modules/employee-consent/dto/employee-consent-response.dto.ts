@@ -1,6 +1,6 @@
-import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
+import { CustomerHeadEntity } from '@skytech/manager/common/entities/customer-head.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EmployeeConsentDto {

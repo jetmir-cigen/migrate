@@ -11,13 +11,13 @@ import {
   ApiBadRequestResponse,
   ApiParam,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@/modules/auth/auth.guard';
-import { UserRoleGuard } from '@/modules/user/user-role.guard';
+import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
+import { UserRoleGuard } from '@skytech/manager/modules/user/user-role.guard';
 import {
   EmployeeConsentListResponseDto,
   EmployeeConsentResponseDto,
 } from './dto/employee-consent-response.dto';
-import { AuthUser } from '@/modules/auth/auth-user.decorator';
+import { AuthUser } from '@skytech/manager/modules/auth/auth-user.decorator';
 import { EmployeeConsentEntity } from './entities/employee-consent.entity';
 import { CreateEmployeeConsentDto } from './dto/create-employee-consent.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';

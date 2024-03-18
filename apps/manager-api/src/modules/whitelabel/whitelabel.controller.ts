@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@/modules/auth/auth.guard';
-import { UserRoleGuard } from '@/modules/user/user-role.guard';
+import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
+import { UserRoleGuard } from '@skytech/manager/modules/user/user-role.guard';
 import { Repository } from 'typeorm';
 import { WhiteLabelEntity } from './entities/whitelabel.entity';
 import { InjectRepository } from '@nestjs/typeorm';

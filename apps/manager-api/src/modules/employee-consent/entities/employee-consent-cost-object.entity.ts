@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { EmployeeConsentEntity } from './employee-consent.entity';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 
 @Entity({ name: 'control.employee_consent_cost_object' })
 export class EmployeeConsentCostObjectEntity {

@@ -1,8 +1,8 @@
 import {
   QueryHandlerInterface,
   QueryInterface,
-} from '@/common/query.interface';
-import { CustomerSetupExportSettingsEntity } from '@/modules/report/entities/customer-setup-export-settings.entity';
+} from '@skytech/manager/common/query.interface';
+import { CustomerSetupExportSettingsEntity } from '@skytech/manager/modules/report/entities/customer-setup-export-settings.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryHandler } from '@nestjs/cqrs';

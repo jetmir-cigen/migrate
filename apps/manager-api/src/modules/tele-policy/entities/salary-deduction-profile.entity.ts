@@ -6,11 +6,11 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import { TelePolicyTemplateEntity } from './tele-policy-template.entity';
-import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
-import { SubscriptionServiceOrderActivationEntity } from '@/modules/subscriptions/entities/subscription-service-order-activation.entity';
+import { CustomerHeadEntity } from '@skytech/manager/common/entities/customer-head.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
+import { SubscriptionServiceOrderActivationEntity } from '@skytech/manager/modules/subscriptions/entities/subscription-service-order-activation.entity';
 
 @Entity({ schema: 'control', name: 'control.salary_deduction_profile' })
 export class SalaryDeductionProfileEntity {

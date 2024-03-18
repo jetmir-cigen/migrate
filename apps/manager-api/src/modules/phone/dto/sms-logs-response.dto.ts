@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { SuccessResponseDto } from '@/common/dto/status-response.dto';
-import { CustomerDto } from '@/modules/customer/dto/customer.dto';
-import { UserDto } from '@/modules/user/dto/user-response.dto';
+import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
+import { CustomerDto } from '@skytech/manager/modules/customer/dto/customer.dto';
+import { UserDto } from '@skytech/manager/modules/user/dto/user-response.dto';
 
 export class LogSmsPushDto {
   @ApiProperty({ example: 1, description: 'The ID of the log SMS push.' })

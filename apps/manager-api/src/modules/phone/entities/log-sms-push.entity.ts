@@ -1,5 +1,5 @@
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

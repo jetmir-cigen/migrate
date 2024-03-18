@@ -1,4 +1,4 @@
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDate,
@@ -10,7 +10,7 @@ import {
   Min,
 } from 'class-validator';
 import { InvoiceDto } from './invoice-response.dto';
-import { ProductDto } from '@/common/dto/product.dto';
+import { ProductDto } from '@skytech/manager/common/dto/product.dto';
 
 export class InvoiceRowDto {
   @ApiProperty({

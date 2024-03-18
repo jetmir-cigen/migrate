@@ -1,13 +1,13 @@
-import { SubServiceOrderType } from '@/common/enums/SubServiceOrderType.enum';
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
-import { NotificationsService } from '@/modules/notifications/services';
+import { SubServiceOrderType } from '@skytech/manager/common/enums/SubServiceOrderType.enum';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
+import { NotificationsService } from '@skytech/manager/modules/notifications/services';
 import {
   ActivationTextTemplate,
   PortationFormFilledTextTemplate,
-} from '@/modules/notifications/types';
-import { UserEntity } from '@/modules/user/entities/user.entity';
-import { getAppLink } from '@/utils/constants';
-import { generateRandomCode } from '@/utils/generateRandomCode';
+} from '@skytech/manager/modules/notifications/types';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
+import { getAppLink } from '@skytech/manager/utils/constants';
+import { generateRandomCode } from '@skytech/manager/utils/generateRandomCode';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

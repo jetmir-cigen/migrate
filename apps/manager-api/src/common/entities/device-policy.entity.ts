@@ -1,4 +1,4 @@
-import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,8 +8,8 @@ import {
   OneToMany,
 } from 'typeorm';
 import { CustomerHeadEntity } from './customer-head.entity';
-import { UserEntity } from '@/modules/user/entities/user.entity';
-import { SubscriptionServiceOrderActivationEntity } from '@/modules/subscriptions/entities/subscription-service-order-activation.entity';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
+import { SubscriptionServiceOrderActivationEntity } from '@skytech/manager/modules/subscriptions/entities/subscription-service-order-activation.entity';
 
 @Entity({ name: 'control.device_policy' })
 export class DevicePolicyEntity {

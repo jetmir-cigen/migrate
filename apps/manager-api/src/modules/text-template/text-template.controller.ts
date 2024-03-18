@@ -25,18 +25,18 @@ import {
   TextTemplateDto,
   CreateTextTemplateDto,
   UpdateTextTemplateDto,
-} from '@/modules/text-template/dto';
+} from '@skytech/manager/modules/text-template/dto';
 import {
   GetDistinctTextTemplateCodesQuery,
   GetTextTemplatesQuery,
   GetTextTemplateByIdQuery,
-} from '@/modules/text-template/queries';
-import { SuccessResponseDto } from '@/common/dto/status-response.dto';
+} from '@skytech/manager/modules/text-template/queries';
+import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 import {
   CreateTextTemplateCommand,
   DeleteTextTemplateCommand,
   UpdateTextTemplateCommand,
-} from '@/modules/text-template/commands';
+} from '@skytech/manager/modules/text-template/commands';
 import { TextTemplateEntity } from './entities';
 import { AuthUser } from '../auth/auth-user.decorator';
 import { ADMIN_USERS_GROUP } from '../user/user-role.groups';

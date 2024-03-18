@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
-import { DrillDownServiceType } from '@/modules/drilldown/dto/product-categories-param.dto';
+import { DrillDownServiceType } from '@skytech/manager/modules/drilldown/dto/product-categories-param.dto';
 import {
   ManagerAccessDepartmentView,
   ManagerAccessFrameAgreementViewEntity,
-} from '@/common/views';
+} from '@skytech/manager/common/views';
 import { CustomerEntity } from '../customer/entities/customer.entity';
-import { CustomerHeadEntity } from '@/common/entities/customer-head.entity';
-import { CustomerHeadFrameAgreementEntity } from '@/common/entities/customer-head-frame-agreement.entity';
+import { CustomerHeadEntity } from '@skytech/manager/common/entities/customer-head.entity';
+import { CustomerHeadFrameAgreementEntity } from '@skytech/manager/common/entities/customer-head-frame-agreement.entity';
 
 @Injectable()
 export class DrillDownService {

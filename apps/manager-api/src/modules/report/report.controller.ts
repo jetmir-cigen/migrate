@@ -6,8 +6,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@/modules/auth/auth.guard';
-import { UserRoleGuard } from '@/modules/user/user-role.guard';
+import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
+import { UserRoleGuard } from '@skytech/manager/modules/user/user-role.guard';
 import { QueryBus } from '@nestjs/cqrs';
 import { AuthUser } from '../auth/auth-user.decorator';
 import { ReportQueryDto, TaxAdvantageQueryDto } from './dto/get-report.dto';
@@ -20,7 +20,7 @@ import {
   SalaryDeductionUsageReportQuery,
   NewNumberOrdersReportQuery,
 } from './queries';
-import { TaxAdvantageReportQuery } from '@/modules/report/queries/tax-advantage-report.query';
+import { TaxAdvantageReportQuery } from '@skytech/manager/modules/report/queries/tax-advantage-report.query';
 import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
 
 @UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))

@@ -1,4 +1,4 @@
-import { DrillDownServiceType } from '@/modules/drilldown/dto';
+import { DrillDownServiceType } from '@skytech/manager/modules/drilldown/dto';
 
 export const filterCondition = (period: number, year: number) =>
   period <= 0

@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CustomerDto } from '@/modules/customer/dto/customer.dto';
+import { CustomerDto } from '@skytech/manager/modules/customer/dto/customer.dto';
 import { TelePolicyTemplateDto } from './tele-policy-template.dto';
-import { SuccessResponseDto } from '@/common/dto/status-response.dto';
-import { CostObjectDto } from '@/common/dto/cost-object.dto';
+import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
+import { CostObjectDto } from '@skytech/manager/common/dto/cost-object.dto';
 
 export class SalaryDeductionProfileDto {
   @ApiProperty({

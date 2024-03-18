@@ -1,13 +1,13 @@
 import { Repository } from 'typeorm';
 
-import { UserEntity } from '@/modules/user/entities/user.entity';
-import { TextTemplateEntity } from '@/modules/text-template/entities';
+import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
+import { TextTemplateEntity } from '@skytech/manager/modules/text-template/entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseTextTemplate } from '../types';
 import { SmsNotificationsService } from './sms-notifications.service';
 import { EmailNotificationsService } from './email-notifications.service';
-import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import {
   ISendBulkNotification,
   ISendNotification,

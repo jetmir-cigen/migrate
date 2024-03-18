@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 
-import { QueryInterface } from '@/common/query.interface';
+import { QueryInterface } from '@skytech/manager/common/query.interface';
 
 /**
  * Simple, thin wrapper around `QueryBus` to infer query return type from

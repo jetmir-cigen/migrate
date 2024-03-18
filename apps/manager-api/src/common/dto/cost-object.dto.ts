@@ -1,4 +1,4 @@
-import { SalaryDeductionProfileDto } from '@/modules/tele-policy/dto';
+import { SalaryDeductionProfileDto } from '@skytech/manager/modules/tele-policy/dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CostObjectDto {

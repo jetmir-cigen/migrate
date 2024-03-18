@@ -5,7 +5,7 @@ import { AuthGuard } from './auth.guard';
 import { FindCurrentUserByFilterQuery } from './queries';
 import { ChangePasswordCommand } from './commands/change-password.command';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { SuccessResponseDto } from '@/common/dto/status-response.dto';
+import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 
 @UseGuards(AuthGuard)
 @Controller('auth')
