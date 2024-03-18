@@ -1,0 +1,24 @@
+{
+  "name": "manager-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/manager-api/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "manager-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "manager-api:build:development"
+        },
+        "production": {
+          "buildTarget": "manager-api:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
