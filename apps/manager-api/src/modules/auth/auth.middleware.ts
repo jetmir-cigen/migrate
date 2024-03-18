@@ -13,20 +13,9 @@ export class AuthMiddleware implements NestMiddleware {
   ) {}
 
   async use(request: Request, _: Response, next: NextFunction) {
-    const AUTH_TOKEN_COOKIE = this.configService.get('auth.authTokenCookie');
-    let authToken = jwtFromBearer(request.headers.authorization);
+    const authToken = jwtFromBearer(request.headers.authorization);
 
-    const {
-      [AUTH_TOKEN_COOKIE]: authTokenFromCookie,
-    }: Record<string, string | undefined> = request.cookies;
 
-    // When we don't have JWT in `Authorization` header
-    // we try to get it from cookie.
-    // Authorization header should be MORE important from cookie which
-    // is treated as a fallback.
-    if (authToken === null && authTokenFromCookie) {
-      authToken = authTokenFromCookie;
-    }
 
     if (typeof authToken === 'string') {
       const jwtExpiresAt = this.authJwtService.getJwtExpiration(authToken);
