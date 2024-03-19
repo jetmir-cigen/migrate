@@ -38,14 +38,11 @@ import {
   UpdateTextTemplateCommand,
 } from '@skytech/manager/modules/text-template/commands';
 import { TextTemplateEntity } from './entities';
-import { AuthUser } from '../auth/auth-user.decorator';
-import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
-import { UserRoleGuard } from '../user/user-role.guard';
-import { AuthGuard } from '../auth/auth.guard';
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
 
 @ApiTags('text-templates')
 @Controller('text-templates')
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))
 export class TextTemplateController {
   constructor(
     private readonly queryBus: QueryBus,
@@ -79,7 +76,7 @@ export class TextTemplateController {
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   async createTextTemplate(
     @Body() createTextTemplateDto: CreateTextTemplateDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<SuccessResponseDto & { textTemplate: TextTemplateDto }> {
     const createdTextTemplate = await this.commandBus.execute(
       new CreateTextTemplateCommand({

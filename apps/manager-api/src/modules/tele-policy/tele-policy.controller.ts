@@ -13,10 +13,6 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 
-import { AuthGuard } from '../auth/auth.guard';
-import { UserRoleGuard } from '../user/user-role.guard';
-import { AuthUser } from '../auth/auth-user.decorator';
-
 import {
   FindTelePoliciesByFilterQuery,
   GetTelePolicyByFilterQuery,
@@ -35,12 +31,12 @@ import {
   UpdateTelePolicyDto,
 } from './dto';
 import { FindTelePolicyTemplatesByFilterQuery } from './queries/all-tele-policy-templates.query';
-import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
 import { AssignTelePolicyDto } from './dto/assign-tele-policy.dto';
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
 
 @ApiTags('Tele-policies')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))
 @Controller('tele-policies')
 export class TelePolicyController {
   constructor(
@@ -50,7 +46,7 @@ export class TelePolicyController {
 
   @Post()
   async create(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Body() createTelePolicyDto: CreateTelePolicyDto,
   ) {
     const { global, ...data } = createTelePolicyDto;
@@ -69,7 +65,7 @@ export class TelePolicyController {
   }
 
   @Get()
-  async findAll(@AuthUser() user: Express.User) {
+  async findAll(@AuthUser() user: IUser) {
     const salaryDeductionProfiles = await this.queryBus.execute(
       new FindTelePoliciesByFilterQuery({
         customerHeadId: user.chid,
@@ -83,7 +79,7 @@ export class TelePolicyController {
   }
 
   @Get(':id(\\d+)')
-  async findOne(@Param('id') id: number, @AuthUser() user: Express.User) {
+  async findOne(@Param('id') id: number, @AuthUser() user: IUser) {
     const salaryDeductionProfile = await this.queryBus.execute(
       new GetTelePolicyByFilterQuery({
         customerHeadId: user.chid,
@@ -101,7 +97,7 @@ export class TelePolicyController {
   async update(
     @Param('id') id: number,
     @Body() updateTelePolicyDto: UpdateTelePolicyDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ) {
     const { global, ...data } = updateTelePolicyDto;
 
@@ -133,7 +129,7 @@ export class TelePolicyController {
   }
 
   @Delete(':id(\\d+)')
-  async remove(@Param('id') id: number, @AuthUser() user: Express.User) {
+  async remove(@Param('id') id: number, @AuthUser() user: IUser) {
     const instance = await this.queryBus.execute(
       new GetTelePolicyByFilterQuery({
         customerHeadId: user.chid,
@@ -161,7 +157,7 @@ export class TelePolicyController {
   @Post('/assign')
   async assignTelePolicyToUser(
     @Body() body: AssignTelePolicyDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ) {
     // if null pass the check
     if (body.telePolicyId) {

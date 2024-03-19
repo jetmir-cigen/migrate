@@ -1,4 +1,4 @@
-import { UserRolesENUM } from '@/modules/user/user-roles.enum';
+import { UserRoles } from '@/modules/user/user-roles.enum';
 
 declare global {
   enum UserRoles {
@@ -22,24 +22,24 @@ declare global {
       cid: number;
       chid: number;
       wlid: number;
-      role: UserRolesENUM;
+      role: UserRoles;
     }
 
     interface RegularUser extends GenericUser {
       id: number;
-      role: UserRolesENUM.USER;
+      role: UserRoles.USER;
     }
     interface ManagerUser extends GenericUser {
       id: number;
-      role: UserRolesENUM.MANAGER;
+      role: UserRoles.MANAGER;
     }
     interface AdminUser extends GenericUser {
       id: number;
-      role: UserRolesENUM.ADMIN;
+      role: UserRoles.ADMIN;
     }
     interface CustomerAdminUser extends GenericUser {
       id: number;
-      role: UserRolesENUM.CUSTOMER_ADMIN;
+      role: UserRoles.CUSTOMER_ADMIN;
     }
 
     type User = RegularUser | ManagerUser | AdminUser | CustomerAdminUser;

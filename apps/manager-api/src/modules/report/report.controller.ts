@@ -6,10 +6,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
-import { UserRoleGuard } from '@skytech/manager/modules/user/user-role.guard';
 import { QueryBus } from '@nestjs/cqrs';
-import { AuthUser } from '../auth/auth-user.decorator';
 import { ReportQueryDto, TaxAdvantageQueryDto } from './dto/get-report.dto';
 import {
   ConsumptionReportQuery,
@@ -21,9 +18,9 @@ import {
   NewNumberOrdersReportQuery,
 } from './queries';
 import { TaxAdvantageReportQuery } from '@skytech/manager/modules/report/queries/tax-advantage-report.query';
-import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
 
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))
 @ApiTags('reports')
 @Controller('reports')
 export class ReportController {
@@ -45,7 +42,7 @@ export class ReportController {
   })
   @ApiResponse({ status: 200, description: 'Success' })
   getReportGroupByOrder(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Query() query: ReportQueryDto,
   ) {
     const { fromDate, toDate, isGlobal } = query;
@@ -76,7 +73,7 @@ export class ReportController {
   })
   @ApiResponse({ status: 200, description: 'Success' })
   getReportGroupByEmployeeNo(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Query() query: ReportQueryDto,
   ) {
     const { fromDate, toDate, isGlobal } = query;
@@ -107,7 +104,7 @@ export class ReportController {
   })
   @ApiResponse({ status: 200, description: 'Success' })
   getSalaryDeductionUsage(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Query() query: ReportQueryDto,
   ) {
     const { fromDate, toDate, isGlobal } = query;
@@ -138,7 +135,7 @@ export class ReportController {
   })
   @ApiResponse({ status: 200, description: 'Success' })
   getAccountingReports(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Query() query: ReportQueryDto,
   ) {
     const { fromDate, toDate, isGlobal } = query;
@@ -164,7 +161,7 @@ export class ReportController {
   })
   @ApiResponse({ status: 200, description: 'Success' })
   getTaxAdvantageReports(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Query() query: TaxAdvantageQueryDto,
   ) {
     const { year, isGlobal } = query;
@@ -197,7 +194,7 @@ export class ReportController {
   })
   @ApiResponse({ status: 200, description: 'Success' })
   getConsumptionReports(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Query() query: ReportQueryDto,
   ) {
     const { fromDate, toDate, isGlobal } = query;
@@ -228,7 +225,7 @@ export class ReportController {
   })
   @ApiResponse({ status: 200, description: 'Success' })
   getOffBoardingReports(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Query() query: ReportQueryDto,
   ) {
     const { fromDate, toDate, isGlobal } = query;
@@ -259,7 +256,7 @@ export class ReportController {
   })
   @ApiResponse({ status: 200, description: 'Success' })
   getNewNumberOrdersReports(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Query() query: ReportQueryDto,
   ) {
     const { fromDate, toDate, isGlobal } = query;

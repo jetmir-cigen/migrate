@@ -1,13 +1,12 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { AuthUser } from './auth-user.decorator';
-import { AuthGuard } from './auth.guard';
 import { FindCurrentUserByFilterQuery } from './queries';
 import { ChangePasswordCommand } from './commands/change-password.command';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
+import { AuthGuard, AuthUser, IUser } from '@skytech/auth';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard())
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -16,7 +15,7 @@ export class AuthController {
   ) {}
 
   @Get('/profile')
-  async profile(@AuthUser() user: Express.User) {
+  async profile(@AuthUser() user: IUser) {
     return this.queryBus.execute(
       new FindCurrentUserByFilterQuery({ userId: user.uid }),
     );
@@ -24,7 +23,7 @@ export class AuthController {
 
   @Post('/change-password')
   async changePassword(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Body() body: ChangePasswordDto,
   ) {
     await this.commandBus.execute(

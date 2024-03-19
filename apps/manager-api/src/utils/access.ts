@@ -1,8 +1,5 @@
-import { UserRolesENUM } from '@skytech/manager/modules/user/user-roles.enum';
+import { IUser, UserRoles } from '@skytech/auth';
 
-export const isDepartmentAdmin = (user: Express.GenericUser) => {
-  return [
-    UserRolesENUM.DEPARTMENT_HEAD,
-    UserRolesENUM.DEPARTMENT_HEAD_CORP,
-  ].includes(user.role);
+export const isDepartmentAdmin = (user: IUser) => {
+  return user.role === UserRoles.DEPARTMENT_HEAD || user.role === UserRoles.DEPARTMENT_HEAD_CORP;
 };

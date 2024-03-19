@@ -1,30 +1,29 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { NotificationsService } from './services';
 import { SMSTestTextTemplate, WelcomeEmailTextTemplate } from './types';
-import { AuthGuard } from '../auth/auth.guard';
-import { AuthUser } from '../auth/auth-user.decorator';
+import { AuthGuard, AuthUser, IUser } from '@skytech/auth';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard())
 @Controller('notifications')
 export class NotificationsController {
   constructor(private readonly notificationService: NotificationsService) {}
 
   @Post('/cost-object')
-  sendToCostObject(@Body() data: any, @AuthUser() user: Express.User) {
+  sendToCostObject(@Body() data: any, @AuthUser() user: IUser) {
     // this.emailNotificationService.sendEmail();
     const params = new SMSTestTextTemplate(data.text);
     return this.notificationService.sendToCostObject(253202, params, user);
   }
 
   @Post('/user')
-  sendToUser(@Body() data: any, @AuthUser() user: Express.User) {
+  sendToUser(@Body() data: any, @AuthUser() user: IUser) {
     const params = new WelcomeEmailTextTemplate(data.text);
 
     return this.notificationService.sendToUser(9061, params, user);
   }
 
   @Post('/users')
-  sendToUsers(@Body() data: any, @AuthUser() user: Express.User) {
+  sendToUsers(@Body() data: any, @AuthUser() user: IUser) {
     // this.emailNotificationService.sendEmail();
     const map = new Map();
     const values = new SMSTestTextTemplate(data);

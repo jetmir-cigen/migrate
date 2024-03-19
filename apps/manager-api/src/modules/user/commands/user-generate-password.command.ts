@@ -7,11 +7,12 @@ import { UserService } from '../user.service';
 import { generateRandomPassword } from '@skytech/manager/utils/generatePassword';
 import { UserPasswordGeneratedEvent } from '../events';
 import { ForbiddenException } from '@nestjs/common';
+import { IUser } from '@skytech/auth';
 
 export class GenerateUserPasswordCommand {
   constructor(
     public readonly id: number,
-    public readonly currentUser: Express.User,
+    public readonly currentUser: IUser,
   ) {}
 }
 

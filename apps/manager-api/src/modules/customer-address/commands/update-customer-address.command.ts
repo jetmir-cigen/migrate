@@ -7,15 +7,16 @@ import {
   UpdateCustomerAddressDto,
 } from '../dto/customer-address.dto';
 import { CustomerAddressEntity } from '../entities/customer-address.entity';
+import { IUser } from '@skytech/auth';
 
 class UpdateCustomerAddressCommand {
   constructor(
-    public readonly user: Express.User,
+    public readonly user: IUser,
     public readonly customerAddressDto: UpdateCustomerAddressDto,
   ) {}
 }
 export const updateCustomerAddressCommand = (
-  user: Express.User,
+  user: IUser,
   customerAddressDto: UpdateCustomerAddressDto,
 ) => new UpdateCustomerAddressCommand(user, customerAddressDto);
 
@@ -29,26 +30,22 @@ export class UpdateCustomerAddressCommandHandler
   ) {}
 
   async execute({ user, customerAddressDto }: UpdateCustomerAddressCommand) {
-    try {
-      const entity = await customerAddressDto.getCustomerAddressEntity({
-        user,
-      });
+    const entity = await customerAddressDto.getCustomerAddressEntity({
+      user,
+    });
 
-      await this.customerAddressRepository.update(
-        {
-          id: entity.id,
-        },
-        entity,
-      );
+    await this.customerAddressRepository.update(
+      {
+        id: entity.id,
+      },
+      entity,
+    );
 
-      const ret = await this.customerAddressRepository.findOne({
-        where: { id: entity.id },
-        relations: ['country', 'customer'],
-      });
+    const ret = await this.customerAddressRepository.findOne({
+      where: { id: entity.id },
+      relations: ['country', 'customer'],
+    });
 
-      return new CustomerAddressDto({ customerAddressEntity: ret });
-    } catch (error) {
-      throw error;
-    }
+    return new CustomerAddressDto({ customerAddressEntity: ret });
   }
 }

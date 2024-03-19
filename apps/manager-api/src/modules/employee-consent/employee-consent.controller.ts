@@ -11,13 +11,10 @@ import {
   ApiBadRequestResponse,
   ApiParam,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
-import { UserRoleGuard } from '@skytech/manager/modules/user/user-role.guard';
 import {
   EmployeeConsentListResponseDto,
   EmployeeConsentResponseDto,
 } from './dto/employee-consent-response.dto';
-import { AuthUser } from '@skytech/manager/modules/auth/auth-user.decorator';
 import { EmployeeConsentEntity } from './entities/employee-consent.entity';
 import { CreateEmployeeConsentDto } from './dto/create-employee-consent.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -26,11 +23,11 @@ import {
   CreateEmployeeConsentCommand,
   RevokeEmployeeConsentCommand,
 } from './commands';
-import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
 
 @ApiTags('Employee-consents')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))
 @Controller('employee-consent')
 export class EmployeeConsentController {
   constructor(
@@ -45,7 +42,7 @@ export class EmployeeConsentController {
   })
   @ApiUnauthorizedResponse()
   @Get('/')
-  async findAll(@AuthUser() user: Express.User) {
+  async findAll(@AuthUser() user: IUser) {
     return this.queryBus.execute(
       new GetEmployeeConsentsQuery({
         customer: { id: user.cid },
@@ -71,14 +68,14 @@ export class EmployeeConsentController {
   @Post('/')
   async create(
     @Body() createEmployeeConsentDto: CreateEmployeeConsentDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<EmployeeConsentResponseDto> {
     const employeeConsent = await this.commandBus.execute(
       new CreateEmployeeConsentCommand({
         createEmployeeConsentDto,
         customer: { id: user.cid },
         customerHead: { id: user.chid },
-        user: { id: user.id },
+        user: { id: user.uid },
       }),
     );
     return new EmployeeConsentResponseDto({ employeeConsent });

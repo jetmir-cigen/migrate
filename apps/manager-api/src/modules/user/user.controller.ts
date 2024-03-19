@@ -16,8 +16,6 @@ import {
   UserCreateResponseDto,
   UserResponseDto,
 } from './dto/user-response.dto';
-import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
-import { UserRoleGuard } from './user-role.guard';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -43,15 +41,14 @@ import {
 } from '@skytech/manager/common/dto/status-response.dto';
 import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import { GetUserByIdQuery } from '@skytech/manager/modules/user/queries/get-user-by-id.query';
-import { AuthUser } from '@skytech/manager/modules/auth/auth-user.decorator';
 import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import { GetCustomersQuery } from '@skytech/manager/modules/user/queries/get-customers.query';
 import { UserPasswordUpdateDto } from './dto/user-password-update.dto';
 import { GenerateUserPasswordCommand } from './commands/user-generate-password.command';
-import { ADMIN_USERS_GROUP } from './user-role.groups';
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
 
 @Controller('users')
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))
 export class UserController {
   constructor(
     private readonly queryBus: QueryBus,
@@ -66,7 +63,7 @@ export class UserController {
   })
   @ApiUnauthorizedResponse()
   @Get('/')
-  async getAll(@AuthUser() user: Express.User): Promise<UserResponseDto> {
+  async getAll(@AuthUser() user: IUser): Promise<UserResponseDto> {
     // In case of complex queries or complex business logic, it is better to use service
     const users = await this.queryBus.execute(
       new FindUsersByFilterQuery({
@@ -88,7 +85,7 @@ export class UserController {
   @Post()
   async createUser(
     @Body() userCreateDto: UserCreateDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<UserCreateResponseDto> {
     return new UserCreateResponseDto({
       user: await this.commandBus.execute(
@@ -104,9 +101,7 @@ export class UserController {
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  async getCustomersByUser(
-    @AuthUser() user: Express.User,
-  ): Promise<CustomerEntity[]> {
+  async getCustomersByUser(@AuthUser() user: IUser): Promise<CustomerEntity[]> {
     return this.queryBus.execute(new GetCustomersQuery(user.chid));
   }
 
@@ -142,7 +137,7 @@ export class UserController {
   async updateUser(
     @Param('id') id: number,
     @Body() userCreateDto: Partial<UserCreateDto>,
-    @AuthUser() authUser: Express.User,
+    @AuthUser() authUser: IUser,
   ): Promise<SuccessResponseDto> {
     if (userCreateDto.password) {
       userCreateDto.password = await this.userService.hashPassword(
@@ -171,7 +166,7 @@ export class UserController {
   @Put('password')
   async updatePassword(
     @Body() { password, newPassword }: UserPasswordUpdateDto,
-    @AuthUser() authUser: Express.User,
+    @AuthUser() authUser: IUser,
   ): Promise<SuccessResponseDto | FailResponseDto> {
     const user = await this.queryBus.execute(
       new GetUserByIdQuery(authUser.uid, true),
@@ -234,10 +229,7 @@ export class UserController {
     description: 'Allowed only for admin users',
   })
   @Post(':id/generate-password')
-  async generatePassword(
-    @Param('id') id: number,
-    @AuthUser() user: Express.User,
-  ) {
+  async generatePassword(@Param('id') id: number, @AuthUser() user: IUser) {
     return this.commandBus.execute(new GenerateUserPasswordCommand(id, user));
   }
 }

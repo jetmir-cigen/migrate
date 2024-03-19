@@ -16,15 +16,16 @@ import { CustomerDealerEntity } from '../entities/customer-dealer.entity';
 import { DealerNotificationEmailEntity } from '../entities/dealer-notification-email.entity';
 import { SubscriptionServiceOrderActivationEntity } from '../entities/subscription-service-order-activation.entity';
 import { SubscriptionServiceOrdersEntity } from '../entities/subscription-service-orders.entity';
+import { IUser } from '@skytech/auth';
 
 class CreateSubscriptionOrderCommand {
   constructor(
-    public readonly user: Express.User,
+    public readonly user: IUser,
     public readonly createSubscriptionDto: CreateSubscriptionDto,
   ) {}
 }
 export const createSubscriptionOrderCommand = (
-  user: Express.User,
+  user: IUser,
   createSubscriptionDto: CreateSubscriptionDto,
 ) => new CreateSubscriptionOrderCommand(user, createSubscriptionDto);
 
@@ -95,13 +96,13 @@ export class CreateSubscriptionOrderCommandHandler
   }
 
   async sendNotifications(
-    user: Express.User,
+    user: IUser,
     createSubscriptionDto: CreateSubscriptionDto,
     subscriptionOrder: SubscriptionServiceOrdersEntity,
     generatedCode?: string,
   ) {
     const userEntity = await this.userRepository.findOne({
-      where: { id: user.id },
+      where: { id: user.uid },
       relations: ['customer'],
     });
 
@@ -132,7 +133,7 @@ export class CreateSubscriptionOrderCommandHandler
   }
 
   sendBusinessNotifications(
-    user: Express.User,
+    user: IUser,
     employeeName: string,
     companyName: string,
     subscriptionOrderId: number,
@@ -159,7 +160,7 @@ export class CreateSubscriptionOrderCommandHandler
   }
 
   async sendUserNotification(
-    user: Express.User,
+    user: IUser,
     customerName: string,
     companyName: string,
     userName: string,
@@ -208,18 +209,14 @@ export class CreateSubscriptionOrderCommandHandler
     user,
     createSubscriptionDto,
   }: CreateSubscriptionOrderCommand) {
-    try {
-      const { generatedCode, subscriptionOrder } =
-        await this.saveSubscriptionOrder(createSubscriptionDto);
+    const { generatedCode, subscriptionOrder } =
+      await this.saveSubscriptionOrder(createSubscriptionDto);
 
-      await this.sendNotifications(
-        user,
-        createSubscriptionDto,
-        subscriptionOrder,
-        generatedCode,
-      );
-    } catch (error) {
-      throw error;
-    }
+    await this.sendNotifications(
+      user,
+      createSubscriptionDto,
+      subscriptionOrder,
+      generatedCode,
+    );
   }
 }

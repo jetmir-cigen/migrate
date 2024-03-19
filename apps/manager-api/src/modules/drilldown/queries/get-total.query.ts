@@ -13,11 +13,12 @@ import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.e
 import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import { CustomerHeadEntity } from '@skytech/manager/common/entities/customer-head.entity';
 import { CustomerHeadFrameAgreementEntity } from '@skytech/manager/common/entities/customer-head-frame-agreement.entity';
+import { IUser } from '@skytech/auth';
 
 type QueryFilters = {
   year: number;
   period: number;
-  user: Express.User;
+  user: IUser;
 };
 
 type List = {

@@ -6,6 +6,7 @@ import { SalaryDeductionProfileEntity } from '../entities/salary-deduction-profi
 import { TelePolicyService } from '../tele-policy.service';
 import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import { ManagerAccessCustomerView } from '@skytech/manager/common/views';
+import { IUser } from '@skytech/auth';
 
 export class AssignTelePolicyCommand {
   constructor(
@@ -13,7 +14,7 @@ export class AssignTelePolicyCommand {
       costObjectIds: number[];
       telePolicyId: number | null;
     },
-    public readonly user: Express.User,
+    public readonly user: IUser,
   ) {}
 }
 

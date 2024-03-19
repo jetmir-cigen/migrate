@@ -10,8 +10,6 @@ import {
 } from '@nestjs/common';
 
 import { DepartmentService } from './department.service';
-import { AuthGuard } from '../auth/auth.guard';
-import { AuthUser } from '../auth/auth-user.decorator';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import {
@@ -28,12 +26,11 @@ import {
   DepartmentListResponseDto,
   DepartmentResponseDto,
 } from './dto/department-response.dto';
-import { UserRoleGuard } from '../user/user-role.guard';
-import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
 
 @ApiTags('Departments')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))
 @Controller('departments')
 export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}
@@ -62,7 +59,7 @@ export class DepartmentController {
     type: DepartmentListResponseDto,
   })
   @Get('/')
-  async findAll(@AuthUser() user: Express.User) {
+  async findAll(@AuthUser() user: IUser) {
     const departments = await this.departmentService.findAll(user.uid);
     return new DepartmentListResponseDto({ departments });
   }
@@ -86,7 +83,7 @@ export class DepartmentController {
     description: `Department with ID not found`,
   })
   @Get(':id(\\d+)')
-  async findOne(@Param('id') id: number, @AuthUser() user: Express.User) {
+  async findOne(@Param('id') id: number, @AuthUser() user: IUser) {
     const department = await this.departmentService.findOne(id, user.uid);
 
     return new DepartmentResponseDto({ department });
@@ -118,7 +115,7 @@ export class DepartmentController {
   async update(
     @Param('id') id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ) {
     const department = await this.departmentService.update(
       id,
@@ -140,7 +137,7 @@ export class DepartmentController {
     description: 'The ID of the department to remove',
     example: 1,
   })
-  remove(@Param('id') id: number, @AuthUser() user: Express.User) {
+  remove(@Param('id') id: number, @AuthUser() user: IUser) {
     return this.departmentService.remove(id, user.uid);
   }
 }

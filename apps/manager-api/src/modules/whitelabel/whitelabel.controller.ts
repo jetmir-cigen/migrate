@@ -1,13 +1,11 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
-import { UserRoleGuard } from '@skytech/manager/modules/user/user-role.guard';
 import { Repository } from 'typeorm';
 import { WhiteLabelEntity } from './entities/whitelabel.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
+import { ADMIN_USERS_GROUP, AuthGuard } from '@skytech/auth';
 
 @Controller('whitelabels')
-@UseGuards(AuthGuard, UserRoleGuard([...ADMIN_USERS_GROUP]))
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))
 export class WhitelabelController {
   constructor(
     @InjectRepository(WhiteLabelEntity)

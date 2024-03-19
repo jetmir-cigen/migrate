@@ -15,25 +15,21 @@ import {
   FindVendorInvoicesByFilterQuery,
 } from './queries';
 
-import { AuthUser } from '../auth/auth-user.decorator';
-import { AuthGuard } from '../auth/auth.guard';
-
 import {
   InvoiceListResponseDto,
   InvoiceResponseDto,
 } from './dto/invoice-response.dto';
-import { UserRoleGuard } from '../user/user-role.guard';
 import {
   ADMIN_USERS_GROUP,
+  AuthGuard,
+  AuthUser,
   DEPARTMENT_USERS_GROUP,
-} from '../user/user-role.groups';
+  IUser,
+} from '@skytech/auth';
 
 @ApiTags('Invoices')
 @ApiBearerAuth()
-@UseGuards(
-  AuthGuard,
-  UserRoleGuard([...ADMIN_USERS_GROUP, ...DEPARTMENT_USERS_GROUP]),
-)
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP, ...DEPARTMENT_USERS_GROUP]))
 @Controller('invoices')
 export class InvoiceController {
   constructor(private readonly queryBus: QueryBus) {}
@@ -52,7 +48,7 @@ export class InvoiceController {
     status: 401,
     description: 'Unauthorized',
   })
-  async findAll(@AuthUser() user: Express.User) {
+  async findAll(@AuthUser() user: IUser) {
     const invoices = await this.queryBus.execute(
       new FindInvoicesByFilterQuery({ userId: user.uid }),
     );
@@ -75,7 +71,7 @@ export class InvoiceController {
     status: 401,
     description: 'Unauthorized',
   })
-  async findAllVendorInvoices(@AuthUser() user: Express.User) {
+  async findAllVendorInvoices(@AuthUser() user: IUser) {
     const invoices = await this.queryBus.execute(
       new FindVendorInvoicesByFilterQuery({
         userId: user.uid,
@@ -110,7 +106,7 @@ export class InvoiceController {
     status: 404,
     description: 'Invoice not found',
   })
-  async findOne(@Param('id') id: number, @AuthUser() user: Express.User) {
+  async findOne(@Param('id') id: number, @AuthUser() user: IUser) {
     const invoice = await this.queryBus.execute(
       new FindInvoiceByFilterQuery({
         userId: user.uid,

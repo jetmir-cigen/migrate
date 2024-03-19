@@ -7,6 +7,7 @@ import { UserCreatedEvent } from '@skytech/manager/modules/user/events/user-crea
 import { ConflictException } from '@nestjs/common';
 import { UserService } from '../user.service';
 import { generateRandomPassword } from '@skytech/manager/utils/generatePassword';
+import { IUser } from '@skytech/auth';
 
 export class CreateUserCommand {
   constructor(
@@ -20,7 +21,7 @@ export class CreateUserCommand {
       userGroupId: number;
       customerId: number;
     },
-    public readonly currentUser: Express.User,
+    public readonly currentUser: IUser,
   ) {}
 }
 

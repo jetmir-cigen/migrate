@@ -4,6 +4,7 @@ import { AssetEntity } from '@skytech/manager/modules/asset/entities/asset.entit
 import { Repository } from 'typeorm';
 import { EcomPolicyEntity } from '@skytech/manager/modules/asset/entities/ecom-policy.entity';
 import { EcomOrderEntity } from '@skytech/manager/modules/asset/entities/ecom-order.entity';
+import { IUser } from '@skytech/auth';
 
 export class CreateAssetCommand implements ICommand {
   constructor(
@@ -21,7 +22,7 @@ export class CreateAssetCommand implements ICommand {
       ownershipId: string;
       comment: string;
       cost: number;
-      user: Express.User;
+      user: IUser;
     },
   ) {}
 }

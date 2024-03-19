@@ -1,14 +1,7 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { GetTotalQuery } from '@skytech/manager/modules/drilldown/queries/get-total.query';
-import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
-import {
-  ADMIN_USERS_GROUP,
-  DEPARTMENT_USERS_GROUP,
-  SUPER_ADMIN_USERS_GROUP,
-} from '@skytech/manager/modules/user/user-role.groups';
-import { UserRoleGuard } from '@skytech/manager/modules/user/user-role.guard';
+
 import { ServiceReportQuery } from '@skytech/manager/modules/drilldown/queries/service/service-report.queries';
-import { AuthUser } from '@skytech/manager/modules/auth/auth-user.decorator';
 import { ListTotalDto, ListProductCategoriesDto } from './dto';
 import { QueryService } from '@skytech/manager/modules/query/query.service';
 import { GetTotalQueryDto } from './dto/request/get-total.dto';
@@ -29,15 +22,22 @@ import { GetProductReportByDepartmentAndCostObjectQuery } from './queries/depart
 import { GetProductsReportByDepartmentAndCostObjectsQueryDto } from './dto/request/product-report-by-department-cost-objects.dto';
 import { GetProductReportByCostObjectQuery } from './queries/cost-object/product-report-by-cost-object.queries';
 import { GetProductReportByCostObjectQueryDto } from './dto/request/product-report-by-cost-object.dto';
-import { UserRolesENUM } from '../user/user-roles.enum';
+import {
+  ADMIN_USERS_GROUP,
+  AuthGuard,
+  AuthUser,
+  DEPARTMENT_USERS_GROUP,
+  IUser,
+  SUPER_ADMIN_USERS_GROUP,
+  UserRoles,
+} from '@skytech/auth';
 
 @Controller('drill-down')
 @UseGuards(
-  AuthGuard,
-  UserRoleGuard([
+  AuthGuard([
     ...ADMIN_USERS_GROUP,
     ...DEPARTMENT_USERS_GROUP,
-    UserRolesENUM.REPORT_USER,
+    UserRoles.REPORT_USER,
   ]),
 )
 export class DrillDownController {
@@ -46,7 +46,7 @@ export class DrillDownController {
   @Get('service/category/groups/cost-objects')
   async getCostObjectReportByProductCategoryAndGroup(
     @Query() params: GetCostObjectReportByProductGroupAndCategoryQueryDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListProductCategoriesDto> {
     return await this.queryService.execute(
       new CostObjectsServiceCategoryAndGroupReportQuery(params, user),
@@ -56,7 +56,7 @@ export class DrillDownController {
   @Get('service/category/groups')
   async getReportByProductCategoryAndGroup(
     @Query() params: GetReportByProductGroupAndCategoryQueryDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListProductCategoriesDto> {
     return await this.queryService.execute(
       new ServiceCategoryAndGroupReportQuery(params, user),
@@ -66,7 +66,7 @@ export class DrillDownController {
   @Get('service/category')
   async getReportByProductCategory(
     @Query() params: GetReportByServiceAndProductCategoryQueryDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListProductCategoriesDto> {
     return await this.queryService.execute(
       new ServiceProductCategoryReportQuery(params, user),
@@ -78,7 +78,7 @@ export class DrillDownController {
   @Get('service')
   async getReportByService(
     @Query() params: GetReportByServiceQueryDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListProductCategoriesDto> {
     return await this.queryService.execute(
       new ServiceReportQuery(params, user),
@@ -88,7 +88,7 @@ export class DrillDownController {
   @Get('department/cost-objects/products')
   async getProductReportByDepartmentAndCostObjects(
     @Query() params: GetProductsReportByDepartmentAndCostObjectsQueryDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListProductCategoriesDto> {
     return await this.queryService.execute(
       new GetProductReportByDepartmentAndCostObjectQuery(params, user),
@@ -98,7 +98,7 @@ export class DrillDownController {
   @Get('department/cost-objects')
   async getCostObjectsReportByDepartment(
     @Query() params: GetCostObjectsReportByDepartmentQueryDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListProductCategoriesDto> {
     console.log(params);
 
@@ -110,7 +110,7 @@ export class DrillDownController {
   @Get('department')
   async getReportByDepartment(
     @Query() params: GetReportByDepartmentQueryDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListProductCategoriesDto> {
     console.log(params);
 
@@ -122,7 +122,7 @@ export class DrillDownController {
   @Get('cost-object/products')
   async getProductReportByCostObject(
     @Query() params: GetProductReportByCostObjectQueryDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListProductCategoriesDto> {
     console.log(params);
 
@@ -134,7 +134,7 @@ export class DrillDownController {
   @Get('cost-object')
   async getReportByCostObject(
     @Query() params: GetReportByCostObjectQueryDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListProductCategoriesDto> {
     console.log(params);
 
@@ -143,11 +143,11 @@ export class DrillDownController {
     );
   }
 
-  @UseGuards(UserRoleGuard([...SUPER_ADMIN_USERS_GROUP]))
+  @UseGuards(AuthGuard([...SUPER_ADMIN_USERS_GROUP]))
   @Get('total')
   async getTotalQuery(
     @Query() params: GetTotalQueryDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListTotalDto[]> {
     return this.queryService.execute(new GetTotalQuery({ ...params, user }));
   }
@@ -155,7 +155,7 @@ export class DrillDownController {
   @Get('/total/:year/:period')
   async getTotal(
     @Param() { year, period },
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<ListTotalDto[]> {
     return this.queryService.execute(new GetTotalQuery({ year, period, user }));
   }

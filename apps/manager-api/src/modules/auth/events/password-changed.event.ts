@@ -1,8 +1,9 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
+import { IUser } from '@skytech/auth';
 
 export class PasswordChangedEvent {
-  constructor(public readonly currentUser: Express.User) {}
+  constructor(public readonly currentUser: IUser) {}
 }
 
 @EventsHandler(PasswordChangedEvent)

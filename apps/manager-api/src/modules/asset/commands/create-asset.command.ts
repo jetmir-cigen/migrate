@@ -3,6 +3,7 @@ import { AssetEntity } from '@skytech/manager/modules/asset/entities/asset.entit
 import { DataSource } from 'typeorm';
 import { EcomPolicyEntity } from '@skytech/manager/modules/asset/entities/ecom-policy.entity';
 import { EcomOrderEntity } from '@skytech/manager/modules/asset/entities/ecom-order.entity';
+import { IUser } from '@skytech/auth';
 
 export class CreateAssetCommand implements ICommand {
   constructor(
@@ -23,7 +24,7 @@ export class CreateAssetCommand implements ICommand {
       comment: string;
       cost: number;
       received: string;
-      user: Express.User;
+      user: IUser;
     },
   ) {}
 }

@@ -5,11 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LogSmsPushEntity } from '../entities/log-sms-push.entity';
 import { NotificationsService } from '@skytech/manager/modules/notifications/services';
 import { ISendNotification } from '@skytech/manager/modules/notifications/dto/send-notification.dto';
+import { IUser } from '@skytech/auth';
 
 export class SendSMSCommand {
   constructor(
     public readonly data: {
-      user: Express.User;
+      user: IUser;
       sender: string;
       message: string;
       receivers: {

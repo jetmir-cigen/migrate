@@ -13,6 +13,7 @@ import { InvoiceEntity } from '@skytech/manager/modules/invoice/entities/invoice
 import { VendorEntity } from '@skytech/manager/common/entities/vendor.entity';
 import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import { isDepartmentAdmin } from '@skytech/manager/utils/access';
+import { IUser } from '@skytech/auth';
 
 type QueryFilters = {
   year: number;
@@ -39,7 +40,7 @@ export class GetCostObjectReportByDepartmentQuery implements QueryInterface {
   $$resolveType: ResultType;
   constructor(
     readonly filters: QueryFilters,
-    readonly user: Express.User,
+    readonly user: IUser,
   ) {}
 }
 

@@ -7,15 +7,16 @@ import {
   CustomerAddressDto,
 } from '../dto/customer-address.dto';
 import { CustomerAddressEntity } from '../entities/customer-address.entity';
+import { IUser } from '@skytech/auth';
 
 class CreateCustomerAddressCommand {
   constructor(
-    public readonly user: Express.User,
+    public readonly user: IUser,
     public readonly customerAddressDto: CreateCustomerAddressDto,
   ) {}
 }
 export const createCustomerAddressCommand = (
-  user: Express.User,
+  user: IUser,
   customerAddressDto: CreateCustomerAddressDto,
 ) => new CreateCustomerAddressCommand(user, customerAddressDto);
 
@@ -29,21 +30,17 @@ export class CreateCustomerAddressCommandHandler
   ) {}
 
   async execute({ user, customerAddressDto }: CreateCustomerAddressCommand) {
-    try {
-      const entity = await customerAddressDto.getCustomerAddressEntity({
-        user,
-      });
+    const entity = await customerAddressDto.getCustomerAddressEntity({
+      user,
+    });
 
-      const ret = await this.customerAddressRepository.save(entity);
+    const ret = await this.customerAddressRepository.save(entity);
 
-      const result = await this.customerAddressRepository.findOne({
-        where: { id: ret.id },
-        relations: ['country', 'customer'],
-      });
+    const result = await this.customerAddressRepository.findOne({
+      where: { id: ret.id },
+      relations: ['country', 'customer'],
+    });
 
-      return new CustomerAddressDto({ customerAddressEntity: result });
-    } catch (error) {
-      throw error;
-    }
+    return new CustomerAddressDto({ customerAddressEntity: result });
   }
 }

@@ -10,10 +10,6 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthUser } from '../auth/auth-user.decorator';
-import { AuthGuard } from '../auth/auth.guard';
-import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
-import { UserRoleGuard } from '../user/user-role.guard';
 import {
   createCustomerAddressCommand,
   deleteCustomerAddressCommand,
@@ -24,14 +20,17 @@ import {
   UpdateCustomerAddressDto,
 } from './dto/customer-address.dto';
 import { getAllCustomerAddressQuery } from './queries';
-import { UserRolesENUM } from '../user/user-roles.enum';
+import {
+  ADMIN_USERS_GROUP,
+  AuthGuard,
+  AuthUser,
+  IUser,
+  UserRoles,
+} from '@skytech/auth';
 
 @ApiTags('addresses')
 @ApiBearerAuth()
-@UseGuards(
-  AuthGuard,
-  UserRoleGuard([...ADMIN_USERS_GROUP, UserRolesENUM.IT_USER]),
-)
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP, UserRoles.IT_USER]))
 @Controller('addresses')
 export class CustomerAddressController {
   constructor(
@@ -42,7 +41,7 @@ export class CustomerAddressController {
   @ApiOperation({ summary: 'create new customer address' })
   @Post()
   async create(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Body() createCustomerAddressDto: CreateCustomerAddressDto,
   ) {
     return this.commandBus.execute(
@@ -52,14 +51,14 @@ export class CustomerAddressController {
 
   @ApiOperation({ summary: 'get all customer addresses based on user id' })
   @Get()
-  async findAll(@AuthUser() user: Express.User) {
+  async findAll(@AuthUser() user: IUser) {
     return this.queryBus.execute(getAllCustomerAddressQuery(user.uid));
   }
 
   @ApiOperation({ summary: 'update customer address' })
   @Patch()
   async update(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Body() updateCustomerAddressDto: UpdateCustomerAddressDto,
   ) {
     return this.commandBus.execute(

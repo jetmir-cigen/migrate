@@ -4,10 +4,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SmsGroupEntity } from '../entities/sms-group.entity';
 import { SmsGroupNumberEntity } from '../entities/sms-group-number.entity';
+import { IUser } from '@skytech/auth';
 
 export class AddNumbersToPhoneGroupCommand {
   constructor(
-    public readonly user: Express.User,
+    public readonly user: IUser,
     public readonly groupId: number,
     public readonly data: {
       number: string;

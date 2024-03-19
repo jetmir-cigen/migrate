@@ -4,6 +4,7 @@ import { EntityNotFoundError, Repository } from 'typeorm';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserUpdatedEvent } from '@skytech/manager/modules/user/events/user-updated.event';
 import { ForbiddenException } from '@nestjs/common';
+import { IUser } from '@skytech/auth';
 
 export class UpdateUserCommand {
   constructor(
@@ -19,7 +20,7 @@ export class UpdateUserCommand {
       customerId?: number;
       isPasswordChangeRequired?: boolean;
     },
-    public readonly currentUser: Express.User,
+    public readonly currentUser: IUser,
   ) {}
 }
 

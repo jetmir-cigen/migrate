@@ -3,11 +3,12 @@ import { Logger } from '@nestjs/common';
 import { NotificationsService } from '@skytech/manager/modules/notifications/services';
 import { UserEntity } from '../entities/user.entity';
 import { ManagerNewUserCreated } from '@skytech/manager/modules/notifications/types';
+import { IUser } from '@skytech/auth';
 
 export class UserCreatedEvent {
   constructor(
     public readonly user: UserEntity,
-    public readonly currentUser: Express.User,
+    public readonly currentUser: IUser,
   ) {}
 }
 

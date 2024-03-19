@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AuthJwtService } from './auth-jwt.service';
 import { HttpModule } from '@nestjs/axios';
 import { AuthController } from './auth.controller';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -18,13 +17,12 @@ import { UserService } from '../user/user.service';
     TypeOrmModule.forFeature([UserEntity, DevicePolicyEntity]),
   ],
   providers: [
-    AuthJwtService,
     UserService,
     FindCurrentUserByFilterQueryHandler,
     ChangePasswordCommandHandler,
     PasswordChangedEventHandler,
   ],
-  exports: [AuthJwtService],
+  exports: [],
   controllers: [AuthController],
 })
 export class AuthModule {}

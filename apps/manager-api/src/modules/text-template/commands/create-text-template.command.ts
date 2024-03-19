@@ -2,6 +2,7 @@ import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TextTemplateEntity } from '../entities';
+import { IUser } from '@skytech/auth';
 
 export class CreateTextTemplateCommand {
   constructor(
@@ -16,7 +17,7 @@ export class CreateTextTemplateCommand {
       text?: string;
       type: string;
       description?: string;
-      authUser: Express.User;
+      authUser: IUser;
       isGlobal: string & ('global' | 'local');
     },
   ) {}

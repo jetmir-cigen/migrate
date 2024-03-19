@@ -5,9 +5,10 @@ import { DepartmentEntity } from '@skytech/manager/modules/department/entities/d
 import { ManagerAccessDepartmentView } from '@skytech/manager/common/views/manager-access-department.view';
 import { SalaryDeductionProfileEntity } from '@skytech/manager/modules/tele-policy/entities/salary-deduction-profile.entity';
 import { ManagerAccessCustomerView } from '@skytech/manager/common/views/manager-access-customer.view';
+import { IUser } from '@skytech/auth';
 
 type QueryFilters = {
-  user: Express.User;
+  user: IUser;
 };
 
 export class FindPhoneBooksByFilterQuery {

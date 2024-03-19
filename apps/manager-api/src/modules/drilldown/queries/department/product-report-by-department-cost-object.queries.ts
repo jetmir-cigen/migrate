@@ -16,6 +16,7 @@ import { ProductEntity } from '@skytech/manager/common/entities/product.entity';
 import { ProductGroupEntity } from '@skytech/manager/common/entities/product-group.entity';
 import { ProductCategoryEntity } from '@skytech/manager/common/entities/product-category.entity';
 import { isDepartmentAdmin } from '@skytech/manager/utils/access';
+import { IUser } from '@skytech/auth';
 
 type QueryFilters = {
   year: number;
@@ -46,7 +47,7 @@ export class GetProductReportByDepartmentAndCostObjectQuery
   $$resolveType: ResultType;
   constructor(
     readonly filters: QueryFilters,
-    readonly user: Express.User,
+    readonly user: IUser,
   ) {}
 }
 

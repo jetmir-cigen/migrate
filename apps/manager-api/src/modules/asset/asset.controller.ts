@@ -6,22 +6,21 @@ import {
   ApiParam,
   ApiResponse,
 } from '@nestjs/swagger';
-import { AuthUser } from '@skytech/manager/modules/auth/auth-user.decorator';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateAssetDto } from '@skytech/manager/modules/asset/dto/create-asset.dto';
-import { AuthGuard } from '@skytech/manager/modules/auth/auth.guard';
 import { CreateAssetCommand } from '@skytech/manager/modules/asset/commands/create-asset.command';
 import { AssetEntity } from '@skytech/manager/modules/asset/entities/asset.entity';
 import { GetAssetByIdQuery } from '@skytech/manager/modules/asset/queries/get-asset-by-id.query';
-import { UserRoleGuard } from '@skytech/manager/modules/user/user-role.guard';
-import { ADMIN_USERS_GROUP } from '@skytech/manager/modules/user/user-role.groups';
-import { UserRolesENUM } from '../user/user-roles.enum';
+import {
+  ADMIN_USERS_GROUP,
+  AuthGuard,
+  AuthUser,
+  IUser,
+  UserRoles,
+} from '@skytech/auth';
 
 @Controller('assets')
-@UseGuards(
-  AuthGuard,
-  UserRoleGuard([...ADMIN_USERS_GROUP, UserRolesENUM.IT_USER]),
-)
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP, UserRoles.IT_USER]))
 export class AssetController {
   constructor(
     private readonly commandBus: CommandBus,
@@ -39,7 +38,7 @@ export class AssetController {
   @Post('/')
   async create(
     @Body() body: CreateAssetDto,
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
   ): Promise<AssetEntity> {
     return this.commandBus.execute(
       new CreateAssetCommand({

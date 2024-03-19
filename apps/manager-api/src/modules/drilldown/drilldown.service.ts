@@ -9,6 +9,7 @@ import {
 import { CustomerEntity } from '../customer/entities/customer.entity';
 import { CustomerHeadEntity } from '@skytech/manager/common/entities/customer-head.entity';
 import { CustomerHeadFrameAgreementEntity } from '@skytech/manager/common/entities/customer-head-frame-agreement.entity';
+import { IUser } from '@skytech/auth';
 
 @Injectable()
 export class DrillDownService {
@@ -28,7 +29,7 @@ export class DrillDownService {
     return macFrameAgreement.map((item) => item.customerId).join(',');
   }
 
-  async getCustomerAccessListArr(user: Express.GenericUser): Promise<number[]> {
+  async getCustomerAccessListArr(user: IUser): Promise<number[]> {
     const { role, uid: userId, cid } = user;
 
     if (['admin', 'customer_head_admin'].includes(role)) {
@@ -146,7 +147,7 @@ export class DrillDownService {
   }
 
   getEntity = async (
-    user: Express.GenericUser,
+    user: IUser,
     type: DrillDownServiceType,
     typeId: number,
   ) => {

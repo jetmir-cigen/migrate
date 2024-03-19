@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { CustomerAddressEntity } from '../entities/customer-address.entity';
+import { IUser } from '@skytech/auth';
 
 export class CustomerAddressDto {
   @IsNumber()
@@ -60,7 +61,7 @@ export class CustomerAddressDto {
 
   async getCustomerAddressEntity(options: {
     isActive?: boolean;
-    user?: Express.User;
+    user?: IUser;
   }) {
     const { user, isActive } = options;
 

@@ -12,6 +12,7 @@ import {
   ISendBulkNotification,
   ISendNotification,
 } from '../dto/send-notification.dto';
+import { IUser } from '@skytech/auth';
 
 export interface IParams {
   data: Map<number, BaseTextTemplate>;
@@ -40,7 +41,7 @@ export class NotificationsService {
     );
   }
 
-  async sendToUser(id: number, data: BaseTextTemplate, user: Express.User) {
+  async sendToUser(id: number, data: BaseTextTemplate, user: IUser) {
     const query = await this.userRepository
       .createQueryBuilder('u')
       .innerJoinAndSelect('u.customer', 'c')
@@ -87,7 +88,7 @@ export class NotificationsService {
   async sendToCostObject(
     id: number,
     data: BaseTextTemplate,
-    user: Express.User,
+    user: IUser,
   ) {
     const query = await this.costObjectRepository
       .createQueryBuilder('costObject')
@@ -132,7 +133,7 @@ export class NotificationsService {
     return { query };
   }
 
-  async sendToUsers(params: IParams, code: string, user: Express.User) {
+  async sendToUsers(params: IParams, code: string, user: IUser) {
     const { data } = params;
 
     // for each data check if value.constructor['code'] === code

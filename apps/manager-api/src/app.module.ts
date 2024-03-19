@@ -14,7 +14,6 @@ import { DepartmentModule } from './modules/department/department.module';
 import { typeOrmAsyncConfig, mailerAsyncConfig, config } from './config';
 import { ElementLabelModule } from './modules/element-label/element-label.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { AuthMiddleware } from './modules/auth/auth.middleware';
 import { UserModule } from './modules/user/user.module';
 import { CustomerModule } from './modules/customer/customer.module';
 import { MailerModule } from './modules/mailer/mailer.module';
@@ -32,6 +31,7 @@ import { QueryModule } from './modules/query/query.module';
 import { CustomerAddressModule } from './modules/customer-address/customer-address.module';
 import { PolicyModule } from './modules/policy/policy.module';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
+import { AuthModule as GlobalAuthModule, AuthMiddleware } from '@skytech/auth';
 
 @Module({
   imports: [
@@ -43,6 +43,7 @@ import { SubscriptionsModule } from './modules/subscriptions/subscriptions.modul
     NestJsMailerModule.forRootAsync(mailerAsyncConfig),
     DepartmentModule,
     ElementLabelModule,
+    GlobalAuthModule,
     AuthModule,
     UserModule,
     CustomerModule,

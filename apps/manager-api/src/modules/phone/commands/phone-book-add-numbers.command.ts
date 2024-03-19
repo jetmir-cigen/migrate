@@ -3,10 +3,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { SmsPhoneBookEntity } from '../entities/sms-phone-book.entity';
+import { IUser } from '@skytech/auth';
 
 export class AddNumbersToPhoneBookCommand {
   constructor(
-    public readonly user: Express.User,
+    public readonly user: IUser,
     public readonly data: {
       number: string;
       name: string;

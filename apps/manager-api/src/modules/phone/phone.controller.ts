@@ -9,7 +9,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { AuthUser } from '../auth/auth-user.decorator';
 import {
   FindGroupNumbersByFilterQuery,
   FindPhoneBooksByFilterQuery,
@@ -30,22 +29,22 @@ import {
 import { SendSmsDto } from './dto/send-sms.dto';
 import { SMSLogsListResponseDto } from './dto/sms-logs-response.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '../auth/auth.guard';
-import { UserRoleGuard } from '../user/user-role.guard';
 import { AddNumbersToPhoneBookCommand } from './commands/phone-book-add-numbers.command';
 import { FindAllActiveNumbersByFilterQuery } from './queries/get-all-active-numbers.query';
 import { UpdatePhoneBookNumberCommand } from './commands/phone-book-update-numbers.command';
 import { UpdatePhoneGroupNumberCommand } from './commands/phone-groups-update-numbers.command';
-import { ADMIN_USERS_GROUP } from '../user/user-role.groups';
 import { FindUserAliasesByFilterQuery } from './queries/get-user-aliases.query';
-import { UserRolesENUM } from '../user/user-roles.enum';
+import {
+  ADMIN_USERS_GROUP,
+  AuthGuard,
+  AuthUser,
+  IUser,
+  UserRoles,
+} from '@skytech/auth';
 
 @ApiTags('Phone')
 @ApiBearerAuth()
-@UseGuards(
-  AuthGuard,
-  UserRoleGuard([...ADMIN_USERS_GROUP, UserRolesENUM.IT_USER]),
-)
+@UseGuards(AuthGuard([...ADMIN_USERS_GROUP, UserRoles.IT_USER]))
 @Controller('phone')
 export class PhoneController {
   constructor(
@@ -55,7 +54,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Get all active numbers' })
   @Get('/numbers')
-  getActiveNumbers(@AuthUser() user: Express.User) {
+  getActiveNumbers(@AuthUser() user: IUser) {
     return this.queryBus.execute(
       new FindAllActiveNumbersByFilterQuery({
         userId: user.uid,
@@ -65,7 +64,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Get all group active numbers' })
   @Get('/group-numbers')
-  getActiveGroupNumbers(@AuthUser() user: Express.User) {
+  getActiveGroupNumbers(@AuthUser() user: IUser) {
     return this.queryBus.execute(
       new FindGroupNumbersByFilterQuery({
         userId: user.uid,
@@ -75,7 +74,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Get all phone books' })
   @Get('books')
-  async getPhoneBooks(@AuthUser() user: Express.User) {
+  async getPhoneBooks(@AuthUser() user: IUser) {
     return this.queryBus.execute(
       new FindPhoneBooksByFilterQuery({
         user,
@@ -85,10 +84,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Add numbers to phone book' })
   @Post('books')
-  async addNumbersToPhoneBook(
-    @AuthUser() user: Express.User,
-    @Body() body: any,
-  ) {
+  async addNumbersToPhoneBook(@AuthUser() user: IUser, @Body() body: any) {
     return this.commandBus.execute(
       new AddNumbersToPhoneBookCommand(user, body.numbers),
     );
@@ -97,7 +93,7 @@ export class PhoneController {
   @ApiOperation({ summary: 'Update phone book number' })
   @Post('books/:id(\\d+)')
   async updatePhoneBookNumber(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Body() body: any,
     @Param('id') id: number,
   ) {
@@ -108,7 +104,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Get all phone groups' })
   @Get('/groups')
-  getGroups(@AuthUser() user: Express.User) {
+  getGroups(@AuthUser() user: IUser) {
     return this.queryBus.execute(
       new FindPhoneGroupsByFilterQuery({
         userId: user.uid,
@@ -118,7 +114,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Get phone group' })
   @Get('/groups/:id(\\d+)')
-  getGroup(@AuthUser() user: Express.User, @Param('id') id: number) {
+  getGroup(@AuthUser() user: IUser, @Param('id') id: number) {
     return this.queryBus.execute(
       new FindPhoneGroupByFilterQuery({
         userId: user.uid,
@@ -129,7 +125,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Create phone group' })
   @Post('/groups')
-  createGroup(@AuthUser() user: Express.User, @Body() body: any) {
+  createGroup(@AuthUser() user: IUser, @Body() body: any) {
     return this.commandBus.execute(
       new CreatePhoneGroupCommand({
         ...body,
@@ -142,7 +138,7 @@ export class PhoneController {
   @ApiOperation({ summary: 'Update phone group' })
   @Patch('/groups/:id(\\d+)')
   async updateGroup(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Body() body: any,
     @Param('id') id: number,
   ) {
@@ -164,7 +160,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Delete phone group' })
   @Delete('/groups/:id(\\d+)')
-  async deleteGroup(@AuthUser() user: Express.User, @Param('id') id: number) {
+  async deleteGroup(@AuthUser() user: IUser, @Param('id') id: number) {
     const group = await this.queryBus.execute(
       new FindPhoneGroupByFilterQuery({
         userId: user.uid,
@@ -177,7 +173,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Get phone group numbers' })
   @Get('/groups/:id(\\d+)/numbers')
-  getGroupNumbers(@AuthUser() user: Express.User, @Param('id') id: number) {
+  getGroupNumbers(@AuthUser() user: IUser, @Param('id') id: number) {
     return this.queryBus.execute(
       new FindPhoneGroupNumbersByFilterQuery({
         userId: user.uid,
@@ -189,7 +185,7 @@ export class PhoneController {
   @ApiOperation({ summary: 'Add phone group numbers' })
   @Post('/groups/:id(\\d+)/numbers')
   async addNumbersToGroup(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Param('id') id: number,
     @Body() body: any,
   ) {
@@ -201,7 +197,7 @@ export class PhoneController {
   @ApiOperation({ summary: 'Update phone group number' })
   @Post('/groups/:groupId(\\d+)/numbers/:numberId(\\d+)')
   async updatePhoneGroupNumber(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Body() body: any,
     @Param('groupId') id: number,
     @Param('numberId') numberId: number,
@@ -214,7 +210,7 @@ export class PhoneController {
   @ApiOperation({ summary: 'Delete phone group numbers' })
   @Delete('/groups/:id(\\d+)/numbers/:numberId(\\d+)')
   async deleteNumberFromGroup(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Param('id') id: number,
     @Param('numberId') numberId: number,
   ) {
@@ -225,7 +221,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Send SMS to selected numbers' })
   @Post('/send-sms')
-  async sendSMS(@AuthUser() user: Express.User, @Body() body: SendSmsDto) {
+  async sendSMS(@AuthUser() user: IUser, @Body() body: SendSmsDto) {
     return this.commandBus.execute(
       new SendSMSCommand({
         ...body,
@@ -236,7 +232,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Get sms logs' })
   @Get('/sms-logs')
-  async getSMSLogs(@AuthUser() user: Express.User) {
+  async getSMSLogs(@AuthUser() user: IUser) {
     const smsLogs = await this.queryBus.execute(
       new GetSMSLogsByFilterQuery({ user }),
     );
@@ -247,7 +243,7 @@ export class PhoneController {
   @ApiOperation({ summary: 'Get sms logs by batch' })
   @Get('/sms-logs/:batchId')
   async getSMSLogsByBatch(
-    @AuthUser() user: Express.User,
+    @AuthUser() user: IUser,
     @Param('batchId') batchId: string,
   ) {
     const smsLogs = await this.queryBus.execute(
@@ -259,7 +255,7 @@ export class PhoneController {
 
   @ApiOperation({ summary: 'Get user aliases' })
   @Get('/aliases')
-  async getUserAliases(@AuthUser() user: Express.User) {
+  async getUserAliases(@AuthUser() user: IUser) {
     return this.queryBus.execute(
       new FindUserAliasesByFilterQuery({
         user,

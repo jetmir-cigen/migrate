@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from '@skytech/manager/modules/user/user.service';
 import { PasswordChangedEvent } from '../events/password-changed.event';
 import { UnauthorizedException } from '@nestjs/common';
+import { IUser } from '@skytech/auth';
 
 export class ChangePasswordCommand {
   constructor(
@@ -13,7 +14,7 @@ export class ChangePasswordCommand {
       currentPassword: string;
       newPassword: string;
     },
-    public readonly currentUser: Express.User,
+    public readonly currentUser: IUser,
   ) {}
 }
 
