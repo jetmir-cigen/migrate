@@ -18,7 +18,7 @@ export class DeletePhoneGroupCommandHandler
   ) {}
 
   async execute({ existingSmsGroup }: DeletePhoneGroupCommand) {
-    await this.repository.delete(existingSmsGroup);
+    await this.repository.delete(existingSmsGroup.id);
 
     return true;
   }

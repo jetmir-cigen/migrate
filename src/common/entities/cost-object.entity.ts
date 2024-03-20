@@ -14,6 +14,7 @@ import {
 } from 'typeorm';
 import { TextTemplateEntity } from '@/modules/text-template/entities';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
+import { SubscriptionServiceOrdersEntity } from '@/modules/subscriptions/entities/subscription-service-orders.entity';
 
 @Entity({ name: 'control.cost_object', schema: 'control' })
 export class CostObjectEntity {
@@ -451,6 +452,12 @@ export class CostObjectEntity {
   @OneToOne(() => UserEntity)
   @JoinColumn({ name: 'code' })
   user: UserEntity;
+
+  @OneToOne(
+    () => SubscriptionServiceOrdersEntity,
+    (subscriptionServiceOrders) => subscriptionServiceOrders.costObject,
+  )
+  subscriptionServiceOrders: SubscriptionServiceOrdersEntity;
 
   @OneToMany(
     () => EmployeeConsentCostObjectEntity,

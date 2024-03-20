@@ -32,6 +32,7 @@ import { QueryModule } from './modules/query/query.module';
 import { CustomerAddressModule } from './modules/customer-address/customer-address.module';
 import { PolicyModule } from './modules/policy/policy.module';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
+import { TerminationsModule } from './modules/terminations/terminations.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { SubscriptionsModule } from './modules/subscriptions/subscriptions.modul
     CustomerAddressModule,
     PolicyModule,
     SubscriptionsModule,
+    TerminationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

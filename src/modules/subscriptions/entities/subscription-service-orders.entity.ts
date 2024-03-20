@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import { SubscriptionServiceOrderActivationEntity } from './subscription-service-order-activation.entity';
 import { SubscriptionServicesEntity } from './subscription-services.entity';
+import { CostObjectEntity } from '@/common/entities/cost-object.entity';
+import { SubscriptionServiceOrderTerminationEntity } from '@/modules/terminations/entity/subscription-service-order-termination.entity';
 
 @Index('cost_element_id', ['costObjectId', 'subscriptionServiceId'], {})
 @Index('subscription_service_id', ['subscriptionServiceId'], {})
@@ -63,8 +65,8 @@ export class SubscriptionServiceOrdersEntity {
   })
   currency: string | null;
 
-  @Column('date', { name: 'activation_date', nullable: true })
-  activationDate: string | null;
+  @Column('timestamp', { name: 'activation_date', nullable: true })
+  activationDate: Date | null;
 
   @Column('mediumtext', { name: 'comment', nullable: true })
   comment: string | null;
@@ -122,6 +124,21 @@ export class SubscriptionServiceOrdersEntity {
   )
   @JoinColumn([{ name: 'subscription_service_id', referencedColumnName: 'id' }])
   subscriptionService: SubscriptionServicesEntity;
+
+  @OneToOne(
+    () => CostObjectEntity,
+    (costObject) => costObject.subscriptionServiceOrders,
+    { onDelete: 'CASCADE', onUpdate: 'CASCADE' },
+  )
+  @JoinColumn([{ name: 'cost_object_id', referencedColumnName: 'id' }])
+  costObject: CostObjectEntity;
+
+  @OneToOne(
+    () => SubscriptionServiceOrderTerminationEntity,
+    (subscriptionServiceOrderTermination) =>
+      subscriptionServiceOrderTermination.subscriptionServiceOrders,
+  )
+  subscriptionServiceOrderTermination: SubscriptionServiceOrderTerminationEntity;
 
   @ManyToOne(() => UserEntity, (user) => user.subscriptionServiceOrders, {
     onDelete: 'SET NULL',

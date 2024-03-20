@@ -95,8 +95,8 @@ export class SubscriptionServiceOrderActivationEntity {
   @Column('varchar', { name: 'sim_city', nullable: true, length: 255 })
   simCity: string | null;
 
-  @Column('date', { name: 'activation_date', nullable: true })
-  activationDate: string | null;
+  @Column('timestamp', { name: 'activation_date', nullable: true })
+  activationDate: Date | null;
 
   @Column('varchar', { name: 'code', length: 255 })
   code: string;
@@ -149,7 +149,7 @@ export class SubscriptionServiceOrderActivationEntity {
   salaryDeductionProfileId: number | null;
 
   @Column('json', { name: 'ecom_policy_id_list', nullable: true })
-  ecomPolicyIdList: object | null;
+  ecomPolicyIdList: number[] | null;
 
   @ManyToOne(
     () => DepartmentEntity,

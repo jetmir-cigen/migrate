@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerEntity } from '../customer/entities/customer.entity';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { UserEntity } from '../user/entities/user.entity';
-import { CreateSubscriptionOrderCommandHandler } from './commands/create-service-order.command';
+import { CreateSubscriptionOrderCommandHandler } from './commands/create-subscription-order.command';
 import { DealerNotificationEmailEntity } from './entities/dealer-notification-email.entity';
 import { SubscriptionServiceOrderActivationEntity } from './entities/subscription-service-order-activation.entity';
 import { SubscriptionServiceOrdersEntity } from './entities/subscription-service-orders.entity';
@@ -13,6 +13,10 @@ import { SubscriptionServicesEntity } from './entities/subscription-services.ent
 import { SubscriptionsController } from './subscriptions.controller';
 import { SubscriptionsService } from './subscriptions.service';
 import { CustomerDealerEntity } from './entities/customer-dealer.entity';
+import { GetAllSubscriptsionsQueryHandler } from './queries/get-all-subscriptions.query';
+import { DepartmentEntity } from '../department/entities/department.entity';
+import { GetSubscriptionByIdQueryHandler } from './queries/get-subscription-by-id';
+import { UpdateSubscriptionCommandHandler } from './commands/update-subscription-order';
 
 @Module({
   imports: [
@@ -27,9 +31,16 @@ import { CustomerDealerEntity } from './entities/customer-dealer.entity';
       SubscriptionServiceOrderActivationEntity,
       SubscriptionServiceOrdersEntity,
       SubscriptionServicesEntity,
+      DepartmentEntity,
     ]),
   ],
   controllers: [SubscriptionsController],
-  providers: [SubscriptionsService, CreateSubscriptionOrderCommandHandler],
+  providers: [
+    SubscriptionsService,
+    CreateSubscriptionOrderCommandHandler,
+    GetAllSubscriptsionsQueryHandler,
+    GetSubscriptionByIdQueryHandler,
+    UpdateSubscriptionCommandHandler,
+  ],
 })
 export class SubscriptionsModule {}

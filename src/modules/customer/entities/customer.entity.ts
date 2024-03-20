@@ -1,5 +1,6 @@
 import { CostObjectEntity } from '@/common/entities/cost-object.entity';
 import { CountryEntity } from '@/common/entities/country.entity';
+import { DepartmentEntity } from '@/modules/department/entities/department.entity';
 import { LogMailEntity } from '@/modules/notifications/entities/log-mail.entity';
 import { LogSmsPushEntity } from '@/modules/phone/entities/log-sms-push.entity';
 import { SubscriptionServicesEntity } from '@/modules/subscriptions/entities/subscription-services.entity';
@@ -298,4 +299,7 @@ export class CustomerEntity {
     (subscriptionServices) => subscriptionServices.customer,
   )
   subscriptionServices: SubscriptionServicesEntity[];
+
+  @OneToMany(() => DepartmentEntity, (department) => department.customer)
+  departments: DepartmentEntity[];
 }

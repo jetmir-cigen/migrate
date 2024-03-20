@@ -1,4 +1,4 @@
-import { SubServiceOrderType } from '@/common/enums/SubServiceOrderType.enum';
+import { EnumSubscriptionServiceOrderType } from '@/common/enums/SubscriptionServiceOrderType.enum';
 import { CustomerEntity } from '@/modules/customer/entities/customer.entity';
 import { NotificationsService } from '@/modules/notifications/services';
 import {
@@ -51,7 +51,7 @@ export class CreateSubscriptionOrderCommandHandler
   async saveSubscriptionOrder(createSubscriptionDto: CreateSubscriptionDto) {
     const subscriptionOrder =
       await this.subscriptionServiceOrdersRepository.save({
-        subscriptionServiceId: SubServiceOrderType.PORTING,
+        subscriptionServiceId: EnumSubscriptionServiceOrderType.PORTING,
         created: new Date(),
         price: '0',
         comment: createSubscriptionDto.comment,
