@@ -5,7 +5,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule as NestJsMailerModule } from '@nestjs-modules/mailer';
 
 import { AppController } from './app.controller';
@@ -31,7 +31,10 @@ import { QueryModule } from './modules/query/query.module';
 import { CustomerAddressModule } from './modules/customer-address/customer-address.module';
 import { PolicyModule } from './modules/policy/policy.module';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
-import { AuthModule as GlobalAuthModule, AuthMiddleware } from '@skytech/auth';
+import {
+  AuthModule as GlobalAuthModule,
+  AuthMiddlewareMixin,
+} from '@skytech/auth';
 
 @Module({
   imports: [
@@ -68,9 +71,15 @@ import { AuthModule as GlobalAuthModule, AuthMiddleware } from '@skytech/auth';
   providers: [AppService],
 })
 export class AppModule implements NestModule {
+  constructor(private configService: ConfigService) {
+    console.log('configService', configService);
+  }
+
   configure(consumer: MiddlewareConsumer) {
+    const authTokenName = this.configService.get('auth.managerAuthToken');
+
     consumer
-      .apply(AuthMiddleware)
+      .apply(AuthMiddlewareMixin(authTokenName))
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

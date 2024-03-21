@@ -4,7 +4,7 @@ export const config = () => ({
   environment: process.env.ENVIRONMENT || 'development',
   port: parseInt(process.env.PORT, 10) || 4000,
   auth: {
-    authTokenCookie: process.env.AUTH_TOKEN_COOKIE,
+    managerAuthToken: process.env.MANAGER_AUTH_TOKEN,
     oauthServerUrl: getOauthServerUrl(process.env.ENVIRONMENT),
     publicKeyUrl: `${getOauthServerUrl(process.env.ENVIRONMENT)}/pubkey`,
   },

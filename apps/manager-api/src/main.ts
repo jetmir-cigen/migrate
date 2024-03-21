@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { TransformInterceptor } from './transform.interceptor';
 import { useContainer } from 'class-validator';
 import { IUser } from '@skytech/auth';
+import cookieParser from 'cookie-parser';
 
 declare global {
   interface AuthToken {
@@ -27,6 +28,7 @@ async function bootstrap() {
     }),
   );
   app.useGlobalInterceptors(new TransformInterceptor());
+  app.use(cookieParser());
   app.setGlobalPrefix('api/v1');
   // Enable cors, so FE can access it.
   app.enableCors({
