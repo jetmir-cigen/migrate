@@ -4,14 +4,13 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule as NestJsMailerModule } from '@nestjs-modules/mailer';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DepartmentModule } from './modules/department/department.module';
-import { typeOrmAsyncConfig, mailerAsyncConfig, config } from './config';
+import { mailerAsyncConfig, config } from './config';
 import { ElementLabelModule } from './modules/element-label/element-label.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
@@ -35,6 +34,7 @@ import {
   AuthModule as GlobalAuthModule,
   AuthMiddlewareMixin,
 } from '@skytech/auth';
+import { DbModule } from '@skytech/db';
 
 @Module({
   imports: [
@@ -42,7 +42,7 @@ import {
       load: [config],
       isGlobal: true,
     }),
-    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+    DbModule,
     NestJsMailerModule.forRootAsync(mailerAsyncConfig),
     DepartmentModule,
     ElementLabelModule,
@@ -71,9 +71,7 @@ import {
   providers: [AppService],
 })
 export class AppModule implements NestModule {
-  constructor(private configService: ConfigService) {
-    console.log('configService', configService);
-  }
+  constructor(private configService: ConfigService) {}
 
   configure(consumer: MiddlewareConsumer) {
     const authTokenName = this.configService.get('auth.managerAuthToken');
