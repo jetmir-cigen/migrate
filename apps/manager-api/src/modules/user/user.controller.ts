@@ -39,13 +39,12 @@ import {
   StatusResponseDTO,
   SuccessResponseDto,
 } from '@skytech/manager/common/dto/status-response.dto';
-import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import { GetUserByIdQuery } from '@skytech/manager/modules/user/queries/get-user-by-id.query';
-import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import { GetCustomersQuery } from '@skytech/manager/modules/user/queries/get-customers.query';
 import { UserPasswordUpdateDto } from './dto/user-password-update.dto';
 import { GenerateUserPasswordCommand } from './commands/user-generate-password.command';
 import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import { CustomerEntity, UserEntity } from '@skytech/db';
 
 @Controller('users')
 @UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))

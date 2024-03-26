@@ -1,22 +1,24 @@
 import { SubServiceOrderType } from '@skytech/manager/common/enums/SubServiceOrderType.enum';
-import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import { NotificationsService } from '@skytech/manager/modules/notifications/services';
 import {
   ActivationTextTemplate,
   PortationFormFilledTextTemplate,
 } from '@skytech/manager/modules/notifications/types';
-import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import { getAppLink } from '@skytech/manager/utils/constants';
 import { generateRandomCode } from '@skytech/manager/utils/generateRandomCode';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateSubscriptionDto } from '../dto/create-subscription.dto';
-import { CustomerDealerEntity } from '../entities/customer-dealer.entity';
-import { DealerNotificationEmailEntity } from '../entities/dealer-notification-email.entity';
-import { SubscriptionServiceOrderActivationEntity } from '../entities/subscription-service-order-activation.entity';
-import { SubscriptionServiceOrdersEntity } from '../entities/subscription-service-orders.entity';
 import { IUser } from '@skytech/auth';
+import {
+  CustomerDealerEntity,
+  CustomerEntity,
+  DealerNotificationEmailEntity,
+  SubscriptionServiceOrderActivationEntity,
+  SubscriptionServiceOrdersEntity,
+  UserEntity,
+} from '@skytech/db';
 
 class CreateSubscriptionOrderCommand {
   constructor(

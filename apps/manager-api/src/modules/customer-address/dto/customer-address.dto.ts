@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
-import { CustomerAddressEntity } from '../entities/customer-address.entity';
 import { IUser } from '@skytech/auth';
+import { CustomerAddressEntity } from '@skytech/db';
 
 export class CustomerAddressDto {
   @IsNumber()

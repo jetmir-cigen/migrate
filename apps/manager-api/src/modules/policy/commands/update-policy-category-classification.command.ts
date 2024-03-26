@@ -2,8 +2,10 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Not, Repository } from 'typeorm';
 import { UpdatePolicyDto } from '../dto/policy.dto';
-import { EcomPolicyCategoryClassificationEntity } from '../entities/ecom-policy-category-classification.entity';
-import { EcomPolicyProductEntity } from '../entities/ecom-policy-product.entity';
+import {
+  EcomPolicyCategoryClassificationEntity,
+  EcomPolicyProductEntity,
+} from '@skytech/db';
 
 class UpdatePolicyCategoryClassificationCommand {
   constructor(
@@ -45,57 +47,50 @@ export class UpdatePolicyCategoryClassificationCommandHandler
     policyId,
     updatePolicyDto,
   }: UpdatePolicyCategoryClassificationCommand) {
-    try {
-      await this.ecomPolicyCategoryClassificationRepository.delete({
+    await this.ecomPolicyCategoryClassificationRepository.delete({
+      policyId,
+    });
+
+    /* Update of classifications for policy categories */
+    if (!updatePolicyDto.categoryClassificationList.includes('ALL')) {
+      const entitiesToCreate = this.getPolicyCategoryClassificationEntity(
         policyId,
-      });
+        updatePolicyDto,
+      );
 
-      /* Update of classifications for policy categories */
-      if (!updatePolicyDto.categoryClassificationList.includes('ALL')) {
-        const entitiesToCreate = this.getPolicyCategoryClassificationEntity(
-          policyId,
-          updatePolicyDto,
-        );
+      await this.ecomPolicyCategoryClassificationRepository.save(
+        entitiesToCreate,
+      );
 
-        await this.ecomPolicyCategoryClassificationRepository.save(
-          entitiesToCreate,
-        );
-
-        /* Update policy products based on categories */
-        const policyProducts2delete =
-          await this.ecomPolicyProductRepository.find({
-            relations: ['productCatalogue', 'productCatalogue.category'],
-            where: {
-              policyId: policyId,
-              productCatalogue: {
-                category: {
-                  classificationId: Not(
-                    In(updatePolicyDto.categoryClassificationList),
-                  ),
-                },
+      /* Update policy products based on categories */
+      const policyProducts2delete = await this.ecomPolicyProductRepository.find(
+        {
+          relations: ['productCatalogue', 'productCatalogue.category'],
+          where: {
+            policyId: policyId,
+            productCatalogue: {
+              category: {
+                classificationId: Not(
+                  In(updatePolicyDto.categoryClassificationList),
+                ),
               },
             },
-          });
+          },
+        },
+      );
 
-        if (policyProducts2delete?.length > 0) {
-          await this.ecomPolicyProductRepository.delete({
-            productCatalogueId: In(
-              policyProducts2delete.map(
-                (element) => element.productCatalogueId,
-              ),
-            ),
-          });
-        }
-        /* Finish Update policy products based on categories */
-
-        return entitiesToCreate.map(
-          (entity) => entity.categoryClassificationId,
-        );
+      if (policyProducts2delete?.length > 0) {
+        await this.ecomPolicyProductRepository.delete({
+          productCatalogueId: In(
+            policyProducts2delete.map((element) => element.productCatalogueId),
+          ),
+        });
       }
+      /* Finish Update policy products based on categories */
 
-      return ['ALL'];
-    } catch (error) {
-      throw error;
+      return entitiesToCreate.map((entity) => entity.categoryClassificationId);
     }
+
+    return ['ALL'];
   }
 }

@@ -1,8 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CustomerAddressEntity } from '@skytech/db';
 import { Repository } from 'typeorm';
-
-import { CustomerAddressEntity } from '../entities/customer-address.entity';
 
 class DeleteCustomerAddressCommand {
   constructor(public readonly id: number) {}
@@ -20,19 +19,15 @@ export class DeleteCustomerAddressCommandHandler
   ) {}
 
   async execute({ id }: DeleteCustomerAddressCommand) {
-    try {
-      const entity = await this.customerAddressRepository.update(
-        {
-          id: id,
-        },
-        {
-          isActive: false,
-        },
-      );
+    const entity = await this.customerAddressRepository.update(
+      {
+        id: id,
+      },
+      {
+        isActive: false,
+      },
+    );
 
-      return entity;
-    } catch (error) {
-      throw error;
-    }
+    return entity;
   }
 }

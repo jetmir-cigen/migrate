@@ -1,8 +1,8 @@
 import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TextTemplateEntity } from '../entities';
 import { IUser } from '@skytech/auth';
+import { TextTemplateEntity } from '@skytech/db';
 
 export class CreateTextTemplateCommand {
   constructor(

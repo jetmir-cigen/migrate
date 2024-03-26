@@ -7,11 +7,11 @@ import {
   ISendBulkNotification,
   ISendNotification,
 } from '../dto/send-notification.dto';
-import { LogSmsPushEntity } from '@skytech/manager/modules/phone/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
+import { LogSmsPushEntity } from '@skytech/db';
 
 @Injectable()
 export class SmsNotificationsService {

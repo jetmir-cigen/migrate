@@ -1,11 +1,11 @@
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
-import { CustomerSetupExportSettingsEntity } from '@skytech/manager/modules/report/entities/customer-setup-export-settings.entity';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { GetSetupExportSettingsQuery } from '@skytech/manager/modules/report/queries';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { UpsertSetupExportSettingsCommand } from '@skytech/manager/modules/report/commands/upsert-setup-export-settings.command';
 import { CreateSetupExportSettingsDto } from '@skytech/manager/modules/report/dto/create-setup-export-settings.dto';
 import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import { CustomerSetupExportSettingsEntity } from '@skytech/db';
 
 @Controller('reports/setup-export-settings')
 @UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))

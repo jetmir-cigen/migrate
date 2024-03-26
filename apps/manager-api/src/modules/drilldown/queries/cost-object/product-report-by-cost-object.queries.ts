@@ -7,14 +7,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DrillDownServiceType } from '@skytech/manager/modules/drilldown/dto';
 import { DrillDownService } from '../../drilldown.service';
-import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
-import { InvoiceRowEntity } from '@skytech/manager/modules/invoice/entities/invoice-row.entity';
-import { InvoiceEntity } from '@skytech/manager/modules/invoice/entities/invoice.entity';
-import { VendorEntity } from '@skytech/manager/common/entities/vendor.entity';
-import { ProductEntity } from '@skytech/manager/common/entities/product.entity';
 import { isDepartmentAdmin } from '@skytech/manager/utils/access';
-import { DepartmentEntity } from '@skytech/manager/modules/department/entities/department.entity';
 import { IUser } from '@skytech/auth';
+import { CostObjectEntity, DepartmentEntity, InvoiceEntity, InvoiceRowEntity, ProductEntity, VendorEntity } from '@skytech/db';
 
 type QueryFilters = {
   year: number;

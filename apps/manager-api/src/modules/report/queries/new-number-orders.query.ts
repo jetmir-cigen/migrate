@@ -7,7 +7,7 @@ import { QueryHandler } from '@nestjs/cqrs';
 
 import { QueryFilter } from '.';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SubscriptionServiceOrderActivationEntity } from '@skytech/manager/modules/subscriptions/entities/subscription-service-order-activation.entity';
+import { SubscriptionServiceOrderActivationEntity } from '@skytech/db';
 
 export class NewNumberOrdersReportQuery implements QueryInterface {
   $$resolveType: any;

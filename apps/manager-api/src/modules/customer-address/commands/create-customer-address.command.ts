@@ -6,8 +6,8 @@ import {
   CreateCustomerAddressDto,
   CustomerAddressDto,
 } from '../dto/customer-address.dto';
-import { CustomerAddressEntity } from '../entities/customer-address.entity';
 import { IUser } from '@skytech/auth';
+import { CustomerAddressEntity } from '@skytech/db';
 
 class CreateCustomerAddressCommand {
   constructor(

@@ -2,8 +2,8 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { SmsPhoneBookEntity } from '../entities/sms-phone-book.entity';
 import { IUser } from '@skytech/auth';
+import { SmsPhoneBookEntity } from '@skytech/db';
 
 export class UpdatePhoneBookNumberCommand {
   constructor(

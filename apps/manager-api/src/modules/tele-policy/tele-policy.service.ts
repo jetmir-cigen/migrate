@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { SalaryDeductionProfileEntity } from './entities/salary-deduction-profile.entity';
 import { QueryRunner, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SalaryDeductionProfileEntity } from '@skytech/db';
 
 @Injectable()
 export class TelePolicyService {

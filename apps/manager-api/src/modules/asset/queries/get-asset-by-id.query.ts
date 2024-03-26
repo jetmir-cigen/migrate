@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { AssetEntity } from '../entities/asset.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AssetEntity } from '@skytech/db';
 import { Repository } from 'typeorm';
 
 export class GetAssetByIdQuery {

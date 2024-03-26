@@ -1,12 +1,12 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { Repository } from 'typeorm';
-import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from '@skytech/manager/modules/user/user.service';
 import { PasswordChangedEvent } from '../events/password-changed.event';
 import { UnauthorizedException } from '@nestjs/common';
 import { IUser } from '@skytech/auth';
+import { UserEntity } from '@skytech/db';
 
 export class ChangePasswordCommand {
   constructor(

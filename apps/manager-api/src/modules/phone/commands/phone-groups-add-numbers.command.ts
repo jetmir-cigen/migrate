@@ -2,9 +2,8 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SmsGroupEntity } from '../entities/sms-group.entity';
-import { SmsGroupNumberEntity } from '../entities/sms-group-number.entity';
 import { IUser } from '@skytech/auth';
+import { SmsGroupEntity, SmsGroupNumberEntity } from '@skytech/db';
 
 export class AddNumbersToPhoneGroupCommand {
   constructor(

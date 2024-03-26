@@ -8,15 +8,17 @@ import {
 } from './queries';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SalaryDeductionProfileEntity } from './entities/salary-deduction-profile.entity';
-import { TelePolicyTemplateEntity } from './entities/tele-policy-template.entity';
 import {
   AssignTelePolicyCommandHandler,
   CreateTelePolicyCommandHandler,
   DeleteTelePolicyCommandHandler,
   UpdateTelePolicyCommandHandler,
 } from './commands';
-import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
+import {
+  CostObjectEntity,
+  SalaryDeductionProfileEntity,
+  TelePolicyTemplateEntity,
+} from '@skytech/db';
 
 @Module({
   imports: [

@@ -10,8 +10,6 @@ export class PasswordChangedEvent {
 export class PasswordChangedEventHandler
   implements IEventHandler<PasswordChangedEvent>
 {
-  constructor() {}
-
   private readonly logger = new Logger(PasswordChangedEventHandler.name);
   handle(event: PasswordChangedEvent): void {
     this.logger.log(`PasswordChangedEvent: ${event.currentUser.uid}`);

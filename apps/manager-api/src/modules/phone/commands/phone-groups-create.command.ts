@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SmsGroupEntity } from '../entities/sms-group.entity';
+import { SmsGroupEntity } from '@skytech/db';
 
 export class CreatePhoneGroupCommand {
   constructor(

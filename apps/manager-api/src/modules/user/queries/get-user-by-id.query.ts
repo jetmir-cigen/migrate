@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
+import { UserEntity } from '@skytech/db';
 
 export class GetUserByIdQuery {
   constructor(

@@ -2,8 +2,8 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SalaryDeductionProfileEntity } from '../entities/salary-deduction-profile.entity';
 import { TelePolicyService } from '../tele-policy.service';
+import { SalaryDeductionProfileEntity } from '@skytech/db';
 
 export class UpdateTelePolicyCommand {
   constructor(

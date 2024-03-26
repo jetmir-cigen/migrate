@@ -2,12 +2,9 @@ import { Module } from '@nestjs/common';
 import { PhoneService } from './phone.service';
 import { PhoneController } from './phone.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import { CqrsModule } from '@nestjs/cqrs';
 import { DepartmentService } from '../department/department.service';
 import { FindTelePoliciesByFilterQueryHandler } from '../tele-policy/queries';
-import { DepartmentEntity } from '../department/entities/department.entity';
-import { SalaryDeductionProfileEntity } from '../tele-policy/entities/salary-deduction-profile.entity';
 import {
   FindActiveNumbersByFilterQueryHandler,
   FindAllActiveNumbersByFilterQueryHandler,
@@ -30,28 +27,30 @@ import {
   UpdatePhoneGroupCommandHandler,
   UpdatePhoneGroupNumberCommandHandler,
 } from './commands';
-import {
-  ActiveMobileUserView,
-  ManagerAccessCustomerView,
-  ManagerAccessDepartmentView,
-} from '@skytech/manager/common/views';
-import {
-  LogSmsPushEntity,
-  SmsGroupEntity,
-  SmsGroupNumberEntity,
-  SmsPhoneBookEntity,
-} from './entities';
+
 import {
   EmailNotificationsService,
   NotificationsService,
   SmsNotificationsService,
 } from '../notifications/services';
-import { UserEntity } from '../user/entities/user.entity';
-import { TextTemplateEntity } from '../text-template/entities';
 import { HttpModule } from '@nestjs/axios';
-import { LogMailEntity } from '../notifications/entities/log-mail.entity';
 import { FindUserAliasesByFilterQueryHandler } from './queries/get-user-aliases.query';
-import { UserAliasEntity } from './entities/user-alias.entity';
+import {
+  ActiveMobileUserView,
+  CostObjectEntity,
+  DepartmentEntity,
+  LogMailEntity,
+  LogSmsPushEntity,
+  ManagerAccessCustomerView,
+  ManagerAccessDepartmentView,
+  SalaryDeductionProfileEntity,
+  SmsGroupEntity,
+  SmsGroupNumberEntity,
+  SmsPhoneBookEntity,
+  TextTemplateEntity,
+  UserAliasEntity,
+  UserEntity,
+} from '@skytech/db';
 
 @Module({
   imports: [

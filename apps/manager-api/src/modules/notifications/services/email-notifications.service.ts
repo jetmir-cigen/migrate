@@ -2,12 +2,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ISendNotification } from '../dto/send-notification.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LogMailEntity } from '../entities/log-mail.entity';
 import { Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
 import { catchError, lastValueFrom } from 'rxjs';
 import { AxiosError } from 'axios';
 import { ConfigService } from '@nestjs/config';
+import { LogMailEntity } from '@skytech/db';
 
 @Injectable()
 export class EmailNotificationsService {

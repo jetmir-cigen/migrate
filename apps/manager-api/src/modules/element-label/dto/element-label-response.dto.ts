@@ -1,6 +1,6 @@
 import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
-import { ElementLabelEntity } from '../element-label.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { ElementLabelEntity } from '@skytech/db';
 
 export class ElementLabelDto {
   @ApiProperty({

@@ -1,9 +1,8 @@
-import { ManagerAccessCustomerView } from '@skytech/manager/common/views';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CustomerAddressDto } from '../dto/customer-address.dto';
-import { CustomerAddressEntity } from '../entities/customer-address.entity';
+import { CustomerAddressEntity, ManagerAccessCustomerView } from '@skytech/db';
 
 class GetAllCustomerAddressesQuery {
   constructor(public readonly userId: number) {}

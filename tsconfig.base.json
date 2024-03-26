@@ -17,7 +17,6 @@
     "paths": {
       "@skytech/auth": ["libs/auth/src/index.ts"],
       "@skytech/db": ["libs/db/src/index.ts"],
-      "@skytech/entities/*": ["libs/db/src/entities/*"],
       "@skytech/manager/*": ["./apps/manager-api/src/*"]
     }
   },

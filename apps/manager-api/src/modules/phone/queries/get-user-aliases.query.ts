@@ -1,9 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserAliasEntity } from '../entities/user-alias.entity';
-import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import { IUser } from '@skytech/auth';
+import { UserAliasEntity, UserEntity } from '@skytech/db';
 
 type QueryFilters = {
   user: IUser;

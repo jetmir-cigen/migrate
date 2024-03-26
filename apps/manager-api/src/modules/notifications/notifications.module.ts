@@ -7,13 +7,15 @@ import {
   SmsNotificationsService,
 } from './services';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from '../user/entities/user.entity';
-import { TextTemplateEntity } from '../text-template/entities';
-import { CustomerEntity } from '../customer/entities/customer.entity';
 import { HttpModule } from '@nestjs/axios';
-import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
-import { LogSmsPushEntity } from '../phone/entities';
-import { LogMailEntity } from './entities/log-mail.entity';
+import {
+  CostObjectEntity,
+  CustomerEntity,
+  LogMailEntity,
+  LogSmsPushEntity,
+  TextTemplateEntity,
+  UserEntity,
+} from '@skytech/db';
 
 @Module({
   imports: [

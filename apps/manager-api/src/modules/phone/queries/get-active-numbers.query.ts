@@ -1,8 +1,10 @@
-import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
-import { ActiveMobileUserView } from '@skytech/manager/common/views/active-mobile-users.view';
-import { ManagerAccessDepartmentView } from '@skytech/manager/common/views/manager-access-department.view';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  ActiveMobileUserView,
+  CostObjectEntity,
+  ManagerAccessDepartmentView,
+} from '@skytech/db';
 import { Repository } from 'typeorm';
 
 type QueryFilters = {

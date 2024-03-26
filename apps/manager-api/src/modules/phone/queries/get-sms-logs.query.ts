@@ -1,10 +1,9 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
-import { LogSmsPushEntity } from '../entities/log-sms-push.entity';
-import { ManagerAccessCustomerView } from '@skytech/manager/common/views/manager-access-customer.view';
 import { QueryInterface } from '@skytech/manager/common/query.interface';
 import { IUser } from '@skytech/auth';
+import { LogSmsPushEntity, ManagerAccessCustomerView } from '@skytech/db';
 
 type QueryFilters = {
   user: IUser;

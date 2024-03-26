@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Repository } from 'typeorm';
-import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CustomerEntity } from '@skytech/db';
 
 export class GetCustomersQuery {
   constructor(public readonly customerHeadId: number) {}

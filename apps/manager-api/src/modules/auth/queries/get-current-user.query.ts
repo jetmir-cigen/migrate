@@ -2,8 +2,8 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { EntityNotFoundError, Repository } from 'typeorm';
-import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import { getCurrentUserQuery } from './query';
+import { UserEntity } from '@skytech/db';
 
 type QueryFilters = {
   userId: number;

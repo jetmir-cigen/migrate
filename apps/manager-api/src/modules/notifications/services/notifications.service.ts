@@ -1,18 +1,16 @@
 import { Repository } from 'typeorm';
 
-import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
-import { TextTemplateEntity } from '@skytech/manager/modules/text-template/entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseTextTemplate } from '../types';
 import { SmsNotificationsService } from './sms-notifications.service';
 import { EmailNotificationsService } from './email-notifications.service';
-import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import {
   ISendBulkNotification,
   ISendNotification,
 } from '../dto/send-notification.dto';
 import { IUser } from '@skytech/auth';
+import { CostObjectEntity, TextTemplateEntity, UserEntity } from '@skytech/db';
 
 export interface IParams {
   data: Map<number, BaseTextTemplate>;
@@ -85,11 +83,7 @@ export class NotificationsService {
     return { query };
   }
 
-  async sendToCostObject(
-    id: number,
-    data: BaseTextTemplate,
-    user: IUser,
-  ) {
+  async sendToCostObject(id: number, data: BaseTextTemplate, user: IUser) {
     const query = await this.costObjectRepository
       .createQueryBuilder('costObject')
       .innerJoinAndSelect('costObject.customer', 'c')

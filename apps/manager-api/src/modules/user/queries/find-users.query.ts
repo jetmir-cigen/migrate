@@ -1,9 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SalaryDeductionProfileEntity, UserEntity } from '@skytech/db';
 import { Brackets, Repository, SelectQueryBuilder } from 'typeorm';
-
-import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
-import { SalaryDeductionProfileEntity } from '@skytech/manager/modules/tele-policy/entities/salary-deduction-profile.entity';
 
 type QueryFilters = {
   customerHeadId: number;

@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DepartmentEntity } from './entities/department.entity';
 import { EntityNotFoundError, Repository } from 'typeorm';
+import { DepartmentEntity } from '@skytech/db';
 
 const selectedFields = [
   'department.id',
@@ -36,18 +36,14 @@ export class DepartmentService {
   async create(
     createDepartmentDto: CreateDepartmentDto,
   ): Promise<DepartmentEntity> {
-    try {
-      const department = await this.departmentRepository.save({
-        ...createDepartmentDto,
-      });
+    const department = await this.departmentRepository.save({
+      ...createDepartmentDto,
+    });
 
-      return this.departmentRepository.findOneOrFail({
-        where: { id: department.id },
-        relations: ['user', 'deputyUser', 'customer'],
-      });
-    } catch (err) {
-      throw err;
-    }
+    return this.departmentRepository.findOneOrFail({
+      where: { id: department.id },
+      relations: ['user', 'deputyUser', 'customer'],
+    });
   }
 
   async findAll(userId: number): Promise<DepartmentEntity[]> {
@@ -107,15 +103,11 @@ export class DepartmentService {
   ): Promise<DepartmentEntity> {
     await this.findOne(id, userId);
 
-    try {
-      await this.departmentRepository.update(id, updateDepartmentDto);
-      return this.departmentRepository.findOneOrFail({
-        where: { id },
-        relations: ['user', 'deputyUser', 'customer'],
-      });
-    } catch (err) {
-      throw err;
-    }
+    await this.departmentRepository.update(id, updateDepartmentDto);
+    return this.departmentRepository.findOneOrFail({
+      where: { id },
+      relations: ['user', 'deputyUser', 'customer'],
+    });
   }
 
   async remove(id: number, userId: number): Promise<boolean> {

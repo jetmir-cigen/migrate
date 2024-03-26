@@ -15,7 +15,6 @@ import {
   EmployeeConsentListResponseDto,
   EmployeeConsentResponseDto,
 } from './dto/employee-consent-response.dto';
-import { EmployeeConsentEntity } from './entities/employee-consent.entity';
 import { CreateEmployeeConsentDto } from './dto/create-employee-consent.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetEmployeeConsentsQuery } from './queries';
@@ -24,6 +23,7 @@ import {
   RevokeEmployeeConsentCommand,
 } from './commands';
 import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import { EmployeeConsentEntity } from '@skytech/db';
 
 @ApiTags('Employee-consents')
 @ApiBearerAuth()

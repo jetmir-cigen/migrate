@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TextTemplateEntity } from '@skytech/manager/modules/text-template/entities';
+import { TextTemplateEntity } from '@skytech/db';
 import { Repository } from 'typeorm';
 
 interface TextTemplateData {

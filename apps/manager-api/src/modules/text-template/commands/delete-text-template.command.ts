@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TextTemplateEntity } from '@skytech/db';
 import { Repository } from 'typeorm';
-import { TextTemplateEntity } from '../entities';
 
 export class DeleteTextTemplateCommand {
   constructor(public readonly id: number) {}

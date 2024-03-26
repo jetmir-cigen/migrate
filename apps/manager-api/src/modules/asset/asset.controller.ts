@@ -9,7 +9,6 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateAssetDto } from '@skytech/manager/modules/asset/dto/create-asset.dto';
 import { CreateAssetCommand } from '@skytech/manager/modules/asset/commands/create-asset.command';
-import { AssetEntity } from '@skytech/manager/modules/asset/entities/asset.entity';
 import { GetAssetByIdQuery } from '@skytech/manager/modules/asset/queries/get-asset-by-id.query';
 import {
   ADMIN_USERS_GROUP,
@@ -18,6 +17,7 @@ import {
   IUser,
   UserRoles,
 } from '@skytech/auth';
+import { AssetEntity } from '@skytech/db';
 
 @Controller('assets')
 @UseGuards(AuthGuard([...ADMIN_USERS_GROUP, UserRoles.IT_USER]))

@@ -1,8 +1,8 @@
-import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { findAllActiveNumbersQuery } from './queries';
+import { CostObjectEntity } from '@skytech/db';
 
 type QueryFilters = {
   userId: number;

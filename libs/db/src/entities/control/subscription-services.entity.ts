@@ -1,4 +1,3 @@
-import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import {
   Column,
   Entity,
@@ -10,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { SubscriptionServiceOrdersEntity } from './subscription-service-orders.entity';
+import { CustomerEntity } from './customer.entity';
 
 @Index('customer_id', ['customerId'], {})
 @Entity({ name: 'control.subscription_services', schema: 'control' })

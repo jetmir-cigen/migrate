@@ -4,6 +4,8 @@ import {
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
 
+import * as Entities from './entities';
+
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   inject: [ConfigService],
   useFactory: async (
@@ -21,5 +23,6 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     database: configService.get('database.name'),
     // migrations: [path.join(__dirname, '../database/migrations/*{.ts,.js}')],
     logging: true,
+    entities: Object.values(Entities),
   }),
 };

@@ -1,8 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SmsGroupEntity, SmsGroupNumberEntity } from '@skytech/db';
 import { Repository } from 'typeorm';
-import { SmsGroupEntity } from '../entities/sms-group.entity';
-import { SmsGroupNumberEntity } from '../entities/sms-group-number.entity';
 
 type QueryFilters = {
   userId: number;

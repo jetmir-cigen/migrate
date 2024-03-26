@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { ElementLabelEntity } from './element-label.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateElementDto } from './dto/create-element.dto';
 import {
@@ -9,6 +8,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { ElementLabelResponseDto } from './dto/element-label-response.dto';
+import { ElementLabelEntity } from '@skytech/db';
 
 @Controller('element-label')
 export class ElementLabelController {

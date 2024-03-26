@@ -1,10 +1,10 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '@skytech/manager/modules/user/entities/user.entity';
 import { EntityNotFoundError, Repository } from 'typeorm';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserUpdatedEvent } from '@skytech/manager/modules/user/events/user-updated.event';
 import { ForbiddenException } from '@nestjs/common';
 import { IUser } from '@skytech/auth';
+import { UserEntity } from '@skytech/db';
 
 export class UpdateUserCommand {
   constructor(

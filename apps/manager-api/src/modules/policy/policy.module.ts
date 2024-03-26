@@ -3,13 +3,15 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdatePolicyCategoryClassificationCommandHandler } from './commands/update-policy-category-classification.command';
-import { EcomPolicyCategoryClassificationEntity } from './entities/ecom-policy-category-classification.entity';
-import { EcomPolicyProductEntity } from './entities/ecom-policy-product.entity';
 import { PolicyController } from './policy.controller';
 import { PolicyService } from './policy.service';
-import { EcomProductCatalogueEntity } from './entities/ecom-product-catalogue.entity';
-import { EcomCategoriesEntity } from './entities/ecom-categories.entity';
-import { EcomCategoryClassificationEntity } from './entities/ecom-category-classification.entity';
+import {
+  EcomCategoriesEntity,
+  EcomCategoryClassificationEntity,
+  EcomPolicyCategoryClassificationEntity,
+  EcomPolicyProductEntity,
+  EcomProductCatalogueEntity,
+} from '@skytech/db';
 
 @Module({
   imports: [

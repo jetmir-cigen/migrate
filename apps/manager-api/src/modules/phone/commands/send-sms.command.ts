@@ -2,10 +2,10 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LogSmsPushEntity } from '../entities/log-sms-push.entity';
 import { NotificationsService } from '@skytech/manager/modules/notifications/services';
 import { ISendNotification } from '@skytech/manager/modules/notifications/dto/send-notification.dto';
 import { IUser } from '@skytech/auth';
+import { LogSmsPushEntity } from '@skytech/db';
 
 export class SendSMSCommand {
   constructor(

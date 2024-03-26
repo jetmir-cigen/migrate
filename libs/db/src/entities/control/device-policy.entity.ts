@@ -1,4 +1,3 @@
-import { CustomerEntity } from '@skytech/manager/modules/customer/entities/customer.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -11,6 +10,7 @@ import {
 import { CustomerHeadEntity } from './customer-head.entity';
 import { UserEntity } from './user.entity';
 import { SubscriptionServiceOrderActivationEntity } from './subscription-service-order-activation.entity';
+import { CustomerEntity } from './customer.entity';
 
 @Entity({ name: 'control.device_policy' })
 export class DevicePolicyEntity {

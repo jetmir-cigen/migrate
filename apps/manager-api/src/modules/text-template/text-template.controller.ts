@@ -37,8 +37,8 @@ import {
   DeleteTextTemplateCommand,
   UpdateTextTemplateCommand,
 } from '@skytech/manager/modules/text-template/commands';
-import { TextTemplateEntity } from './entities';
 import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import { TextTemplateEntity } from '@skytech/db';
 
 @ApiTags('text-templates')
 @Controller('text-templates')

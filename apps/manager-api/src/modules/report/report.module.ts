@@ -13,10 +13,12 @@ import {
   TaxAdvantageReportQueryHandler,
   NewNumberOrdersReportQueryHandler,
 } from '@skytech/manager/modules/report/queries';
-import { CustomerSetupExportSettingsEntity } from '@skytech/manager/modules/report/entities/customer-setup-export-settings.entity';
 import { SetupExportSettingsController } from '@skytech/manager/modules/report/setup-export-settings.controller';
 import { UpsertSetupExportSettingsCommandHandler } from '@skytech/manager/modules/report/commands/upsert-setup-export-settings.command';
-import { SubscriptionServiceOrderActivationEntity } from '../subscriptions/entities/subscription-service-order-activation.entity';
+import {
+  CustomerSetupExportSettingsEntity,
+  SubscriptionServiceOrderActivationEntity,
+} from '@skytech/db';
 
 @Module({
   imports: [

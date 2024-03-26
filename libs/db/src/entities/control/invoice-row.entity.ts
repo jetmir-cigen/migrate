@@ -1,4 +1,3 @@
-import { CostObjectEntity } from '@skytech/manager/common/entities/cost-object.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,6 +8,7 @@ import {
 
 import { InvoiceEntity } from './invoice.entity';
 import { ProductEntity } from './product.entity';
+import { CostObjectEntity } from './cost-object.entity';
 
 @Entity({ name: 'control.invoice_row' })
 export class InvoiceRowEntity {

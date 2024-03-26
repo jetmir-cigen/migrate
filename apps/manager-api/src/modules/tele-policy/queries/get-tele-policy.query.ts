@@ -6,8 +6,8 @@ import {
   Repository,
   SelectQueryBuilder,
 } from 'typeorm';
-import { SalaryDeductionProfileEntity } from '../entities/salary-deduction-profile.entity';
 import { NotFoundException } from '@nestjs/common';
+import { SalaryDeductionProfileEntity } from '@skytech/db';
 
 type QueryFilters = {
   customerHeadId: number;

@@ -1,9 +1,9 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { NotificationsService } from '@skytech/manager/modules/notifications/services';
-import { UserEntity } from '../entities/user.entity';
 import { ManagerNewUserCreated } from '@skytech/manager/modules/notifications/types';
 import { IUser } from '@skytech/auth';
+import { UserEntity } from '@skytech/db';
 
 export class UserCreatedEvent {
   constructor(

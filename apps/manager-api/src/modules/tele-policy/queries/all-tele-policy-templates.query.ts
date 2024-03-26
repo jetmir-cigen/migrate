@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TelePolicyTemplateEntity } from '@skytech/db';
 import { Repository } from 'typeorm';
-import { TelePolicyTemplateEntity } from '../entities/tele-policy-template.entity';
 
 export class FindTelePolicyTemplatesByFilterQuery {}
 
