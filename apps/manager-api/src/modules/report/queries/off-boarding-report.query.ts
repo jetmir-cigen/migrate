@@ -1,9 +1,10 @@
+import { QueryHandler } from '@nestjs/cqrs';
+import { DataSource } from 'typeorm';
+
 import {
   QueryHandlerInterface,
   QueryInterface,
 } from '@skytech/manager/common/query.interface';
-import { DataSource } from 'typeorm';
-import { QueryHandler } from '@nestjs/cqrs';
 
 import { offBoardingGlobal, offBoardingLocal } from './query';
 import { QueryFilter } from './';

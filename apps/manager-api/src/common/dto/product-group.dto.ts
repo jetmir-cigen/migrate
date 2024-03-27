@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProductCategoryDto } from './product-category.dto';
+
 import { CountryDto } from './country.dto';
+import { ProductCategoryDto } from './product-category.dto';
 
 export class ProductGroupDto {
   @ApiProperty({

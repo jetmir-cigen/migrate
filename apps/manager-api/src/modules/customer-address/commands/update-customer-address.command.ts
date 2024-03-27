@@ -2,12 +2,13 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { IUser } from '@skytech/auth';
+import { CustomerAddressEntity } from '@skytech/db';
+
 import {
   CustomerAddressDto,
   UpdateCustomerAddressDto,
 } from '../dto/customer-address.dto';
-import { IUser } from '@skytech/auth';
-import { CustomerAddressEntity } from '@skytech/db';
 
 class UpdateCustomerAddressCommand {
   constructor(

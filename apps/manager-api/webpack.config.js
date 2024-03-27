@@ -1,4 +1,3 @@
-
 const { NxWebpackPlugin } = require('@nx/webpack');
 const { join } = require('path');
 
@@ -15,7 +14,6 @@ module.exports = {
       assets: [],
       optimization: false,
       outputHashing: 'none',
-    })
+    }),
   ],
 };
-

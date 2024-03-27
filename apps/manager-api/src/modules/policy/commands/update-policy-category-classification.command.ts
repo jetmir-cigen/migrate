@@ -1,11 +1,13 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Not, Repository } from 'typeorm';
-import { UpdatePolicyDto } from '../dto/policy.dto';
+
 import {
   EcomPolicyCategoryClassificationEntity,
   EcomPolicyProductEntity,
 } from '@skytech/db';
+
+import { UpdatePolicyDto } from '../dto/policy.dto';
 
 class UpdatePolicyCategoryClassificationCommand {
   constructor(

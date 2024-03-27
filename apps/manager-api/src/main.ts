@@ -1,11 +1,13 @@
-import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { useContainer } from 'class-validator';
+import cookieParser from 'cookie-parser';
+
+import { IUser } from '@skytech/auth';
+
 import { AppModule } from './app.module';
 import { TransformInterceptor } from './transform.interceptor';
-import { useContainer } from 'class-validator';
-import { IUser } from '@skytech/auth';
-import cookieParser from 'cookie-parser';
 
 declare global {
   interface AuthToken {

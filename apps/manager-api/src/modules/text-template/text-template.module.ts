@@ -1,18 +1,7 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-  GetTextTemplatesQueryHandler,
-  GetDistinctTextTemplateCodesQuery,
-  GetTextTemplateByIdQueryHandler,
-  GetDistinctTextTemplateCodesQueryHandler,
-} from '@skytech/manager/modules/text-template/queries';
-import { TextTemplateController } from './text-template.controller';
 import { CqrsModule } from '@nestjs/cqrs';
-import {
-  CreateTextTemplateCommandHandler,
-  DeleteTextTemplateCommandHandler,
-  UpdateTextTemplateCommandHandler,
-} from '@skytech/manager/modules/text-template/commands';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import {
   CustomerEntity,
   CustomerHeadEntity,
@@ -20,6 +9,19 @@ import {
   TextTemplateEntity,
   WhiteLabelEntity,
 } from '@skytech/db';
+import {
+  CreateTextTemplateCommandHandler,
+  DeleteTextTemplateCommandHandler,
+  UpdateTextTemplateCommandHandler,
+} from '@skytech/manager/modules/text-template/commands';
+import {
+  GetDistinctTextTemplateCodesQuery,
+  GetDistinctTextTemplateCodesQueryHandler,
+  GetTextTemplateByIdQueryHandler,
+  GetTextTemplatesQueryHandler,
+} from '@skytech/manager/modules/text-template/queries';
+
+import { TextTemplateController } from './text-template.controller';
 
 @Module({
   imports: [

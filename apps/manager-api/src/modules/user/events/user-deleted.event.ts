@@ -1,5 +1,5 @@
-import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
+import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 
 export class UserDeletedEvent {
   constructor(public readonly userId: number) {}

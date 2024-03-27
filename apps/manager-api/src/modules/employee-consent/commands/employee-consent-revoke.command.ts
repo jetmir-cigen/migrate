@@ -1,7 +1,8 @@
-import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EmployeeConsentCostObjectEntity } from '@skytech/db';
 import { Repository } from 'typeorm';
+
+import { EmployeeConsentCostObjectEntity } from '@skytech/db';
 
 export class RevokeEmployeeConsentCommand {
   constructor(

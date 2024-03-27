@@ -1,13 +1,7 @@
 import { Module } from '@nestjs/common';
-import { InvoiceService } from './invoice.service';
-import { InvoiceController } from './invoice.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { CqrsModule } from '@nestjs/cqrs';
-import {
-  FindInvoiceByFilterQueryHandler,
-  FindInvoicesByFilterQueryHandler,
-  FindVendorInvoicesByFilterQueryHandler,
-} from './queries';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import {
   CostObjectEntity,
   CountryEntity,
@@ -18,6 +12,14 @@ import {
   ProductGroupEntity,
   VendorEntity,
 } from '@skytech/db';
+
+import { InvoiceController } from './invoice.controller';
+import { InvoiceService } from './invoice.service';
+import {
+  FindInvoiceByFilterQueryHandler,
+  FindInvoicesByFilterQueryHandler,
+  FindVendorInvoicesByFilterQueryHandler,
+} from './queries';
 
 @Module({
   imports: [

@@ -8,9 +8,11 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { InvoiceDto } from './invoice-response.dto';
-import { ProductDto } from '@skytech/manager/common/dto/product.dto';
+
 import { CostObjectEntity } from '@skytech/db';
+import { ProductDto } from '@skytech/manager/common/dto/product.dto';
+
+import { InvoiceDto } from './invoice-response.dto';
 
 export class InvoiceRowDto {
   @ApiProperty({

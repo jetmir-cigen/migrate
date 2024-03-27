@@ -1,6 +1,7 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { ADMIN_USERS_GROUP, AuthGuard } from '@skytech/auth';
 import { WhiteLabelEntity } from '@skytech/db';
 

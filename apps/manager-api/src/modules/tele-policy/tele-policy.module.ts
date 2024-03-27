@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TelePolicyService } from './tele-policy.service';
-import { TelePolicyController } from './tele-policy.controller';
-import {
-  FindTelePoliciesByFilterQueryHandler,
-  FindTelePolicyTemplatesByFilterQueryHandler,
-  GetTelePolicyByFilterQueryHandler,
-} from './queries';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import {
+  CostObjectEntity,
+  SalaryDeductionProfileEntity,
+  TelePolicyTemplateEntity,
+} from '@skytech/db';
+
 import {
   AssignTelePolicyCommandHandler,
   CreateTelePolicyCommandHandler,
@@ -15,10 +15,12 @@ import {
   UpdateTelePolicyCommandHandler,
 } from './commands';
 import {
-  CostObjectEntity,
-  SalaryDeductionProfileEntity,
-  TelePolicyTemplateEntity,
-} from '@skytech/db';
+  FindTelePoliciesByFilterQueryHandler,
+  FindTelePolicyTemplatesByFilterQueryHandler,
+  GetTelePolicyByFilterQueryHandler,
+} from './queries';
+import { TelePolicyController } from './tele-policy.controller';
+import { TelePolicyService } from './tele-policy.service';
 
 @Module({
   imports: [

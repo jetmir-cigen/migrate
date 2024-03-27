@@ -1,6 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { IUser } from '@skytech/auth';
 import {
   DepartmentEntity,

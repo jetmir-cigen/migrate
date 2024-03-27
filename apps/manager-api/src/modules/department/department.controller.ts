@@ -8,10 +8,6 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-
-import { DepartmentService } from './department.service';
-import { UpdateDepartmentDto } from './dto/update-department.dto';
-import { CreateDepartmentDto } from './dto/create-department.dto';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -21,12 +17,17 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
+
+import { CreateDepartmentDto } from './dto/create-department.dto';
 import {
   DepartmentDto,
   DepartmentListResponseDto,
   DepartmentResponseDto,
 } from './dto/department-response.dto';
-import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import { UpdateDepartmentDto } from './dto/update-department.dto';
+import { DepartmentService } from './department.service';
 
 @ApiTags('Departments')
 @ApiBearerAuth()

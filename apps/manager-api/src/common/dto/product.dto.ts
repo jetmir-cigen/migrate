@@ -6,6 +6,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
+
 import { ProductGroupDto } from './product-group.dto';
 
 export class ProductDto {

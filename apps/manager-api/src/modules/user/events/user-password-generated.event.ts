@@ -1,9 +1,10 @@
-import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
-import { NotificationsService } from '@skytech/manager/modules/notifications/services';
-import { ManagerPasswordGenerated } from '@skytech/manager/modules/notifications/types';
+import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+
 import { IUser } from '@skytech/auth';
 import { UserEntity } from '@skytech/db';
+import { NotificationsService } from '@skytech/manager/modules/notifications/services';
+import { ManagerPasswordGenerated } from '@skytech/manager/modules/notifications/types';
 
 export class UserPasswordGeneratedEvent {
   constructor(

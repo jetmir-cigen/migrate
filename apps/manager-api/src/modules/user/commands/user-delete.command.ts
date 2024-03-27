@@ -1,8 +1,9 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { EntityNotFoundError, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserDeletedEvent } from '@skytech/manager/modules/user/events/user-deleted.event';
+import { EntityNotFoundError, Repository } from 'typeorm';
+
 import { UserEntity } from '@skytech/db';
+import { UserDeletedEvent } from '@skytech/manager/modules/user/events/user-deleted.event';
 
 export class DeleteUserCommand {
   constructor(public readonly id: number) {}

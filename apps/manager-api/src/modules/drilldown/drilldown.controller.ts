@@ -1,27 +1,5 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { GetTotalQuery } from '@skytech/manager/modules/drilldown/queries/get-total.query';
 
-import { ServiceReportQuery } from '@skytech/manager/modules/drilldown/queries/service/service-report.queries';
-import { ListTotalDto, ListProductCategoriesDto } from './dto';
-import { QueryService } from '@skytech/manager/modules/query/query.service';
-import { GetTotalQueryDto } from './dto/request/get-total.dto';
-import { GetReportByServiceQueryDto } from './dto/request/report-by-service.dto';
-import { GetReportByDepartmentQueryDto } from './dto/request/report-by-department.dto';
-import { GetReportByDepartmentQuery } from './queries/department/get-report-by-department.queries';
-import { GetReportByCostObjectQuery } from './queries/cost-object/get-report-by-cost-object.queries';
-import { GetReportByCostObjectQueryDto } from './dto/request/report-by-cost-object.dto';
-import { GetReportByServiceAndProductCategoryQueryDto } from './dto/request/report-by-service-and-prodcut-category.dto';
-import { ServiceProductCategoryReportQuery } from './queries/service/service-product-category-report.queries';
-import { ServiceCategoryAndGroupReportQuery } from './queries/service/service-category-and-group-report.queries';
-import { GetReportByProductGroupAndCategoryQueryDto } from './dto/request/report-by-product-group-categories.dto';
-import { CostObjectsServiceCategoryAndGroupReportQuery } from './queries/service/cost-objects-service-category-and-group-report.queries';
-import { GetCostObjectReportByProductGroupAndCategoryQueryDto } from './dto/request/cost-object-report-by-product-group-categories.dto';
-import { GetCostObjectsReportByDepartmentQueryDto } from './dto/request/cost-objects-report-by-department.dto';
-import { GetCostObjectReportByDepartmentQuery } from './queries/department/cost-objects-report-by-department.queries';
-import { GetProductReportByDepartmentAndCostObjectQuery } from './queries/department/product-report-by-department-cost-object.queries';
-import { GetProductsReportByDepartmentAndCostObjectsQueryDto } from './dto/request/product-report-by-department-cost-objects.dto';
-import { GetProductReportByCostObjectQuery } from './queries/cost-object/product-report-by-cost-object.queries';
-import { GetProductReportByCostObjectQueryDto } from './dto/request/product-report-by-cost-object.dto';
 import {
   ADMIN_USERS_GROUP,
   AuthGuard,
@@ -31,6 +9,29 @@ import {
   SUPER_ADMIN_USERS_GROUP,
   UserRoles,
 } from '@skytech/auth';
+import { GetTotalQuery } from '@skytech/manager/modules/drilldown/queries/get-total.query';
+import { ServiceReportQuery } from '@skytech/manager/modules/drilldown/queries/service/service-report.queries';
+import { QueryService } from '@skytech/manager/modules/query/query.service';
+
+import { GetCostObjectReportByProductGroupAndCategoryQueryDto } from './dto/request/cost-object-report-by-product-group-categories.dto';
+import { GetCostObjectsReportByDepartmentQueryDto } from './dto/request/cost-objects-report-by-department.dto';
+import { GetTotalQueryDto } from './dto/request/get-total.dto';
+import { GetProductReportByCostObjectQueryDto } from './dto/request/product-report-by-cost-object.dto';
+import { GetProductsReportByDepartmentAndCostObjectsQueryDto } from './dto/request/product-report-by-department-cost-objects.dto';
+import { GetReportByCostObjectQueryDto } from './dto/request/report-by-cost-object.dto';
+import { GetReportByDepartmentQueryDto } from './dto/request/report-by-department.dto';
+import { GetReportByProductGroupAndCategoryQueryDto } from './dto/request/report-by-product-group-categories.dto';
+import { GetReportByServiceQueryDto } from './dto/request/report-by-service.dto';
+import { GetReportByServiceAndProductCategoryQueryDto } from './dto/request/report-by-service-and-prodcut-category.dto';
+import { GetReportByCostObjectQuery } from './queries/cost-object/get-report-by-cost-object.queries';
+import { GetProductReportByCostObjectQuery } from './queries/cost-object/product-report-by-cost-object.queries';
+import { GetCostObjectReportByDepartmentQuery } from './queries/department/cost-objects-report-by-department.queries';
+import { GetReportByDepartmentQuery } from './queries/department/get-report-by-department.queries';
+import { GetProductReportByDepartmentAndCostObjectQuery } from './queries/department/product-report-by-department-cost-object.queries';
+import { CostObjectsServiceCategoryAndGroupReportQuery } from './queries/service/cost-objects-service-category-and-group-report.queries';
+import { ServiceCategoryAndGroupReportQuery } from './queries/service/service-category-and-group-report.queries';
+import { ServiceProductCategoryReportQuery } from './queries/service/service-product-category-report.queries';
+import { ListProductCategoriesDto, ListTotalDto } from './dto';
 
 @Controller('drill-down')
 @UseGuards(

@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDefined,
-  IsString,
   IsInt,
   IsOptional,
+  IsString,
   Length,
 } from 'class-validator';
 

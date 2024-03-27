@@ -1,9 +1,11 @@
 import { Body, Controller, Param, Patch, UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import { ADMIN_USERS_GROUP, AuthGuard } from '@skytech/auth';
+
 import { updatePolicyCategoryClassificationCommand } from './commands/update-policy-category-classification.command';
 import { UpdatePolicyDto } from './dto/policy.dto';
-import { ADMIN_USERS_GROUP, AuthGuard } from '@skytech/auth';
 
 @ApiTags('ecom-policy')
 @ApiBearerAuth()

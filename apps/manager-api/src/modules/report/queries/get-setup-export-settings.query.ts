@@ -1,11 +1,12 @@
+import { QueryHandler } from '@nestjs/cqrs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { CustomerSetupExportSettingsEntity } from '@skytech/db';
 import {
   QueryHandlerInterface,
   QueryInterface,
 } from '@skytech/manager/common/query.interface';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { QueryHandler } from '@nestjs/cqrs';
-import { CustomerSetupExportSettingsEntity } from '@skytech/db';
 
 export class GetSetupExportSettingsQuery implements QueryInterface {
   $$resolveType: CustomerSetupExportSettingsEntity;

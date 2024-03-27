@@ -5,20 +5,22 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { QueryBus } from '@nestjs/cqrs';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import { TaxAdvantageReportQuery } from '@skytech/manager/modules/report/queries/tax-advantage-report.query';
+
 import { ReportQueryDto, TaxAdvantageQueryDto } from './dto/get-report.dto';
 import {
+  AccountingReportQuery,
   ConsumptionReportQuery,
+  NewNumberOrdersReportQuery,
+  OffBoardingReportQuery,
   ReportGroupByEmployeeNoQuery,
   ReportGroupByOrderQuery,
-  AccountingReportQuery,
-  OffBoardingReportQuery,
   SalaryDeductionUsageReportQuery,
-  NewNumberOrdersReportQuery,
 } from './queries';
-import { TaxAdvantageReportQuery } from '@skytech/manager/modules/report/queries/tax-advantage-report.query';
-import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
 
 @UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))
 @ApiTags('reports')

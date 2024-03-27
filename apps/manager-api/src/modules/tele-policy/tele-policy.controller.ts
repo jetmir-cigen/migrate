@@ -1,22 +1,21 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
 import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 
-import {
-  FindTelePoliciesByFilterQuery,
-  GetTelePolicyByFilterQuery,
-} from './queries';
+import { AssignTelePolicyDto } from './dto/assign-tele-policy.dto';
+import { FindTelePolicyTemplatesByFilterQuery } from './queries/all-tele-policy-templates.query';
 import {
   AssignTelePolicyCommand,
   CreateTelePolicyCommand,
@@ -30,9 +29,10 @@ import {
   TelePolicyTemplateListResponseDto,
   UpdateTelePolicyDto,
 } from './dto';
-import { FindTelePolicyTemplatesByFilterQuery } from './queries/all-tele-policy-templates.query';
-import { AssignTelePolicyDto } from './dto/assign-tele-policy.dto';
-import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import {
+  FindTelePoliciesByFilterQuery,
+  GetTelePolicyByFilterQuery,
+} from './queries';
 
 @ApiTags('Tele-policies')
 @ApiBearerAuth()

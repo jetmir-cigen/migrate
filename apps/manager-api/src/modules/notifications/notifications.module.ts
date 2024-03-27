@@ -1,13 +1,7 @@
-import { Module } from '@nestjs/common';
-import { NotificationsController } from './notifications.controller';
-import {
-  EmailNotificationsService,
-  NotificationsService,
-  PushNotificationsService,
-  SmsNotificationsService,
-} from './services';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import {
   CostObjectEntity,
   CustomerEntity,
@@ -16,6 +10,14 @@ import {
   TextTemplateEntity,
   UserEntity,
 } from '@skytech/db';
+
+import { NotificationsController } from './notifications.controller';
+import {
+  EmailNotificationsService,
+  NotificationsService,
+  PushNotificationsService,
+  SmsNotificationsService,
+} from './services';
 
 @Module({
   imports: [

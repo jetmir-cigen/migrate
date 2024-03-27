@@ -11,11 +11,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { FindUsersByFilterQuery } from './queries/find-users.query';
-import {
-  UserCreateResponseDto,
-  UserResponseDto,
-} from './dto/user-response.dto';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -27,24 +22,31 @@ import {
   ApiResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UserCreateDto } from '@skytech/manager/modules/user/dto/user-create.dto';
-import {
-  CreateUserCommand,
-  DeleteUserCommand,
-  UpdateUserCommand,
-} from '@skytech/manager/modules/user/commands';
-import { UserService } from '@skytech/manager/modules/user/user.service';
+
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import { CustomerEntity, UserEntity } from '@skytech/db';
 import {
   FailResponseDto,
   StatusResponseDTO,
   SuccessResponseDto,
 } from '@skytech/manager/common/dto/status-response.dto';
-import { GetUserByIdQuery } from '@skytech/manager/modules/user/queries/get-user-by-id.query';
+import {
+  CreateUserCommand,
+  DeleteUserCommand,
+  UpdateUserCommand,
+} from '@skytech/manager/modules/user/commands';
+import { UserCreateDto } from '@skytech/manager/modules/user/dto/user-create.dto';
 import { GetCustomersQuery } from '@skytech/manager/modules/user/queries/get-customers.query';
-import { UserPasswordUpdateDto } from './dto/user-password-update.dto';
+import { GetUserByIdQuery } from '@skytech/manager/modules/user/queries/get-user-by-id.query';
+import { UserService } from '@skytech/manager/modules/user/user.service';
+
 import { GenerateUserPasswordCommand } from './commands/user-generate-password.command';
-import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
-import { CustomerEntity, UserEntity } from '@skytech/db';
+import { UserPasswordUpdateDto } from './dto/user-password-update.dto';
+import {
+  UserCreateResponseDto,
+  UserResponseDto,
+} from './dto/user-response.dto';
+import { FindUsersByFilterQuery } from './queries/find-users.query';
 
 @Controller('users')
 @UseGuards(AuthGuard([...ADMIN_USERS_GROUP]))

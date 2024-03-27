@@ -1,7 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CustomerAddressEntity } from '@skytech/db';
 import { Repository } from 'typeorm';
+
+import { CustomerAddressEntity } from '@skytech/db';
 
 class DeleteCustomerAddressCommand {
   constructor(public readonly id: number) {}

@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { FindCurrentUserByFilterQuery } from './queries';
+
+import { AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
+
 import { ChangePasswordCommand } from './commands/change-password.command';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
-import { AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import { FindCurrentUserByFilterQuery } from './queries';
 
 @UseGuards(AuthGuard())
 @Controller('auth')

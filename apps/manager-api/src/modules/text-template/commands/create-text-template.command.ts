@@ -1,6 +1,7 @@
-import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { IUser } from '@skytech/auth';
 import { TextTemplateEntity } from '@skytech/db';
 

@@ -1,49 +1,63 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "**/*"
-  ],
+  "ignorePatterns": ["**/*"],
   "plugins": [
-    "@nx"
+    "@nx",
+    "@typescript-eslint/eslint-plugin",
+    "simple-import-sort",
+    "import"
   ],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "env": {
+    "node": true,
+    "jest": true
+  },
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
+        "@typescript-eslint/interface-name-prefix": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "simple-import-sort/imports": [
+          "error",
+          {
+            "groups": [
+              // Packages `@nestjs` related packages come first.
+              ["^@nestjs", "^@?\\w"],
+              // Internal packages.
+              ["^(@skytech)(/.*|$)"],
+              // Side effect imports.
+              ["^\\u0000"],
+              // Parent imports. Put `..` last.
+              ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+              // Other relative imports. Put same-folder imports and `.` last.
+              ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"]
+            ]
+          }
+        ],
+        "simple-import-sort/exports": "error",
+        "import/first": "error",
+        "import/newline-after-import": "error",
+        "import/no-duplicates": "error"
       }
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "extends": [
-        "plugin:@nx/typescript"
-      ],
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
       "rules": {}
     },
     {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
-      "extends": [
-        "plugin:@nx/javascript"
-      ],
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
       "rules": {}
     },
     {
-      "files": [
-        "*.spec.ts",
-        "*.spec.tsx",
-        "*.spec.js",
-        "*.spec.jsx"
-      ],
+      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
       "env": {
         "jest": true
       },

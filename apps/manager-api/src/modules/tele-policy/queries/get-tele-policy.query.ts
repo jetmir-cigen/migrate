@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -6,7 +7,7 @@ import {
   Repository,
   SelectQueryBuilder,
 } from 'typeorm';
-import { NotFoundException } from '@nestjs/common';
+
 import { SalaryDeductionProfileEntity } from '@skytech/db';
 
 type QueryFilters = {

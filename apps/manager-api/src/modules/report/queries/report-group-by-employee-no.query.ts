@@ -1,11 +1,12 @@
+import { QueryHandler } from '@nestjs/cqrs';
+import { DataSource } from 'typeorm';
+
 import {
   QueryHandlerInterface,
   QueryInterface,
 } from '@skytech/manager/common/query.interface';
-import { DataSource } from 'typeorm';
-import { QueryHandler } from '@nestjs/cqrs';
 
-import { groupByEmployeeNoLocal, groupByEmployeeNoGlobal } from './query';
+import { groupByEmployeeNoGlobal, groupByEmployeeNoLocal } from './query';
 import { QueryFilter } from '.';
 
 export class ReportGroupByEmployeeNoQuery implements QueryInterface {

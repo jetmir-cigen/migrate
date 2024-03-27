@@ -1,13 +1,15 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ISendNotification } from '../dto/send-notification.dto';
-import { MailerService } from '@nestjs-modules/mailer';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
-import { catchError, lastValueFrom } from 'rxjs';
-import { AxiosError } from 'axios';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MailerService } from '@nestjs-modules/mailer';
+import { AxiosError } from 'axios';
+import { catchError, lastValueFrom } from 'rxjs';
+import { Repository } from 'typeorm';
+
 import { LogMailEntity } from '@skytech/db';
+
+import { ISendNotification } from '../dto/send-notification.dto';
 
 @Injectable()
 export class EmailNotificationsService {

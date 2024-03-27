@@ -1,9 +1,9 @@
 import {
+  IsDateString,
   IsNotEmpty,
-  IsString,
   IsNumber,
   IsOptional,
-  IsDateString,
+  IsString,
 } from 'class-validator';
 
 export class CreateAssetDto {

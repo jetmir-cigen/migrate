@@ -21,24 +21,25 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import {
-  TextTemplateDto,
-  CreateTextTemplateDto,
-  UpdateTextTemplateDto,
-} from '@skytech/manager/modules/text-template/dto';
-import {
-  GetDistinctTextTemplateCodesQuery,
-  GetTextTemplatesQuery,
-  GetTextTemplateByIdQuery,
-} from '@skytech/manager/modules/text-template/queries';
+
+import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
+import { TextTemplateEntity } from '@skytech/db';
 import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 import {
   CreateTextTemplateCommand,
   DeleteTextTemplateCommand,
   UpdateTextTemplateCommand,
 } from '@skytech/manager/modules/text-template/commands';
-import { ADMIN_USERS_GROUP, AuthGuard, AuthUser, IUser } from '@skytech/auth';
-import { TextTemplateEntity } from '@skytech/db';
+import {
+  CreateTextTemplateDto,
+  TextTemplateDto,
+  UpdateTextTemplateDto,
+} from '@skytech/manager/modules/text-template/dto';
+import {
+  GetDistinctTextTemplateCodesQuery,
+  GetTextTemplateByIdQuery,
+  GetTextTemplatesQuery,
+} from '@skytech/manager/modules/text-template/queries';
 
 @ApiTags('text-templates')
 @Controller('text-templates')

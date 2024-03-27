@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { CustomerEntity, CustomerHeadEntity, UserEntity } from '@skytech/db';
 
 export class EmployeeConsentDto {

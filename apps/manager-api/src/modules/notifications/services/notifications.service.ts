@@ -1,16 +1,18 @@
-import { Repository } from 'typeorm';
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseTextTemplate } from '../types';
-import { SmsNotificationsService } from './sms-notifications.service';
-import { EmailNotificationsService } from './email-notifications.service';
+import { Repository } from 'typeorm';
+
+import { IUser } from '@skytech/auth';
+import { CostObjectEntity, TextTemplateEntity, UserEntity } from '@skytech/db';
+
 import {
   ISendBulkNotification,
   ISendNotification,
 } from '../dto/send-notification.dto';
-import { IUser } from '@skytech/auth';
-import { CostObjectEntity, TextTemplateEntity, UserEntity } from '@skytech/db';
+import { BaseTextTemplate } from '../types';
+
+import { EmailNotificationsService } from './email-notifications.service';
+import { SmsNotificationsService } from './sms-notifications.service';
 
 export interface IParams {
   data: Map<number, BaseTextTemplate>;

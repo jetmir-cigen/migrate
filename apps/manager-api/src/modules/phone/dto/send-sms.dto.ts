@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
-  IsBoolean,
-  IsString,
   IsArray,
+  IsBoolean,
   IsNumber,
+  IsString,
   ValidateNested,
 } from 'class-validator';
 

@@ -1,36 +1,28 @@
-import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
   constructor(private readonly httpService: HttpService) {}
   async hashPassword(password: string): Promise<string> {
-    try {
-      const response = await this.httpService.axiosRef.post(
-        'https://auth-dev.skytechcontrol.io/hash',
-        { password },
-      );
+    const response = await this.httpService.axiosRef.post(
+      'https://auth-dev.skytechcontrol.io/hash',
+      { password },
+    );
 
-      return response.data.hash;
-    } catch (err) {
-      throw err;
-    }
+    return response.data.hash;
   }
 
   async validatePassword(
     password: string,
     hashedPassword: string,
   ): Promise<boolean> {
-    try {
-      const encodedPassword = encodeURIComponent(password);
-      const encodedHashedPassword = encodeURIComponent(hashedPassword);
+    const encodedPassword = encodeURIComponent(password);
+    const encodedHashedPassword = encodeURIComponent(hashedPassword);
 
-      const response = await this.httpService.axiosRef.get(
-        `https://auth-dev.skytechcontrol.io/hash/verify?password=${encodedPassword}&hash=${encodedHashedPassword}`,
-      );
-      return response.data.valid;
-    } catch (err) {
-      throw err;
-    }
+    const response = await this.httpService.axiosRef.get(
+      `https://auth-dev.skytechcontrol.io/hash/verify?password=${encodedPassword}&hash=${encodedHashedPassword}`,
+    );
+    return response.data.valid;
   }
 }

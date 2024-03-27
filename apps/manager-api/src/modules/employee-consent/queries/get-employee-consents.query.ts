@@ -1,7 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EmployeeConsentEntity } from '@skytech/db';
 import { Repository } from 'typeorm';
+
+import { EmployeeConsentEntity } from '@skytech/db';
 
 export class GetEmployeeConsentsQuery {
   constructor(

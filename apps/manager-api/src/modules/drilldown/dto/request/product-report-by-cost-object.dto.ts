@@ -1,4 +1,5 @@
 import { IsEnum, IsNumberString } from 'class-validator';
+
 import { DrillDownServiceType } from '../../types';
 
 export class GetProductReportByCostObjectQueryDto {

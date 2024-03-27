@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateDepartmentDto } from './dto/create-department.dto';
-import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityNotFoundError, Repository } from 'typeorm';
+
 import { DepartmentEntity } from '@skytech/db';
+
+import { CreateDepartmentDto } from './dto/create-department.dto';
+import { UpdateDepartmentDto } from './dto/update-department.dto';
 
 const selectedFields = [
   'department.id',

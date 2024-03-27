@@ -1,13 +1,14 @@
-import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserService } from '../user.service';
-import { generateRandomPassword } from '@skytech/manager/utils/generatePassword';
-import { UserPasswordGeneratedEvent } from '../events';
 import { ForbiddenException } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { IUser } from '@skytech/auth';
 import { UserEntity } from '@skytech/db';
+import { generateRandomPassword } from '@skytech/manager/utils/generatePassword';
+
+import { UserPasswordGeneratedEvent } from '../events';
+import { UserService } from '../user.service';
 
 export class GenerateUserPasswordCommand {
   constructor(

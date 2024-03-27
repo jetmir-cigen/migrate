@@ -1,30 +1,8 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { CqrsModule } from '@nestjs/cqrs';
 import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { FindUsersByFilterQueryHandler } from './queries/find-users.query';
-import {
-  CreateUserCommandHandler,
-  DeleteUserCommandHandler,
-  UpdateUserCommandHandler,
-} from '@skytech/manager/modules/user/commands';
-import {
-  UserCreatedEventHandler,
-  UserUpdatedEventHandler,
-  UserDeletedEventHandler,
-  UserPasswordGeneratedEventHandler,
-} from '@skytech/manager/modules/user/events';
-import { GetUserByIdQueryHandler } from '@skytech/manager/modules/user/queries/get-user-by-id.query';
-import { GetCustomerQueryHandler } from '@skytech/manager/modules/user/queries/get-customers.query';
-import { GenerateUserPasswordCommandHandler } from './commands/user-generate-password.command';
-import {
-  EmailNotificationsService,
-  NotificationsService,
-  SmsNotificationsService,
-} from '../notifications/services';
 import {
   CostObjectEntity,
   CustomerEntity,
@@ -34,6 +12,30 @@ import {
   UserEntity,
   UserGroupEntity,
 } from '@skytech/db';
+import {
+  CreateUserCommandHandler,
+  DeleteUserCommandHandler,
+  UpdateUserCommandHandler,
+} from '@skytech/manager/modules/user/commands';
+import {
+  UserCreatedEventHandler,
+  UserDeletedEventHandler,
+  UserPasswordGeneratedEventHandler,
+  UserUpdatedEventHandler,
+} from '@skytech/manager/modules/user/events';
+import { GetCustomerQueryHandler } from '@skytech/manager/modules/user/queries/get-customers.query';
+import { GetUserByIdQueryHandler } from '@skytech/manager/modules/user/queries/get-user-by-id.query';
+
+import {
+  EmailNotificationsService,
+  NotificationsService,
+  SmsNotificationsService,
+} from '../notifications/services';
+
+import { GenerateUserPasswordCommandHandler } from './commands/user-generate-password.command';
+import { FindUsersByFilterQueryHandler } from './queries/find-users.query';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 
 @Module({
   imports: [

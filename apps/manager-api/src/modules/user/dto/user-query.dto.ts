@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsEmail,
@@ -5,8 +7,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+
 import { PaginationQueryDto } from '@skytech/manager/common/dto/pagination-query.dto';
 
 export class UserQueryDto extends PaginationQueryDto {

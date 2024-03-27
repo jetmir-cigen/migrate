@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DepartmentEntity } from '@skytech/db';
 
-import { DepartmentService } from './department.service';
 import { DepartmentController } from './department.controller';
+import { DepartmentService } from './department.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([DepartmentEntity])],

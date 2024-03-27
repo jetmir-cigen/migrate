@@ -1,40 +1,8 @@
-import { Module } from '@nestjs/common';
-import { PhoneService } from './phone.service';
-import { PhoneController } from './phone.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { CqrsModule } from '@nestjs/cqrs';
-import { DepartmentService } from '../department/department.service';
-import { FindTelePoliciesByFilterQueryHandler } from '../tele-policy/queries';
-import {
-  FindActiveNumbersByFilterQueryHandler,
-  FindAllActiveNumbersByFilterQueryHandler,
-  FindGroupNumbersByFilterQueryHandler,
-  FindPhoneBooksByFilterQueryHandler,
-  FindPhoneGroupByFilterQueryHandler,
-  FindPhoneGroupNumbersByFilterQueryHandler,
-  FindPhoneGroupsByFilterQueryHandler,
-  GetSMSLogsByBatchFilterQueryHandler,
-  GetSMSLogsByFilterQueryHandler,
-} from './queries';
-import {
-  AddNumbersToPhoneBookCommandHandler,
-  AddNumbersToPhoneGroupCommandHandler,
-  CreatePhoneGroupCommandHandler,
-  DeleteNumberFromPhoneGroupCommandHandler,
-  DeletePhoneGroupCommandHandler,
-  SendSMSCommandHandler,
-  UpdatePhoneBookNumberCommandHandler,
-  UpdatePhoneGroupCommandHandler,
-  UpdatePhoneGroupNumberCommandHandler,
-} from './commands';
-
-import {
-  EmailNotificationsService,
-  NotificationsService,
-  SmsNotificationsService,
-} from '../notifications/services';
 import { HttpModule } from '@nestjs/axios';
-import { FindUserAliasesByFilterQueryHandler } from './queries/get-user-aliases.query';
+import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import {
   ActiveMobileUserView,
   CostObjectEntity,
@@ -51,6 +19,40 @@ import {
   UserAliasEntity,
   UserEntity,
 } from '@skytech/db';
+
+import { DepartmentService } from '../department/department.service';
+import {
+  EmailNotificationsService,
+  NotificationsService,
+  SmsNotificationsService,
+} from '../notifications/services';
+import { FindTelePoliciesByFilterQueryHandler } from '../tele-policy/queries';
+
+import { FindUserAliasesByFilterQueryHandler } from './queries/get-user-aliases.query';
+import {
+  AddNumbersToPhoneBookCommandHandler,
+  AddNumbersToPhoneGroupCommandHandler,
+  CreatePhoneGroupCommandHandler,
+  DeleteNumberFromPhoneGroupCommandHandler,
+  DeletePhoneGroupCommandHandler,
+  SendSMSCommandHandler,
+  UpdatePhoneBookNumberCommandHandler,
+  UpdatePhoneGroupCommandHandler,
+  UpdatePhoneGroupNumberCommandHandler,
+} from './commands';
+import { PhoneController } from './phone.controller';
+import { PhoneService } from './phone.service';
+import {
+  FindActiveNumbersByFilterQueryHandler,
+  FindAllActiveNumbersByFilterQueryHandler,
+  FindGroupNumbersByFilterQueryHandler,
+  FindPhoneBooksByFilterQueryHandler,
+  FindPhoneGroupByFilterQueryHandler,
+  FindPhoneGroupNumbersByFilterQueryHandler,
+  FindPhoneGroupsByFilterQueryHandler,
+  GetSMSLogsByBatchFilterQueryHandler,
+  GetSMSLogsByFilterQueryHandler,
+} from './queries';
 
 @Module({
   imports: [

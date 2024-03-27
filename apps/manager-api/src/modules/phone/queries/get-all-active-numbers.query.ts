@@ -1,8 +1,10 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { findAllActiveNumbersQuery } from './queries';
+
 import { CostObjectEntity } from '@skytech/db';
+
+import { findAllActiveNumbersQuery } from './queries';
 
 type QueryFilters = {
   userId: number;

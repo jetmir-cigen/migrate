@@ -9,6 +9,31 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+
+import {
+  ADMIN_USERS_GROUP,
+  AuthGuard,
+  AuthUser,
+  IUser,
+  UserRoles,
+} from '@skytech/auth';
+
+import { AddNumbersToPhoneBookCommand } from './commands/phone-book-add-numbers.command';
+import { UpdatePhoneBookNumberCommand } from './commands/phone-book-update-numbers.command';
+import { UpdatePhoneGroupNumberCommand } from './commands/phone-groups-update-numbers.command';
+import { SendSmsDto } from './dto/send-sms.dto';
+import { SMSLogsListResponseDto } from './dto/sms-logs-response.dto';
+import { FindAllActiveNumbersByFilterQuery } from './queries/get-all-active-numbers.query';
+import { FindUserAliasesByFilterQuery } from './queries/get-user-aliases.query';
+import {
+  AddNumbersToPhoneGroupCommand,
+  CreatePhoneGroupCommand,
+  DeleteNumberFromPhoneGroupCommand,
+  DeletePhoneGroupCommand,
+  SendSMSCommand,
+  UpdatePhoneGroupCommand,
+} from './commands';
 import {
   FindGroupNumbersByFilterQuery,
   FindPhoneBooksByFilterQuery,
@@ -18,29 +43,6 @@ import {
   GetSMSLogsByBatchFilterQuery,
   GetSMSLogsByFilterQuery,
 } from './queries';
-import {
-  AddNumbersToPhoneGroupCommand,
-  CreatePhoneGroupCommand,
-  DeleteNumberFromPhoneGroupCommand,
-  DeletePhoneGroupCommand,
-  SendSMSCommand,
-  UpdatePhoneGroupCommand,
-} from './commands';
-import { SendSmsDto } from './dto/send-sms.dto';
-import { SMSLogsListResponseDto } from './dto/sms-logs-response.dto';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AddNumbersToPhoneBookCommand } from './commands/phone-book-add-numbers.command';
-import { FindAllActiveNumbersByFilterQuery } from './queries/get-all-active-numbers.query';
-import { UpdatePhoneBookNumberCommand } from './commands/phone-book-update-numbers.command';
-import { UpdatePhoneGroupNumberCommand } from './commands/phone-groups-update-numbers.command';
-import { FindUserAliasesByFilterQuery } from './queries/get-user-aliases.query';
-import {
-  ADMIN_USERS_GROUP,
-  AuthGuard,
-  AuthUser,
-  IUser,
-  UserRoles,
-} from '@skytech/auth';
 
 @ApiTags('Phone')
 @ApiBearerAuth()

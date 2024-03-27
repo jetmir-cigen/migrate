@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { IUser } from '@skytech/auth';
 import { SmsPhoneBookEntity } from '@skytech/db';

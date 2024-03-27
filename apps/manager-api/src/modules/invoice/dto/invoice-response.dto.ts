@@ -1,5 +1,3 @@
-import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
-import { ElementLabelDto } from '@skytech/manager/modules/element-label/dto/element-label-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
@@ -11,9 +9,14 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { InvoiceRowDto } from './invoice-row.dto';
+
+import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 import { VendorDto } from '@skytech/manager/common/dto/vendor.dto';
 import { CustomerDto } from '@skytech/manager/modules/customer/dto/customer.dto';
+import { ElementLabelDto } from '@skytech/manager/modules/element-label/dto/element-label-response.dto';
+
+import { InvoiceRowDto } from './invoice-row.dto';
+
 export class InvoiceDto {
   @ApiProperty({
     description: 'The ID of the invoice',

@@ -1,5 +1,6 @@
-import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
+
+import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 
 export class DepartmentDto {
   @ApiProperty({

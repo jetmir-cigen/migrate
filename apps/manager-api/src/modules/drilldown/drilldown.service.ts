@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
-import { DrillDownServiceType } from '@skytech/manager/modules/drilldown/dto/product-categories-param.dto';
 
 import { IUser } from '@skytech/auth';
 import {
@@ -11,6 +10,7 @@ import {
   ManagerAccessDepartmentView,
   ManagerAccessFrameAgreementViewEntity,
 } from '@skytech/db';
+import { DrillDownServiceType } from '@skytech/manager/modules/drilldown/dto/product-categories-param.dto';
 
 @Injectable()
 export class DrillDownService {

@@ -1,5 +1,6 @@
-import { SalaryDeductionProfileDto } from '@skytech/manager/modules/tele-policy/dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+import { SalaryDeductionProfileDto } from '@skytech/manager/modules/tele-policy/dto';
 
 export class CostObjectDto {
   @ApiProperty({ description: 'The ID of the cost object', example: 1 })

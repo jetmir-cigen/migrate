@@ -1,8 +1,9 @@
-import { CreateSetupExportSettingsDto } from '@skytech/manager/modules/report/dto/create-setup-export-settings.dto';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { CustomerSetupExportSettingsEntity } from '@skytech/db';
+import { CreateSetupExportSettingsDto } from '@skytech/manager/modules/report/dto/create-setup-export-settings.dto';
 
 export class UpsertSetupExportSettingsCommand {
   constructor(

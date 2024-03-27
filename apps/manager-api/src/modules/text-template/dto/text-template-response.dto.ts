@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { TextTemplateEntity } from '@skytech/db';
 import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 

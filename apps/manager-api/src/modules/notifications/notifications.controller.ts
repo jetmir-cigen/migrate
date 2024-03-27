@@ -1,7 +1,9 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+
+import { AuthGuard, AuthUser, IUser } from '@skytech/auth';
+
 import { NotificationsService } from './services';
 import { SMSTestTextTemplate, WelcomeEmailTextTemplate } from './types';
-import { AuthGuard, AuthUser, IUser } from '@skytech/auth';
 
 @UseGuards(AuthGuard())
 @Controller('notifications')

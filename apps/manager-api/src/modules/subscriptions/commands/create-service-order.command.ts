@@ -1,15 +1,7 @@
-import { SubServiceOrderType } from '@skytech/manager/common/enums/SubServiceOrderType.enum';
-import { NotificationsService } from '@skytech/manager/modules/notifications/services';
-import {
-  ActivationTextTemplate,
-  PortationFormFilledTextTemplate,
-} from '@skytech/manager/modules/notifications/types';
-import { getAppLink } from '@skytech/manager/utils/constants';
-import { generateRandomCode } from '@skytech/manager/utils/generateRandomCode';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateSubscriptionDto } from '../dto/create-subscription.dto';
+
 import { IUser } from '@skytech/auth';
 import {
   CustomerDealerEntity,
@@ -19,6 +11,16 @@ import {
   SubscriptionServiceOrdersEntity,
   UserEntity,
 } from '@skytech/db';
+import { SubServiceOrderType } from '@skytech/manager/common/enums/SubServiceOrderType.enum';
+import { NotificationsService } from '@skytech/manager/modules/notifications/services';
+import {
+  ActivationTextTemplate,
+  PortationFormFilledTextTemplate,
+} from '@skytech/manager/modules/notifications/types';
+import { getAppLink } from '@skytech/manager/utils/constants';
+import { generateRandomCode } from '@skytech/manager/utils/generateRandomCode';
+
+import { CreateSubscriptionDto } from '../dto/create-subscription.dto';
 
 class CreateSubscriptionOrderCommand {
   constructor(

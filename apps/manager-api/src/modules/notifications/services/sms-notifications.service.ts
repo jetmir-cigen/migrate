@@ -1,17 +1,19 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { catchError, lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
 import { AxiosError } from 'axios';
+import { catchError, lastValueFrom } from 'rxjs';
+import { Repository } from 'typeorm';
+import { v4 } from 'uuid';
+
+import { LogSmsPushEntity } from '@skytech/db';
+
 import {
   INumber,
   ISendBulkNotification,
   ISendNotification,
 } from '../dto/send-notification.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { v4 } from 'uuid';
-import { ConfigService } from '@nestjs/config';
-import { LogSmsPushEntity } from '@skytech/db';
 
 @Injectable()
 export class SmsNotificationsService {

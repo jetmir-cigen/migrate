@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ElementLabelController } from './element-label.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ElementLabelService } from './element-label.service';
 import { ElementLabelEntity } from '@skytech/db';
+
+import { ElementLabelController } from './element-label.controller';
+import { ElementLabelService } from './element-label.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ElementLabelEntity])],

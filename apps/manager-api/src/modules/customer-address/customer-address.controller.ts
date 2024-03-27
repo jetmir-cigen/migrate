@@ -10,16 +10,7 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import {
-  createCustomerAddressCommand,
-  deleteCustomerAddressCommand,
-  updateCustomerAddressCommand,
-} from './commands';
-import {
-  CreateCustomerAddressDto,
-  UpdateCustomerAddressDto,
-} from './dto/customer-address.dto';
-import { getAllCustomerAddressQuery } from './queries';
+
 import {
   ADMIN_USERS_GROUP,
   AuthGuard,
@@ -27,6 +18,17 @@ import {
   IUser,
   UserRoles,
 } from '@skytech/auth';
+
+import {
+  CreateCustomerAddressDto,
+  UpdateCustomerAddressDto,
+} from './dto/customer-address.dto';
+import {
+  createCustomerAddressCommand,
+  deleteCustomerAddressCommand,
+  updateCustomerAddressCommand,
+} from './commands';
+import { getAllCustomerAddressQuery } from './queries';
 
 @ApiTags('addresses')
 @ApiBearerAuth()

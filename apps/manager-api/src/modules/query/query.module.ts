@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { QueryService } from './query.service';
 import { CqrsModule } from '@nestjs/cqrs';
+
+import { QueryService } from './query.service';
 
 @Module({
   imports: [CqrsModule],

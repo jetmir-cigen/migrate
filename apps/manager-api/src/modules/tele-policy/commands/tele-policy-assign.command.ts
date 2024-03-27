@@ -1,14 +1,15 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TelePolicyService } from '../tele-policy.service';
+import { Repository } from 'typeorm';
+
 import { IUser } from '@skytech/auth';
 import {
   CostObjectEntity,
   ManagerAccessCustomerView,
   SalaryDeductionProfileEntity,
 } from '@skytech/db';
+
+import { TelePolicyService } from '../tele-policy.service';
 
 export class AssignTelePolicyCommand {
   constructor(

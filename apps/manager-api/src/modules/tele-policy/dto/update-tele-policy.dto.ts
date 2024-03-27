@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, Min, MaxLength, IsBoolean } from 'class-validator';
+import { IsBoolean, IsNumber, IsString, MaxLength, Min } from 'class-validator';
 
 export class UpdateTelePolicyDto {
   @ApiProperty({

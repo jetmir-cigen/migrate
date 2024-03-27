@@ -1,13 +1,16 @@
-import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { AuthController } from './auth.controller';
+import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FindCurrentUserByFilterQueryHandler } from './queries';
+
+import { DevicePolicyEntity, UserEntity } from '@skytech/db';
+
+import { UserService } from '../user/user.service';
+
 import { ChangePasswordCommandHandler } from './commands/change-password.command';
 import { PasswordChangedEventHandler } from './events/password-changed.event';
-import { UserService } from '../user/user.service';
-import { DevicePolicyEntity, UserEntity } from '@skytech/db';
+import { AuthController } from './auth.controller';
+import { FindCurrentUserByFilterQueryHandler } from './queries';
 
 @Module({
   imports: [

@@ -1,12 +1,7 @@
 import { QueryHandler } from '@nestjs/cqrs';
-import {
-  QueryHandlerInterface,
-  QueryInterface,
-} from '@skytech/manager/common/query.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DrillDownServiceType } from '@skytech/manager/modules/drilldown/dto';
-import { DrillDownService } from '../../drilldown.service';
+
 import { IUser } from '@skytech/auth';
 import {
   CostObjectEntity,
@@ -18,9 +13,14 @@ import {
   ProductGroupEntity,
   VendorEntity,
 } from '@skytech/db';
-
+import {
+  QueryHandlerInterface,
+  QueryInterface,
+} from '@skytech/manager/common/query.interface';
+import { DrillDownServiceType } from '@skytech/manager/modules/drilldown/dto';
 import { isDepartmentAdmin } from '@skytech/manager/utils/access';
 
+import { DrillDownService } from '../../drilldown.service';
 
 type QueryFilters = {
   year: number;

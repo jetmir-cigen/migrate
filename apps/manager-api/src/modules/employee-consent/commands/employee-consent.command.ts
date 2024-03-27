@@ -1,8 +1,10 @@
-import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateEmployeeConsentDto } from '../dto/create-employee-consent.dto';
+
 import { EmployeeConsentEntity } from '@skytech/db';
+
+import { CreateEmployeeConsentDto } from '../dto/create-employee-consent.dto';
 
 export class CreateEmployeeConsentCommand {
   constructor(

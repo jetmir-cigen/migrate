@@ -1,11 +1,12 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import {
   ActiveMobileUserView,
   CostObjectEntity,
   ManagerAccessDepartmentView,
 } from '@skytech/db';
-import { Repository } from 'typeorm';
 
 type QueryFilters = {
   userId: number;

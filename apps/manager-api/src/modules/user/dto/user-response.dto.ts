@@ -1,6 +1,7 @@
-import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
+
 import { UserEntity } from '@skytech/db';
+import { SuccessResponseDto } from '@skytech/manager/common/dto/status-response.dto';
 
 export class UserResponseDto extends SuccessResponseDto {
   constructor(init: Pick<UserResponseDto, 'users'>) {
