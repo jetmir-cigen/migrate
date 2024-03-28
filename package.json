@@ -3,16 +3,17 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start:manager": "nx serve manager-api",
-    "build:manager": "nx build manager-api",
     "start:app": "nx serve app-api",
+    "start:manager": "nx serve manager-api",
     "build:app": "nx build app-api",
-    "lint:all": "nx run-many --target=lint --all",
+    "build:manager": "nx build manager-api",
     "fix:all": "nx run-many --target=lint --all --fix",
-    "fix:manager": "nx lint manager-api",
     "fix:app": "nx lint app-api",
     "fix:auth": "nx lint auth",
-    "fix:db": "nx lint db"
+    "fix:common": "nx lint common",
+    "fix:db": "nx lint db",
+    "fix:manager": "nx lint manager-api",
+    "lint:all": "nx run-many --target=lint --all"
   },
   "private": true,
   "dependencies": {
