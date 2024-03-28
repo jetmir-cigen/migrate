@@ -1,17 +1,17 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { TelePolicyTemplateEntity } from './tele-policy-template.entity';
+import { CostObjectEntity } from './cost-object.entity';
 import { CustomerEntity } from './customer.entity';
 import { CustomerHeadEntity } from './customer-head.entity';
-import { CostObjectEntity } from './cost-object.entity';
 import { SubscriptionServiceOrderActivationEntity } from './subscription-service-order-activation.entity';
+import { TelePolicyTemplateEntity } from './tele-policy-template.entity';
 
 @Entity({ schema: 'control', name: 'control.salary_deduction_profile' })
 export class SalaryDeductionProfileEntity {

@@ -1,22 +1,22 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
-  Unique,
+  Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
+  PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 
-import { UserGroupEntity } from './user-group.entity';
-import { CustomerEntity } from './customer.entity';
-import { LogSmsPushEntity } from './log-sms-push.entity';
 import { CostObjectEntity } from './cost-object.entity';
+import { CustomerEntity } from './customer.entity';
 import { EmployeeConsentCostObjectEntity } from './employee-consent-cost-object.entity';
-import { TextTemplateEntity } from './text-template.entity';
+import { LogSmsPushEntity } from './log-sms-push.entity';
 import { SubscriptionServiceOrdersEntity } from './subscription-service-orders.entity';
+import { TextTemplateEntity } from './text-template.entity';
+import { UserGroupEntity } from './user-group.entity';
 
 @Entity('control.user')
 export class UserEntity {

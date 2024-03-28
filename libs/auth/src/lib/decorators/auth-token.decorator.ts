@@ -1,5 +1,6 @@
-import { IAuthToken, IRequestWithUser } from '@skytech/auth';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+import { IAuthToken, IRequestWithUser } from '@skytech/auth';
 
 export const AuthToken = createParamDecorator(
   (_: unknown, ctx: ExecutionContext): IAuthToken | null => {

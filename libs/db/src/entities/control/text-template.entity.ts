@@ -1,15 +1,15 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { WhiteLabelEntity } from './whitelabel.entity';
-import { CustomerHeadEntity } from './customer-head.entity';
 import { CustomerEntity } from './customer.entity';
+import { CustomerHeadEntity } from './customer-head.entity';
 import { UserEntity } from './user.entity';
+import { WhiteLabelEntity } from './whitelabel.entity';
 
 @Entity({ name: 'control.text_template', schema: 'control' })
 export class TextTemplateEntity {

@@ -1,13 +1,13 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { ProductCategoryEntity } from './product-category.entity';
 import { CountryEntity } from './country.entity';
+import { ProductCategoryEntity } from './product-category.entity';
 
 @Entity({ name: 'control.product_group' })
 export class ProductGroupEntity {

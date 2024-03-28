@@ -1,9 +1,9 @@
-import { Injectable, NestMiddleware, mixin } from '@nestjs/common';
-import { Response, NextFunction } from 'express';
+import { Injectable, mixin, NestMiddleware } from '@nestjs/common';
+import { NextFunction, Response } from 'express';
 
+import { IRequestWithUser } from './auth.types';
 import { AuthJwtService } from './auth-jwt.service';
 import { jwtFromBearer } from './utils';
-import { IRequestWithUser } from './auth.types';
 
 export const AuthMiddlewareMixin = (authTokenName: string) => {
   @Injectable()

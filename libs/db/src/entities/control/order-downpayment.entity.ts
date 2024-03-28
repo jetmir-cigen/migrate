@@ -1,10 +1,11 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
+  Entity,
   Index,
   ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
+
 import { CostObjectEntity } from './cost-object.entity';
 
 @Entity({ name: 'control.order_downpayment', schema: 'device_policy' })

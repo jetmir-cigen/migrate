@@ -1,14 +1,14 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
   JoinColumn,
   ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { CostObjectEntity } from './cost-object.entity';
 import { InvoiceEntity } from './invoice.entity';
 import { ProductEntity } from './product.entity';
-import { CostObjectEntity } from './cost-object.entity';
 
 @Entity({ name: 'control.invoice_row' })
 export class InvoiceRowEntity {

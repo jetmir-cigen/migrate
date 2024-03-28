@@ -1,16 +1,16 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { CustomerHeadEntity } from './customer-head.entity';
-import { UserEntity } from './user.entity';
-import { SubscriptionServiceOrderActivationEntity } from './subscription-service-order-activation.entity';
 import { CustomerEntity } from './customer.entity';
+import { CustomerHeadEntity } from './customer-head.entity';
+import { SubscriptionServiceOrderActivationEntity } from './subscription-service-order-activation.entity';
+import { UserEntity } from './user.entity';
 
 @Entity({ name: 'control.device_policy' })
 export class DevicePolicyEntity {

@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { AuthJwtService } from './auth-jwt.service';

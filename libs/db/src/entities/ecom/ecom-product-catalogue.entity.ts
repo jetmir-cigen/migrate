@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { EcomPolicyProductEntity } from './ecom-policy-product.entity';
 import { EcomCategoriesEntity } from './ecom-categories.entity';
+import { EcomPolicyProductEntity } from './ecom-policy-product.entity';
 
 @Index('fk_category_id_idx', ['categoryId'], {})
 @Index('fk_ecom_vendor_id_idx', ['ecomVendorId'], {})

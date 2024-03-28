@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+
 import { EcomPolicyEntity } from './ecom-policy.entity';
 
 @Entity('ecom.policy_category_classification', { schema: 'ecom' })

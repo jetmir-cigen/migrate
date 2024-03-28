@@ -1,18 +1,18 @@
 import {
-  Entity,
   Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
-  ManyToOne,
-  JoinColumn,
-  Index,
-  OneToMany,
 } from 'typeorm';
 
-import { CustomerEntity } from './customer.entity';
-import { UserEntity } from './user.entity';
 import { CostObjectEntity } from './cost-object.entity';
+import { CustomerEntity } from './customer.entity';
 import { SubscriptionServiceOrderActivationEntity } from './subscription-service-order-activation.entity';
+import { UserEntity } from './user.entity';
 
 @Entity({ schema: 'control', name: 'control.department' })
 @Unique(['customer', 'code'])

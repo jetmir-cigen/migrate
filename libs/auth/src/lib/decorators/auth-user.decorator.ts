@@ -1,10 +1,11 @@
-import { IUser } from '@skytech/auth';
 import {
   createParamDecorator,
   ExecutionContext,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { Request } from 'express';
+
+import { IUser } from '@skytech/auth';
 
 interface IGetUserAuthInfoRequest extends Request {
   user: IUser;

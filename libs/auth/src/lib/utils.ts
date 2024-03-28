@@ -16,7 +16,7 @@ export function jwtFromBearer(authHeader: string | undefined): string | null {
 /**
  * Format public key(string) to be used in JWT.
  */
-export function generatePublicKey(pubKeyStr: string): any {
+export function generatePublicKey(pubKeyStr: string) {
   const publickKey = `-----BEGIN PUBLIC KEY-----\n${pubKeyStr}\n-----END PUBLIC KEY-----`;
   return crypto.createPublicKey({
     key: publickKey,
@@ -27,6 +27,6 @@ export function generatePublicKey(pubKeyStr: string): any {
 /**
  * Format public key(string) to be used in JWT.
  */
-export function formatPublicKey(pubKeyStr: string): any {
+export function formatPublicKey(pubKeyStr: string) {
   return `-----BEGIN PUBLIC KEY-----\n${pubKeyStr}\n-----END PUBLIC KEY-----`;
 }

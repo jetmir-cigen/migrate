@@ -1,17 +1,17 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
-  JoinColumn,
+  Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { InvoiceRowEntity } from './invoice-row.entity';
-import { VendorEntity } from './vendor.entity';
 import { CustomerEntity } from './customer.entity';
 import { ElementLabelEntity } from './element-label.entity';
+import { InvoiceRowEntity } from './invoice-row.entity';
+import { VendorEntity } from './vendor.entity';
 
 @Entity({ name: 'control.invoice', schema: 'control' })
 @Index('uk_invoices_vendor_id_invoice_no', ['vendorId', 'invoiceNo'], {

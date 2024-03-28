@@ -18,6 +18,14 @@
           "buildTarget": "manager-api:build:production"
         }
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/manager-api/src/**/*.ts"],
+        "fix": true
+      }
     }
   },
   "tags": []

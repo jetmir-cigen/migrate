@@ -1,10 +1,11 @@
 import {
   CanActivate,
   ExecutionContext,
-  UnauthorizedException,
   ForbiddenException,
   mixin,
+  UnauthorizedException,
 } from '@nestjs/common';
+
 import { IRequestWithUser, UserRole, UserRoles } from '../auth.types';
 
 const guards: Record<UserRole, (role: UserRole) => boolean> = {

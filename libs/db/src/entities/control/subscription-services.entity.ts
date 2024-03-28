@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { SubscriptionServiceOrdersEntity } from './subscription-service-orders.entity';
 import { CustomerEntity } from './customer.entity';
+import { SubscriptionServiceOrdersEntity } from './subscription-service-orders.entity';
 
 @Index('customer_id', ['customerId'], {})
 @Entity({ name: 'control.subscription_services', schema: 'control' })

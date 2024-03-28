@@ -1,13 +1,13 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { UserEntity } from './user.entity';
 import { CustomerEntity } from './customer.entity';
+import { UserEntity } from './user.entity';
 
 @Entity({ schema: 'control', name: 'control.sms_group' })
 export class SmsGroupEntity {

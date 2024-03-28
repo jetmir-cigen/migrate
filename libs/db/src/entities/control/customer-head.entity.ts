@@ -1,14 +1,14 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
-  JoinColumn,
+  Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { CustomerHeadFrameAgreementEntity } from './customer-head-frame-agreement.entity';
 import { CustomerEntity } from './customer.entity';
+import { CustomerHeadFrameAgreementEntity } from './customer-head-frame-agreement.entity';
 
 @Entity({ schema: 'control', name: 'control.customer_head' })
 export class CustomerHeadEntity {

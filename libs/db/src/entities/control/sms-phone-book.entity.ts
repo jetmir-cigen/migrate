@@ -1,14 +1,14 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { UserEntity } from './user.entity';
-import { CountryEntity } from './country.entity';
 import { CostObjectEntity } from './cost-object.entity';
+import { CountryEntity } from './country.entity';
+import { UserEntity } from './user.entity';
 
 @Entity({ schema: 'control', name: 'control.sms_phone_book' })
 export class SmsPhoneBookEntity {

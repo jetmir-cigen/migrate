@@ -1,16 +1,18 @@
-import { Injectable, Logger } from '@nestjs/common';
-import * as jsonwebtoken from 'jsonwebtoken';
-import { AxiosResponse } from 'axios';
 import { HttpService } from '@nestjs/axios';
-import { generatePublicKey } from './utils';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AxiosResponse } from 'axios';
+import * as jsonwebtoken from 'jsonwebtoken';
+
 import { IUser } from '@skytech/auth';
+
+import { generatePublicKey } from './utils';
 
 @Injectable()
 export class AuthJwtService {
   protected readonly logger = new Logger(AuthJwtService.name);
 
-  protected PUBLIC_KEY: string = '';
+  protected PUBLIC_KEY = '';
   protected hasPublicKeyFailed = false;
 
   constructor(

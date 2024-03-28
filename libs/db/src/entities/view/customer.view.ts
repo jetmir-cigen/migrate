@@ -1,4 +1,4 @@
-import { ViewEntity, ViewColumn } from 'typeorm';
+import { ViewColumn, ViewEntity } from 'typeorm';
 
 @ViewEntity({
   schema: 'view',

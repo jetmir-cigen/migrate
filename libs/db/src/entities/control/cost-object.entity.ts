@@ -1,20 +1,20 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { CustomerEntity } from './customer.entity';
 import { DepartmentEntity } from './department.entity';
+import { EmployeeConsentCostObjectEntity } from './employee-consent-cost-object.entity';
 import { SalaryDeductionProfileEntity } from './salary-deduction-profile.entity';
 import { SmsPhoneBookEntity } from './sms-phone-book.entity';
-import { UserEntity } from './user.entity';
-import { EmployeeConsentCostObjectEntity } from './employee-consent-cost-object.entity';
 import { TextTemplateEntity } from './text-template.entity';
+import { UserEntity } from './user.entity';
 
 @Entity({ name: 'control.cost_object', schema: 'control' })
 export class CostObjectEntity {

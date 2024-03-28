@@ -1,22 +1,22 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  Unique,
+  Entity,
   Index,
-  ManyToOne,
   JoinColumn,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
 } from 'typeorm';
 
-import { CountryEntity } from './country.entity';
-import { LogSmsPushEntity } from './log-sms-push.entity';
-import { UserEntity } from './user.entity';
 import { CostObjectEntity } from './cost-object.entity';
+import { CountryEntity } from './country.entity';
 import { LogMailEntity } from './log-mail.entity';
+import { LogSmsPushEntity } from './log-sms-push.entity';
 import { SubscriptionServicesEntity } from './subscription-services.entity';
+import { UserEntity } from './user.entity';
 
 @Entity({ name: 'control.customer' })
 export class CustomerEntity {

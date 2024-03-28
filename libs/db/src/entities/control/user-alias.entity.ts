@@ -1,12 +1,13 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserEntity } from './user.entity';
+
 import { CustomerEntity } from './customer.entity';
+import { UserEntity } from './user.entity';
 
 @Entity('control.user_alias')
 export class UserAliasEntity {

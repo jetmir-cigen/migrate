@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryColumn, JoinColumn, ManyToOne } from 'typeorm';
-import { EmployeeConsentEntity } from './employee-consent.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+
 import { CostObjectEntity } from './cost-object.entity';
+import { EmployeeConsentEntity } from './employee-consent.entity';
 import { UserEntity } from './user.entity';
 
 @Entity({ name: 'control.employee_consent_cost_object' })

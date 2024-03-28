@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { EcomProductCatalogueEntity } from './ecom-product-catalogue.entity';
 import { EcomCategoryClassificationEntity } from './ecom-category-classification.entity';
+import { EcomProductCatalogueEntity } from './ecom-product-catalogue.entity';
 
 @Index('categories_asset_type_id_fk', ['assetTypeId'], {})
 @Index('categories_category_classification_id_fk', ['classificationId'], {})

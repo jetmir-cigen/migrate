@@ -1,15 +1,15 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { EmployeeConsentCostObjectEntity } from './employee-consent-cost-object.entity';
-import { CustomerHeadEntity } from './customer-head.entity';
 import { CustomerEntity } from './customer.entity';
+import { CustomerHeadEntity } from './customer-head.entity';
+import { EmployeeConsentCostObjectEntity } from './employee-consent-cost-object.entity';
 import { UserEntity } from './user.entity';
 
 @Entity({ name: 'control.employee_consent' })
