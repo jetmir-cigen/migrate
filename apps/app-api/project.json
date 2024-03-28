@@ -1,0 +1,33 @@
+{
+  "name": "app-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/app-api/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "app-api:build",
+        "port": 9999
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "app-api:build:development"
+        },
+        "production": {
+          "buildTarget": "app-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/app-api/src/**/*.ts"],
+        "fix": true
+      }
+    }
+  },
+  "tags": []
+}

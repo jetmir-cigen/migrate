@@ -5,9 +5,12 @@
   "scripts": {
     "start:manager": "nx serve manager-api",
     "build:manager": "nx build manager-api",
+    "start:app": "nx serve app-api",
+    "build:app": "nx build app-api",
     "lint:all": "nx run-many --target=lint --all",
     "fix:all": "nx run-many --target=lint --all --fix",
     "fix:manager": "nx lint manager-api",
+    "fix:app": "nx lint app-api",
     "fix:auth": "nx lint auth",
     "fix:db": "nx lint db"
   },

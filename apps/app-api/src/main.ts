@@ -4,36 +4,23 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import cookieParser from 'cookie-parser';
 
-import { IUser } from '@skytech/auth';
-
-import { AppModule } from './app.module';
-import { TransformInterceptor } from './transform.interceptor';
-
-declare global {
-  interface AuthToken {
-    jwt: string;
-    expiresAt: Date;
-  }
-
-  interface Request {
-    authToken?: AuthToken | null;
-    user?: IUser;
-  }
-}
+import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       transform: true,
     }),
   );
-  app.useGlobalInterceptors(new TransformInterceptor());
+
   app.use(cookieParser());
+
   const globalPrefix = 'api/v1';
   app.setGlobalPrefix(globalPrefix);
-  // Enable cors, so FE can access it.
+
   app.enableCors({
     credentials: true,
     origin: ['http://localhost:3000', /.+vercel\.app/, /.+skytechcontrol\.io/],
@@ -58,13 +45,13 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('app api docs', app, document);
 
-  const PORT = process.env.MANAGER_PORT || 4000;
-
+  const PORT = process.env.APP_PORT || 4001;
   await app.listen(PORT);
   Logger.log(
-    `🚀 Manager api is running on: http://localhost:${PORT}/${globalPrefix}`,
+    `🚀 App api is running on: http://localhost:${PORT}/${globalPrefix}`,
   );
 }
+
 bootstrap();
