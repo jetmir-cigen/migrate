@@ -15,11 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@skytech/app/*": ["./apps/app-api/src/*"],
       "@skytech/auth": ["libs/auth/src/index.ts"],
       "@skytech/common": ["libs/common/src/index.ts"],
       "@skytech/db": ["libs/db/src/index.ts"],
-      "@skytech/manager/*": ["./apps/manager-api/src/*"],
-      "@skytech/app/*": ["./apps/app-api/src/*"]
+      "@skytech/manager/*": ["./apps/manager-api/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
