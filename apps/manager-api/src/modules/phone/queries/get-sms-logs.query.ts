@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 
 import { IUser } from '@skytech/auth';
+import { QueryInterface } from '@skytech/common';
 import { LogSmsPushEntity, ManagerAccessCustomerView } from '@skytech/db';
-import { QueryInterface } from '@skytech/manager/common/query.interface';
 
 type QueryFilters = {
   user: IUser;

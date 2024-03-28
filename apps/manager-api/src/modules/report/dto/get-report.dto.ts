@@ -1,7 +1,7 @@
 import { Transform, Type } from 'class-transformer';
 import { IsBoolean, IsDateString, IsInt } from 'class-validator';
 
-import { IsDateAfter } from '@skytech/manager/common/validators/compare-dates.validator';
+import { IsDateAfter } from '@skytech/common';
 
 export class QueryFilter {
   @IsBoolean()

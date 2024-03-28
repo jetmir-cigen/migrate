@@ -2,11 +2,8 @@ import { QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { QueryHandlerInterface, QueryInterface } from '@skytech/common';
 import { SubscriptionServiceOrderActivationEntity } from '@skytech/db';
-import {
-  QueryHandlerInterface,
-  QueryInterface,
-} from '@skytech/manager/common/query.interface';
 
 import { QueryFilter } from '.';
 

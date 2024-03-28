@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MinLength } from 'class-validator';
 
-import { Match } from '@skytech/manager/common/validators/match.validator';
+import { Match } from '@skytech/common';
 
 export class ChangePasswordDto {
   @ApiProperty()

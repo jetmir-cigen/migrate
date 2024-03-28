@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { IUser } from '@skytech/auth';
+import { QueryHandlerInterface, QueryInterface } from '@skytech/common';
 import {
   CostObjectEntity,
   CustomerEntity,
@@ -12,10 +13,6 @@ import {
   InvoiceRowEntity,
   VendorEntity,
 } from '@skytech/db';
-import {
-  QueryHandlerInterface,
-  QueryInterface,
-} from '@skytech/manager/common/query.interface';
 import { DrillDownService } from '@skytech/manager/modules/drilldown/drilldown.service';
 
 type QueryFilters = {
