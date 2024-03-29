@@ -1,0 +1,88 @@
+version: '3.8'
+
+networks:
+  corp:
+    driver: bridge
+
+services:
+  manager-api:
+    container_name: manager-api
+    build:
+      context: ./
+      cache_from:
+        - skytech-monorepo:nx-base
+      dockerfile: ./apps/manager-api/Dockerfile
+      args:
+        NODE_ENV: 'development'
+        BUILD_FLAG: ''
+    image: manager-api:nx-dev
+    ports:
+      - 4000:4000
+    environment:
+      NODE_ENV: 'development'
+      PORT: '4000'
+      API_URL: 'http://localhost:3000'
+      MANAGER_AUTH_TOKEN: 'skytech-manager'
+      APP_AUTH_TOKEN: 'skytech-manager'
+      COOKIE_DOMAIN: 'localhost'
+      CORS_DOMAINS: ''
+      DB_PORT: '3311'
+      DB_HOST: 'localhost'
+      DB_NAME: 'control'
+      DB_USER: 'jetmir'
+      DB_PASS: 'vNE2M5dWzNdp'
+      DB_SSL: 'false'
+      FRONTEND_URL: ''
+      JWT_MAX_AGE: '1080'
+      JWT_SECRET: 'somesecret'
+      MANAGER_PORT: '4000'
+      APP_PORT: '4001'
+      TELIA_API_KEY: 'Mzk0Mzc5NGEzMjQ3NDEzOTQxNTczNTU5NWE0MjMxNmI='
+      SMTP_USER: '9628b49034cd06'
+      SMTP_PASS: '885822ed5b0659'
+      SMTP_HOST: 'sandbox.smtp.mailtrap.io'
+      SMTP_PORT: '2525'
+    networks:
+      - corp
+    restart: on-failure
+
+  app-api:
+    container_name: app-api
+    build:
+      context: ./
+      cache_from:
+        - skytech-monorepo:nx-base
+      dockerfile: ./apps/app-api/Dockerfile
+      args:
+        NODE_ENV: 'development'
+        BUILD_FLAG: ''
+    image: app-api:nx-dev
+    ports:
+      - 4001:4001
+    environment:
+      NODE_ENV: 'development'
+      PORT: 4001
+      API_URL: 'http://localhost:3000'
+      MANAGER_AUTH_TOKEN: 'skytech-manager'
+      APP_AUTH_TOKEN: 'skytech-manager'
+      COOKIE_DOMAIN: 'localhost'
+      CORS_DOMAINS: ''
+      DB_PORT: '3311'
+      DB_HOST: 'localhost'
+      DB_NAME: 'control'
+      DB_USER: 'jetmir'
+      DB_PASS: 'vNE2M5dWzNdp'
+      DB_SSL: 'false'
+      FRONTEND_URL: ''
+      JWT_MAX_AGE: '1080'
+      JWT_SECRET: 'somesecret'
+      MANAGER_PORT: '4000'
+      APP_PORT: '4001'
+      TELIA_API_KEY: 'Mzk0Mzc5NGEzMjQ3NDEzOTQxNTczNTU5NWE0MjMxNmI='
+      SMTP_USER: '9628b49034cd06'
+      SMTP_PASS: '885822ed5b0659'
+      SMTP_HOST: 'sandbox.smtp.mailtrap.io'
+      SMTP_PORT: '2525'
+    networks:
+      - corp
+    restart: on-failure
